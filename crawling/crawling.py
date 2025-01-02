@@ -11,16 +11,25 @@ import numpy as np
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 import requests
-# 모듈 경로 설정.... 이렇게 해줘야 다른 디랙토리에 있는 모듈 가져다 쓸 수 있음... !!
+import urllib.request
+import urllib.parse
+import json
+import datetime
+
 import sys
 import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
+# 모듈 경로 설정.... 이렇게 해줘야 다른 디랙토리에 있는 모듈 가져다 쓸 수 있음... !!
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from DB.db_mysql import apt_housing_application_basic_info_insert,apt_housing_application_basic_info_select,apt_housing_competition_rate_insert,apt_housing_application_status_insert,apt_housing_application_status_select,apt_housing_competition_rate_select,unranked_housing_application_basic_info_select,unranked_housing_application_basic_info_insert,unranked_housing_competition_rate_select,unranked_housing_competition_rate_insert,delete,some_condition,apt_schedule_insert,apt_schedule_select
+from DB.db_mongodb import mongodb_insert,mongo_delete
 
 # Selenium 설정
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36")
@@ -29,6 +38,8 @@ chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-extensions')
 
 
+naver_client_id = os.environ.get('NAVER_ID')
+naver_client_secret = os.environ.get('NAVER_PASSWORD')
 
 def base_info_crawling(url,number,type_number,col,select,insert,df_col): # number = 뒤에 어디까지 제거할건지. 들고올 컬럼
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
@@ -166,10 +177,6 @@ def competition_rate_crawling(url,select,insert,db_table_name):
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        current_page_num, soup = navigate_to_next_page(driver, soup, previous_page_num)
-        if current_page_num is None:
-            break
-        previous_page_num = current_page_num
         for i in range(10):  
             try:
                 WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "btn_tbl")))  
@@ -485,13 +492,93 @@ def unranked_craling():
     competition_rate_crawling(url,unranked_housing_competition_rate_select(),unranked_housing_competition_rate_insert,competition_rate_table_list)
     housing_application_announcement_download(url,dic)
 
+def get_article_image(news_url):
+    try:
+        # 뉴스 URL로 HTTP GET 요청
+        response = requests.get(news_url, headers={'User-Agent': 'Mozilla/5.0'})
+        response.raise_for_status()
+
+        # HTML 파싱
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # 이미지 태그 추출
+        img_tag = soup.find('meta', property='og:image')  # Open Graph 이미지 태그
+        if img_tag and img_tag.get('content'):
+            return img_tag['content']
+        else:
+            print("이미지를 찾을 수 없습니다.")
+            return None
+
+    except Exception as e:
+        print(f"이미지 가져오기 중 오류 발생: {e}")
+        return None
+
+def naver_news_crawling():
+    # 검색할 키워드 설정 (UTF-8 인코딩)
+    encText = urllib.parse.quote("청약")
+
+    # 뉴스 검색 API URL 설정 (날짜순 정렬, 10개의 기사 요청)
+    url = "https://openapi.naver.com/v1/search/news?query=" + encText + "&display=10&sort=sim"  # 정확도순, 10개의 기사
+
+
+    # API 요청 설정
+    request = urllib.request.Request(url)
+    request.add_header("X-Naver-Client-Id", naver_client_id)
+    request.add_header("X-Naver-Client-Secret", naver_client_secret)
+
+    # API 호출 및 응답 처리
+    response = urllib.request.urlopen(request)
+    rescode = response.getcode()
+    collection = "news"
+    # 기존데이터삭제
+    mongo_delete(collection)
+    if rescode == 200:
+        response_body = response.read().decode('utf-8')
+
+        # JSON 데이터를 파싱
+        news_data = json.loads(response_body)
+
+        # 각 뉴스 아이템에서 필요한 정보를 추출하고 출력
+        for item in news_data['items']:
+            title = item['title'].replace('<b>', '').replace('</b>', '')  # HTML 태그 제거
+            link = item['link']
+            description = item['description'].replace('<b>', '').replace('</b>', '')
+            pubDate = item['pubDate']
+
+            # 뉴스 상세 페이지에서 이미지 URL 추출
+            image_url = get_article_image(link)
+
+            # MongoDB에 저장할 데이터
+            mydict = {
+                "title": title,
+                "link": link,
+                "description": description,
+                "pubDate": pubDate,
+                "image": image_url
+            }
+
+            # MongoDB에 데이터 삽입            
+            mongodb_insert(collection, mydict)
+
+            # 출력
+            print(f"Title: {title}")
+            print(f"Link: {link}")
+            print(f"Description: {description}")
+            print(f"Published Date: {pubDate}")
+            print(f"Image: {image_url}")
+            print("\n")
+        
+    else:
+        print("Error Code:" + str(rescode))
 
 if __name__ == "__main__":
     
-    print("아파트 청약 데이터 크롤링 시작")
-    apt_crawling()
+    # print("아파트 청약 데이터 크롤링 시작")
+    # apt_crawling()
 
-    print("무순위 청약 데이터 크롤링 시작")
-    unranked_craling()
+    # print("무순위 청약 데이터 크롤링 시작")
+    # unranked_craling()
 
+    print("청약 뉴스 크롤링 시작")
+    naver_news_crawling()
     pass

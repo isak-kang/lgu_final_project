@@ -33,14 +33,15 @@ def mongodb_insert(collection, mydict):
     except Exception as e:
         print(f"{e} : 데이터 삽입에 실패했습니다... ㅠㅠ 확인 부탁해용")
 
-def delect(collection, mydict):
-    mycollection = db[f'{collection}']
-    mycollection.delete_many(mydict)
-
-    try : 
-        print(f'{mydict} 데이터 삭제 성공!!')
+def mongo_delete(collection):
+    try:
+        collection = db[collection]
+        # 컬렉션의 모든 문서 삭제
+        result = collection.delete_many({})
+        print(f"{collection.name} 컬렉션의 데이터 삭제 성공! 삭제된 문서 수: {result.deleted_count}")
     except Exception as e:
-        print(f"{e} : 데이터 삭제 실패했습니다... ㅠㅠ 확인 부탁해용")
+        print(f"오류 발생: {str(e)}. 데이터 삭제 실패... ㅠㅠ 확인 부탁드립니다.")
+
 
 def select(collection):
     mycollection = db[f'{collection}']
@@ -53,12 +54,12 @@ def select(collection):
 
 if __name__ == "__main__":
 
-    collection = 'term'
-    data = select (collection)
-    terms = [(item['term'], item['term_description']) for item in data]
-    print(terms)
+    # collection = 'term'
+    # data = select (collection)
+    # terms = [(item['term'], item['term_description']) for item in data]
+    # print(terms)
+    pass
 
-    
 
 
 
