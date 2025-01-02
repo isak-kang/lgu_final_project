@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/style/style.css" rel="stylesheet">
+    <title>login</title>
+</head>
+<body>
+    <form method="POST" action="/login">
+        <table>
+        <tr>
+            <td><h2>로그인</h2></td>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="ID" name="id"></td>
+        </tr>
+        <tr>
+            <td><input type="password" placeholder=Password name="password"></td>
+        </tr>
+        <tr>
+           <td><input type="checkbox"> 로그인 정보 저장</td>
+        </tr>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <tr>
+            <td><input type="submit" value="Sign in" class="btn"></td>
+        </tr>
+        <tr>
+            <td class="join"><a href="/join_membership">회원가입</a></td>
+        </tr>
+        </table>
+    </form>
+
+    </body>
+</html>

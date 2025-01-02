@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
+    <script src="/static/js/calendar.js"></script>
+    <script src="/static/style/style.css"></script>
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .popup-close {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="filters">
+        <label><input type="checkbox" id="special" checked> 특별공급</label>
+        <label><input type="checkbox" id="priority1" checked> 1순위</label>
+        <label><input type="checkbox" id="priority2" checked> 2순위</label>
+        <label><input type="checkbox" id="unranked" checked> 무순위</label>
+    </div>
+    
+    <div id="calendar"></div>
+    
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="popup" id="popup">
+        <div id="popup-content"></div>
+        <div class="popup-close" id="popup-close">Close</div>
+    </div>
+    
+</body>
+</html>
+    

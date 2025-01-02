@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/style/style.css" rel="stylesheet">
+    <title>회원가입</title>
+</head>
+<body>
+    <form method="POST" action="/join_membership">
+        <table>
+            <tr>
+                <td><h2>회원가입</h2></td>
+            </tr>
+            {% if error %}
+            <tr>
+                <td><p style="color: red;">{{ error }}</p></td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>아이디</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="id" required></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+            </tr>
+            <tr>
+                <td><input type="password" class="text" name="password" required></td>
+            </tr>
+            <tr>
+                <td>비밀번호 확인</td>
+            </tr>
+            <tr>
+                <td><input type="password" class="text" name="confirm_password" required></td>
+            </tr>
+            <tr>
+                <td>이름</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="name" required></td>
+            </tr>
+            <tr>
+                <td>생년월일 (주민번호)</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="resident_number" placeholder="YYMMDD-XXXXXXX" required></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" class="email" name="email" required> @ 
+                    <input list="email_domains" name="email_domain" placeholder="도메인 선택 또는 입력" required>
+                    <datalist id="email_domains">
+                        <option value="naver.com">
+                        <option value="gmail.com">
+                        <option value="daum.net">
+                        <option value="nate.com">
+                    </datalist>
+                </td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="phone_number" required></td>
+            </tr>
+            <tr>
+                <td>주소</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="text" name="address"></td>
+            </tr>
+            <tr>
+                <td>통장 유무</td>
+            </tr>
+            <tr>
+                <td>
+                    <label><input type="radio" name="bankbook" value="yes" required> 예</label>
+                    <label><input type="radio" name="bankbook" value="no" required> 아니오</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="가입하기" class="btn">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <link rel="stylesheet" href="/static/style/style.css">
+</head>
+<body>
+    <h1>로그인 정보 확인</h1>
+    
+    {% if user %}
+        <h1>Welcome, {{ user["id"] }}</h1>
+        <p>Phone Number: {{ user["phone_number"] }}</p>
+        <p>Address: {{ user["address"] }}</p>
+        <a href="/logout">Logout</a>  
+    {% else %}
+        <h1>로그인되지 않았습니다.</h1>
+        <a href="/login">Login</a>
+    {% endif %}
+    <br>
+    <br>
+    <a href="/chatbot">Chatbot</a>
+    <br>
+    <br>
+    <a href="/calendar">Calendar</a>
+    <br>
+    <br>
+    <a href="/term">term</a>
+    <br>
+    <br>
+    <a href="/faq">faq</a>
+    <br>
+    <br>
+    <!-- <div>
+        {% for title, link, description, pubDate, image in news %}
+        <div>
+            <div><a href="{{ link }}" target="_blank" >{{ title }}</a></div>
+            <div>{{ description }}</div>
+            <div>{{ pubDate }}</div>
+            <div><a href="{{ link }}" target="_blank" ><img src="{{ image }}"></a></div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+    <section id="cardType" class="card__wrap GmarketSans section">
+        <h2>최신뉴스</h2>
+        <p>
+            청약관련 최신뉴스
+        </p>
+            <div class="card__inner container">
+                <article class="card">
+                    <img src="img/card_bg02_01.jpg" alt="혹등고래">
+                    <h3 class="tit">혹등고래</h3>
+                    <p class="desc">혹등고래는 바다에서 볼 수 있는 고래 중 하나로 바다에 천사라고 불리우는 고래 입니다. 혹등고래는 바다에서 서식하는</p>
+                    <a href="#" class="more"><span class="ir">더보기</span></a>
+                </article>
+            </div>
+    </section> -->
+
+    
+    <section id="cardType" class="card__wrap GmarketSans section">
+        <h2>최신뉴스</h2>
+        <p>청약관련 최신뉴스</p>
+        <div class="card__inner container">
+            {% for title, link, description, pubDate, image in news %}
+            <article class="card">
+                <img src="{{ image }}" alt="{{ title }}">
+                <h3 class="tit">{{ title }}</h3>
+                <p class="desc">{{ description }}</p>
+                <a href="{{ link }}" class="more"><span class="ir">더보기</span></a>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>
