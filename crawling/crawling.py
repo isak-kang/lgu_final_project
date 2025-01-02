@@ -573,7 +573,7 @@ def naver_news_crawling():
         print("Error Code:" + str(rescode))
 
 if __name__ == "__main__":
-    
+    print(datetime.datetime.now())
     print("아파트 청약 데이터 크롤링 시작")
     apt_crawling()
 
@@ -582,4 +582,6 @@ if __name__ == "__main__":
 
     print("청약 뉴스 크롤링 시작")
     naver_news_crawling()
+    print()
+    print()
     pass
