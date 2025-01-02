@@ -28,6 +28,7 @@ from DB.db_mysql import apt_housing_application_basic_info_insert,apt_housing_ap
 from DB.db_mongodb import mongodb_insert,mongo_delete
 
 # Selenium 설정
+service = Service(executable_path='/home/ubuntu/chromedriver-linux64/chromedriver')
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
@@ -573,11 +574,11 @@ def naver_news_crawling():
 
 if __name__ == "__main__":
     
-    # print("아파트 청약 데이터 크롤링 시작")
-    # apt_crawling()
+    print("아파트 청약 데이터 크롤링 시작")
+    apt_crawling()
 
-    # print("무순위 청약 데이터 크롤링 시작")
-    # unranked_craling()
+    print("무순위 청약 데이터 크롤링 시작")
+    unranked_craling()
 
     print("청약 뉴스 크롤링 시작")
     naver_news_crawling()
