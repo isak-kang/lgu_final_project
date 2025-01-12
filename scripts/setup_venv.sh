@@ -1,9 +1,7 @@
 #!/bin/bash
 
-
 cd /home/ubuntu/lgu_final_project/
 source lgu/bin/activate
-
 
 cd lgu_final
 pip install --upgrade pip
