@@ -6,10 +6,10 @@ import QuickMenu from "./QuickMenu";
 import { Link } from 'react-router-dom';
 
 
-// import whatIsImage from './assets/free-icon-ask-2859733.png';
-// import bankImage from './assets/free-icon-passbook-2746070.png';
-// import possibleImage from './assets/free-icon-confused-5969711.png';
-// import practiceImage from './assets/free-icon-exam-4008657.png';
+// import whatIsImage from './assets/whatIsImage.png';
+// import bankImage from './assets/bankImage.png';
+// import possibleImage from './assets/possibleImage.png';
+// import practiceImage from './assets/practiceImage.png';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
