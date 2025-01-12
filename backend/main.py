@@ -221,12 +221,7 @@ async def get_news(request: Request):
     return {"news": news}
 
 
-@app.get("/api/user")
-async def get_user(request: Request):
 
-        
-    
-    return {"user": user_data}
 
 
 @app.get("/api/upcoming")
