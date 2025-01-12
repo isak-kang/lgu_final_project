@@ -8,7 +8,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 
-echo "3" >> ../test
+echo "3" >> /home/ubuntu/lgu_final_project/test
 
 
 deactivate
