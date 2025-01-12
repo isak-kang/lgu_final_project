@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 import csv
 
-
+ 
 load_dotenv()
 
 # mysql 연결 URI

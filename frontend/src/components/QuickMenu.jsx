@@ -5,6 +5,7 @@ import bankImage from '../assets/free-icon-passbook-2746070.png';
 import possibleImage from '../assets/free-icon-confused-5969711.png';
 import practiceImage from '../assets/free-icon-exam-4008657.png';
 
+
 const QuickMenu = ({ setChatHistory }) => {
     const [isOpen, setIsOpen] = useState(false);
     

@@ -7,7 +7,7 @@ import matplotlib as mpl
 import io
 import base64
 
-
+ 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from DB.db_mysql import select_all

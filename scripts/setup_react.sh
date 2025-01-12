@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 cd /home/ubuntu/lgu_final_project/lgu_final/frontend
 
 # React 의존성 설치 및 빌드

@@ -4,6 +4,7 @@ import axios from "axios";
 function MyInfo() {
   const [user, setUser] = useState(null);
 
+  
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {

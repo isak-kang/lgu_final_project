@@ -10,6 +10,7 @@ import MyInfo from "./components/my_info.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Analysis from "./components/Analysis.jsx";
 // import Competition from "./components/Competition.jsx";
+
 function App() {
   return (
     <div>

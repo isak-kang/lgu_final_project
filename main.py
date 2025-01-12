@@ -59,7 +59,6 @@ async def main(request: Request):
         "unranked_upcoming_data" : unranked_upcoming_data
     })
 
-
 @app.api_route("/join_membership", methods=["GET", "POST"], response_class=HTMLResponse)
 async def join_membership(
     request: Request,

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+
 cd /home/ubuntu/lgu_final_project/
 source lgu/bin/activate
 

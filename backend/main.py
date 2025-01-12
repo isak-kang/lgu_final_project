@@ -16,7 +16,7 @@ import jwt
 from pydantic import BaseModel
 from rag import rag_chat
 from scenario import get_scenario_response
-
+ 
 app = FastAPI()
 
 app.add_middleware(

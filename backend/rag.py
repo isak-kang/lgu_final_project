@@ -12,7 +12,7 @@ load_dotenv()
 # mysql 연결 URI
 OPEN_AI = os.environ.get('OPEN_AI')
 
-
+ 
 
 
 

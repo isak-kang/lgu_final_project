@@ -8,7 +8,7 @@ def scroll_to_top(driver):
     """페이지를 맨 위로 스크롤"""
     driver.execute_script("window.scrollTo(0, 0);")
     time.sleep(1)
-
+ 
 def get_faq_content(driver):
     """현재 탭의 FAQ 내용을 가져옵니다."""
     faq_list = []

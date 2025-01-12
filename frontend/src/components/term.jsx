@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
 const Terms = () => {
   const [terms, setTerms] = useState([]);
   const [error, setError] = useState("");

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "axios"; 
 
 const FAQ = () => {
   const [faqs, setFaqs] = useState([]); // FAQ 데이터 상태

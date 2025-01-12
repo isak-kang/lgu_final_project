@@ -1,4 +1,4 @@
-import ChatbotIcon from "./ChatbotIcon"
+import ChatbotIcon from "./ChatbotIcon" 
 
 const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
   // 현재 시간을 포맷팅하는 함수

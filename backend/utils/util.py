@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from DB.db_mysql import select_apt_competition,select_unranked_competition_1,select_upcoming_applications
-
+ 
 def web_apt_competition():
     df = select_apt_competition()
 

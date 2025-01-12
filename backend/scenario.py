@@ -27,7 +27,7 @@ SCENARIO_DATA: Dict[str, ScenarioCategory] = {
     }
   }
 }
-
+ 
 def get_scenario_response(question: str) -> Optional[ScenarioResponse]:
     """
     질문에 해당하는 시나리오 응답을 반환합니다.
