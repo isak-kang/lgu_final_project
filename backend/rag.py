@@ -219,7 +219,7 @@ def rag_chat(chat):
             # './data/pdf_to_parsing.json',
             
             './data/FAQ_Crawling.json',
-            './data/test_result(1~12).json',
+            './data/test_result.json',
             # './Cheongyak/data/processed_output.json'
         ]
         
