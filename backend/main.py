@@ -222,8 +222,6 @@ async def get_news(request: Request):
 
 
 
-
-
 @app.get("/api/upcoming")
 async def get_upcoming(request: Request):
 
