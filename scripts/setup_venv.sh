@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# setup_venv
 cd /home/ubuntu/lgu_final_project/
 source lgu/bin/activate
 
