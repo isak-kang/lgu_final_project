@@ -32,6 +32,7 @@ jobs:
         pip install pymongo 
         pip install boto3
         pip install selenium
+        pip install webdriver_manager
         ls -al
         
     - name: install mysql lib 
