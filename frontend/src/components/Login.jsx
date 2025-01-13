@@ -8,7 +8,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(""); // 에러 메시지 초기화
@@ -19,7 +20,7 @@ const Login = () => {
     formData.append("password", password);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", formData, {
+      const response = await axios.post(`http://${API_URL}/api/login`, formData, {
         headers: {
           "Content-Type": "multipart/form-data", // FormData를 보내는 경우 설정
         },

@@ -5,12 +5,13 @@ import axios from "axios";
 const Terms = () => {
   const [terms, setTerms] = useState([]);
   const [error, setError] = useState("");
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
 
   // API 호출
   useEffect(() => {
     const fetchTerms = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/term"); // FastAPI 엔드포인트
+        const response = await axios.get(`http://${API_URL}/api/term`); // FastAPI 엔드포인트
         setTerms(response.data.terms); // terms 데이터를 상태로 설정
       } catch (err) {
         setError("데이터를 가져오는 중 오류가 발생했습니다.");
@@ -22,6 +23,7 @@ const Terms = () => {
 
   return (
     <div style={{ margin: "20px", fontFamily: "Arial, sans-serif" }}>
+      
       <h1>용어 설명</h1>
       {error && <p style={{ color: "red" }}>{error}</p>} {/* 에러 메시지 */}
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>

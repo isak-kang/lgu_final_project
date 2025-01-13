@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 function Join() {
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
   const [formData, setFormData] = useState({
     id: "",
     password: "",
@@ -35,7 +36,7 @@ function Join() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/join",
+        `http://${API_URL}/api/join`,
         new URLSearchParams({
           id: formData.id,
           password: formData.password,

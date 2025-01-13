@@ -28,6 +28,7 @@ const Main = () => {
   const [unranked_upcoming_data, setUnrankedUpcoming] = useState(null);
   const [apt_grouped_data, setAptCompetition] = useState(null);
   const [unranked_grouped_data, setUnrankedCompetition] = useState(null);
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
 
   // Reset activity timer
   const resetActivityTimer = () => {
@@ -42,7 +43,7 @@ const Main = () => {
   // API 호출 및 모달 열기
   const handleButtonClick = async (apartmentName) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/detail/${encodeURIComponent(apartmentName)}`);
+      const response = await fetch(`http://${API_URL}/api/detail/${encodeURIComponent(apartmentName)}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -95,7 +96,7 @@ const Main = () => {
     const token = localStorage.getItem("access_token");
     if (token) {
       axios
-        .get("http://127.0.0.1:8000/api/protected", {
+        .get(`http://${API_URL}/api/protected`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -123,7 +124,7 @@ const Main = () => {
     const token = localStorage.getItem("access_token");
     if (token) {
       try {
-        await axios.post("http://127.0.0.1:8000/api/logout", {}, {
+        await axios.post(`http://${API_URL}/api/logout`, {}, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -185,7 +186,7 @@ const Main = () => {
   // Fetch news data
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/news")
+      .get(`http://${API_URL}/api/news`)
       .then((response) => {
         const { news } = response.data;
         setNews(news);
@@ -197,7 +198,7 @@ const Main = () => {
   // Fetch news data
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/upcoming")
+      .get(`http://${API_URL}/api/upcoming`)
       .then((response) => {
         const { apt_upcoming_data,unranked_upcoming_data } = response.data;
         setAptUpcoming(apt_upcoming_data);
@@ -209,7 +210,7 @@ const Main = () => {
   // Fetch user data
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/competition")
+      .get(`http://${API_URL}/api/competition`)
       .then((response) => {
         const { apt_grouped_data,unranked_grouped_data } = response.data;
         setAptCompetition(apt_grouped_data);
@@ -234,7 +235,7 @@ const Main = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/chat", {
+      const response = await fetch(`http://${API_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: history[history.length - 1].text }),

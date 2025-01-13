@@ -5,12 +5,12 @@ const FAQ = () => {
   const [faqs, setFaqs] = useState([]); // FAQ 데이터 상태
   const [error, setError] = useState(""); // 에러 메시지 상태
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태
-
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
   useEffect(() => {
     // FAQ 데이터를 가져오는 함수
     const fetchFAQs = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/faq");
+        const response = await axios.get(`http://${API_URL}/api/faq`);
         setFaqs(response.data.terms); // API의 'terms' 배열을 상태에 저장
       } catch (err) {
         setError("FAQ 데이터를 불러오는 데 실패했습니다.");

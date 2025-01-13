@@ -3,13 +3,13 @@ import axios from "axios";
 
 function MyInfo() {
   const [user, setUser] = useState(null);
-
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
   
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
       axios
-        .get("http://127.0.0.1:8000/api/protected", {
+        .get(`http://${API_URL}/api/protected`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

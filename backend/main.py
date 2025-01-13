@@ -19,6 +19,9 @@ from scenario import get_scenario_response
  
 app = FastAPI()
 
+
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  

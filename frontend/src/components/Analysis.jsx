@@ -6,7 +6,8 @@ function Analysis() {
   const [year, setYear] = useState("");
   const [home, setHome] = useState("");
   const [graph, setGraph] = useState(null);
-
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -16,7 +17,7 @@ function Analysis() {
       formData.append("year", year);
       formData.append("home", home);
 
-      const response = await axios.post("http://localhost:8000/api/analysis", formData);
+      const response = await axios.post(`http://${API_URL}/api/analysis`, formData);
       const { graph } = response.data;
 
       setGraph(graph);

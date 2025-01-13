@@ -7,6 +7,7 @@ import axios from "axios"; // Axios 추가
 import "../index.css"; // 스타일 추가
 
 const Calendar = () => {
+  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
   const [events, setEvents] = useState([]);
   const [filterState, setFilterState] = useState({
     special: true,
@@ -28,8 +29,8 @@ const Calendar = () => {
         priority2: filterState.priority2,
         unranked: filterState.unranked,
       });
-      console.log(`http://127.0.0.1:8000/api/schedule?${query.toString()}`);
-      const response = await axios.get(`http://127.0.0.1:8000/api/schedule?${query.toString()}`);
+      console.log(`http://${API_URL}/api/schedule?${query.toString()}`);
+      const response = await axios.get(`http://${API_URL}/api/schedule?${query.toString()}`);
       setEvents(response.data);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -39,7 +40,7 @@ const Calendar = () => {
   // 상세 정보 가져오기
   const fetchEventDetails = async (apartmentName) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/schedule/${encodeURIComponent(apartmentName)}`);
+      const response = await axios.get(`http://${API_URL}/api/schedule/${encodeURIComponent(apartmentName)}`);
       const data = response.data;
       if (data.error) {
         alert("Event details not found.");
