@@ -31,6 +31,7 @@ jobs:
         pip install typing
         pip install pymongo 
         pip install boto3
+        pip install selenium
         ls -al
         
     - name: install mysql lib 
