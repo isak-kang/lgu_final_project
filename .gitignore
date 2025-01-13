@@ -16,6 +16,10 @@ dist
 dist-ssr
 *.local
 
+all_faqs.json
+pdf_to_parsing_2.json
+pdf_to_parsing_1.json
+processed_output.json
 
 # Editor directories and files
 .vscode/*
@@ -27,3 +31,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
