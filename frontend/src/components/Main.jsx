@@ -253,72 +253,83 @@ const Main = () => {
     <div>
 
    <br /><br /><br /><br />
-
-   <div className="d-flex justify-content-between align-items-start" style={{ maxWidth: "1600px", margin: "auto", gap: "20px" }}>
-     {/* News Carousel */}
-     <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel" style={{ flex: 2, maxWidth: "1050px" }}>
-       <div className="carousel-inner">
-         {news.map((item, index) => (
-           <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-             <div
-               className="card d-flex flex-row align-items-center"
-               style={{
-                 width: "100%",
-                 margin: "auto",
-                 position: "relative",
-                 padding: "15px",
-               }}
-             >
-               <a
-                 href={item.link}
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 style={{ flex: 1, textDecoration: "none" }}
-               >
-                 <img
-                   src={item.image}
-                   className="card-img-left"
-                   alt={item.title}
-                   style={{
-                     width: "350px",
-                     height: "350px",
-                     objectFit: "cover",
-                     borderRadius: "5px",
-                   }}
-                 />
-               </a>
-               <div className="card-body" style={{ flex: 2, paddingLeft: "20px" }}>
-                 <a
-                   href={item.link}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="card-title"
-                   style={{
-                     fontWeight: "bold",
-                     fontSize: "1.5rem",
-                     textDecoration: "none",
-                     color: "#57b6fe",
-                   }}
-                 >
-                   {item.title}
-                 </a>
-                 <p
-                   className="card-text"
-                   style={{
-                     fontSize: "1rem",
-                     color: "#555",
-                     marginTop: "10px",
-                   }}
-                 >
-                   {item.description}
-                 </p>
-               </div>
-             </div>
-           </div>
-         ))}
-       </div>
-
-       <button
+   <div 
+  className="d-flex justify-content-between align-items-start flex-wrap" 
+  style={{ maxWidth: "1600px", margin: "auto", gap: "20px", padding: "40px 0" }}
+>
+  {/* News Carousel */}
+  <div 
+    id="newsCarousel" 
+    className="carousel slide" 
+    data-bs-ride="carousel" 
+    style={{ flex: 2, maxWidth: "1050px" }}
+  >
+    <div className="carousel-inner">
+      {news.map((item, index) => (
+        <div 
+          key={index} 
+          className={`carousel-item ${index === 0 ? "active" : ""}`}
+        >
+          <div
+            className="card d-flex flex-row align-items-center"
+            style={{
+              width: "100%",
+              margin: "auto",
+              padding: "20px",
+              backgroundColor: "#f9f9f9",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+            }}
+          >
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ flex: 1, textDecoration: "none" }}
+            >
+              <img
+                src={item.image}
+                className="card-img-left"
+                alt={item.title}
+                style={{
+                  width: "350px",
+                  height: "350px",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                }}
+              />
+            </a>
+            <div className="card-body" style={{ flex: 2, paddingLeft: "20px" }}>
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-title"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  textDecoration: "none",
+                  color: "#57b6fe",
+                }}
+              >
+                {item.title}
+              </a>
+              <p
+                className="card-text"
+                style={{
+                  fontSize: "1rem",
+                  color: "#555",
+                  marginTop: "10px",
+                }}
+              >
+                {item.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <button
          className="carousel-control-prev"
          type="button"
          data-bs-target="#carouselExampleAutoplaying"
@@ -359,32 +370,57 @@ const Main = () => {
          <span className="carousel-control-next-icon" aria-hidden="true"></span>
          <span className="visually-hidden">Next</span>
        </button>
-     </div>
 
-     {/* Login/User Card */}
-     <div className="d-flex justify-content-center align-items-center" style={{ flex: 1, maxWidth: "450px", height: "40vh", textAlign: "center" }}>
-       <div className="card" style={{ width: "100%" }}>
-         <div className="card-body">
-           {user ? (
-             <>
-               <h5 className="card-title">어서오세요. {user.name}님</h5>
-               <p className="card-text">많은 청약 정보를 탐색해 보세요!!</p>
-               <a href="#" className="btn btn-primary" onClick={handleLogout}>
-                로그아웃
-              </a>
-             </>
-           ) : (
-             <>
-               <h5 className="card-title">로그인이 필요합니다</h5>
-               <p className="card-text">내게 필요한 청약을 알아보세요</p>
-               <Link to="/login">로그인</Link>
+  </div>
 
-             </>
-           )}
-         </div>
-       </div>
-     </div>
-   </div>
+  {/* Login/User Card */}
+  <div
+  className="d-flex justify-content-center align-items-center"
+  style={{
+    flex: 1,
+    maxWidth: "100%", // 카드 느낌을 없애기 위해 너비를 조정
+    height: "40vh",
+    textAlign: "center",
+    // background: "linear-gradient(#f0f7ff, #e0efff)", // 배경만 유지
+    padding: "20px",
+  }}
+>
+    <div className="card" style={{ width: "100%" }}>
+      <div className="card-body">
+        {user ? (
+          <>
+            <h5 className="card-title" style={{ fontSize: "1.5rem", color: "#57b6fe" }}>
+              어서오세요, {user.name}님!
+            </h5>
+            <p className="card-text" style={{ fontSize: "1rem", color: "#555" }}>
+              많은 청약 정보를 탐색해 보세요!
+            </p>
+            <button 
+              className="btn btn-primary" 
+              onClick={handleLogout}
+              style={{ backgroundColor: "#57b6fe", border: "none" }}
+            >
+              로그아웃
+            </button>
+          </>
+        ) : (
+          <>
+            <h5 className="card-title" style={{ fontSize: "1.5rem", color: "#57b6fe" }}>
+              로그인이 필요합니다
+            </h5>
+            <p className="card-text" style={{ fontSize: "1rem", color: "#555" }}>
+              내게 필요한 청약 정보를 알아보세요.
+            </p>
+            <Link to="/login" className="btn btn-primary" style={{ backgroundColor: "#57b6fe", border: "none" }}>
+              로그인
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
 
    <div 
   className="d-flex flex-wrap justify-content-around" 
