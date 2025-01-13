@@ -16,8 +16,12 @@ import jwt
 from pydantic import BaseModel
 from rag import rag_chat
 from scenario import get_scenario_response
- 
-app = FastAPI()
+from dotenv import load_dotenv
+
+load_dotenv()
+ROOT_PATH = os.environ.get("ROOT_PATH")
+
+app = FastAPI(root_path=ROOT_PATH)
 
 
 
