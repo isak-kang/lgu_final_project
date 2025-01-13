@@ -9,6 +9,7 @@ import practiceImage from '../assets/practiceImage.png';
 const QuickMenu = ({ setChatHistory }) => {
     const [isOpen, setIsOpen] = useState(false);
     
+  
     const handleQuickMenu = (buttonText) => {
         // 사용자가 선택한 버튼의 텍스트를 user-message로 추가
         setChatHistory(prevHistory => [...prevHistory, { 
