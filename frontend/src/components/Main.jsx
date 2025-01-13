@@ -6,10 +6,10 @@ import QuickMenu from "./QuickMenu";
 import { Link } from 'react-router-dom';
 
 
-// import whatIsImage from './assets/whatIsImage.png';
-// import bankImage from './assets/bankImage.png';
-// import possibleImage from './assets/possibleImage.png';
-// import practiceImage from './assets/practiceImage.png';
+import whatIsImage from '../assets/whatIsImage.png';
+import bankImage from '../assets/bankImage.png';
+import possibleImage from '../assets/possibleImage.png';
+import practiceImage from '../assets/practiceImage.png';
 
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -80,10 +80,10 @@ const Main = () => {
             type: "card_button",
             text: "안녕하세요, 청약 도우미 청약이입니다. 무엇을 도와드릴까요?",
             buttons: [
-              { text: "청약이란?", image: "path_to_image" },
-              { text: "청약 통장이란?", image: "path_to_image" },
-              { text: "나에게 가능한 청약은?", image: "path_to_image" },
-              { text: "청약체험 및 연습", image: "path_to_image" },
+              { text: "청약이란?", image: whatIsImage },
+              { text: "청약 통장이란?", image: bankImage },
+              { text: "나에게 가능한 청약은?", image: possibleImage },
+              { text: "청약체험 및 연습", image: practiceImage },
             ],
             timestamp: Date.now(),
           },
@@ -166,10 +166,10 @@ const Main = () => {
               type: "card_button",
               text: "청약이와의 대화가 도움이 되었나요? 추가 질문이 있다면 언제든지 저에게 질문해주세요.",
               buttons: [
-                { text: "청약이란?", image: "path_to_image" },
-                { text: "청약 통장이란?", image: "path_to_image" },
-                { text: "나에게 가능한 청약은?", image: "path_to_image" },
-                { text: "청약체험 및 연습", image: "path_to_image" },
+                { text: "청약이란?", image: whatIsImage },
+                { text: "청약 통장이란?", image: bankImage },
+                { text: "나에게 가능한 청약은?", image: possibleImage },
+                { text: "청약체험 및 연습", image: practiceImage },
               ],
               timestamp: Date.now(),
             },
@@ -297,7 +297,7 @@ const Main = () => {
                      fontWeight: "bold",
                      fontSize: "1.5rem",
                      textDecoration: "none",
-                     color: "#333",
+                     color: "#57b6fe",
                    }}
                  >
                    {item.title}
@@ -329,7 +329,7 @@ const Main = () => {
            padding: "4px 6px",
            width: "40px",
            height: "40px",
-           backgroundColor: "#6a75ca",
+           backgroundColor: "#57b6fe",
            color: "white",
            borderRadius: "50%",
            fontSize: "14px",
@@ -350,7 +350,7 @@ const Main = () => {
            padding: "4px 6px",
            width: "40px",
            height: "40px",
-           backgroundColor: "#6a75ca",
+           backgroundColor: "#57b6fe",
            color: "white",
            borderRadius: "50%",
            fontSize: "14px",
@@ -391,7 +391,7 @@ const Main = () => {
   style={{ 
     maxWidth: "1600px", margin: "40px auto", gap: "20px", display: "flex", justifyContent: "center", alignItems: "center",  }}>
 
-  <div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #6a75ca", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
+  <div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
   <h3 style={{ textAlign: "center", marginBottom: "15px", fontSize: "1.5rem" }}>최신 경쟁률</h3>
   <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
   <div id="apt_competiton" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250" }}>
@@ -412,7 +412,7 @@ const Main = () => {
               <button
                 onClick={() => handleButtonClick(group.apartment_name)}
                 style={{
-                  backgroundColor: "#6a75ca",
+                  backgroundColor: "#57b6fe",
                   color: "white",
                   border: "none",
                   padding: "8px 20px",
@@ -453,7 +453,7 @@ const Main = () => {
         padding: "4px 6px",
         width: "25px",
         height: "25px",
-        backgroundColor: "#6a75ca",
+        backgroundColor: "#57b6fe",
         color: "white",
         borderRadius: "50%",
         fontSize: "10px",
@@ -473,7 +473,7 @@ const Main = () => {
         padding: "4px 6px",
         width: "25px",
         height: "25px",
-        backgroundColor: "#6a75ca",
+        backgroundColor: "#57b6fe",
         color: "white",
         borderRadius: "50%",
         fontSize: "10px",
@@ -487,7 +487,7 @@ const Main = () => {
 
 <div className="d-flex justify-content-around flex-wrap" style={{ gap: "20px" }}>
 <div id="unranked_competiton" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "300px" }}>
-  <h4 style={{ textAlign: "center", marginBottom: "10px", fontWeight: "bold", color: "#6a75ca" }}>무순위</h4>
+  <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>무순위</h4>
   <div className="carousel-inner">
     {unranked_grouped_data && unranked_grouped_data.map((group, index) => (
       <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
@@ -504,7 +504,7 @@ const Main = () => {
             <button
               onClick={() => handleButtonClick(group.apartment_name)}
               style={{
-                backgroundColor: "#6a75ca",
+                backgroundColor: "#57b6fe",
                 color: "white",
                 border: "none",
                 padding: "8px 20px",
@@ -546,7 +546,7 @@ const Main = () => {
       padding: "4px 6px",
       width: "25px",
       height: "25px",
-      backgroundColor: "#6a75ca",
+      backgroundColor: "#57b6fe",
       color: "white",
       borderRadius: "50%",
       fontSize: "10px",
@@ -566,7 +566,7 @@ const Main = () => {
       padding: "4px 6px",
       width: "25px",
       height: "25px",
-      backgroundColor: "#6a75ca",
+      backgroundColor: "#57b6fe",
       color: "white",
       borderRadius: "50%",
       fontSize: "10px",
@@ -580,11 +580,11 @@ const Main = () => {
 </div>
 </div>
 
-<div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #6a75ca", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
+<div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
     <h3 style={{ textAlign: "center", marginBottom: "15px", fontSize: "1.5rem" }}>다가올 청약</h3>
     <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
       <div id="apt_upcoming_applications" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250px" }}>
-        <h4 style={{ textAlign: "center", marginBottom: "8px", fontSize: "1.2rem", fontWeight: "bold", color: "#6a75ca" }}>아파트</h4>
+        <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>아파트</h4>
         <div className="carousel-inner">
         {apt_upcoming_data && apt_upcoming_data.map((group, index) => (
           <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
@@ -599,7 +599,7 @@ const Main = () => {
                 <div><p style={{ fontSize: "0.9rem", margin: "0" }}>지역 : { group.region }</p></div>
                 <button 
                   onClick={() => handleButtonClick(group.apartment_name)}
-                  style={{ backgroundColor: "#6a75ca", color: "white", border: "none", padding: "8px 15px", borderRadius: "5px", fontSize: "0.9rem", cursor: "pointer", marginTop: "10px" }}>
+                  style={{ backgroundColor: "#57b6fe", color: "white", border: "none", padding: "8px 15px", borderRadius: "5px", fontSize: "0.9rem", cursor: "pointer", marginTop: "10px" }}>
                   더보기
                 </button>
               </div>
@@ -622,12 +622,12 @@ const Main = () => {
   </div>
 )}
         <button className="carousel-control-prev" type="button" data-bs-target="#apt_upcoming_applications" data-bs-slide="prev" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#6a75ca", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button className="carousel-control-next" type="button" data-bs-target="#apt_upcoming_applications" data-bs-slide="next" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#6a75ca", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
@@ -635,7 +635,7 @@ const Main = () => {
 
       <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
       <div id="unranked_upcoming_data" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250px" }}>
-        <h4 style={{ textAlign: "center", marginBottom: "8px", fontSize: "1.2rem", fontWeight: "bold", color: "#6a75ca" }}>무순위</h4>
+        <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>무순위</h4>
         <div className="carousel-inner">
         {unranked_upcoming_data && unranked_upcoming_data.map((group, index) => (
           <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
@@ -650,7 +650,7 @@ const Main = () => {
                 <div><p style={{ fontSize: "0.9rem", margin: "0" }}>지역 : { group.region }</p></div>
                 <button 
                   onClick={() => handleButtonClick(group.apartment_name)}
-                  style={{ backgroundColor: "#6a75ca", color: "white", border: "none", padding: "8px 15px", borderRadius: "5px", fontSize: "0.9rem", cursor: "pointer", marginTop: "10px" }}>
+                  style={{ backgroundColor: "#57b6fe", color: "white", border: "none", padding: "8px 15px", borderRadius: "5px", fontSize: "0.9rem", cursor: "pointer", marginTop: "10px" }}>
                   더보기
                 </button>
               </div>
@@ -673,12 +673,12 @@ const Main = () => {
           </div>
         )}
         <button className="carousel-control-prev" type="button" data-bs-target="#unranked_upcoming_data" data-bs-slide="prev" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#6a75ca", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button className="carousel-control-next" type="button" data-bs-target="#unranked_upcoming_data" data-bs-slide="next" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#6a75ca", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
