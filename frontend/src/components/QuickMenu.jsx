@@ -9,7 +9,6 @@ import practiceImage from '../assets/practiceImage.png';
 const QuickMenu = ({ setChatHistory }) => {
     const [isOpen, setIsOpen] = useState(false);
     
-  
     const handleQuickMenu = (buttonText) => {
         // 사용자가 선택한 버튼의 텍스트를 user-message로 추가
         setChatHistory(prevHistory => [...prevHistory, { 
@@ -39,19 +38,42 @@ const QuickMenu = ({ setChatHistory }) => {
             
             case "자주묻는질문(FAQ)":
             case "청약 용어집":
-                // 생각중... 메시지 표시 후 RAG 시스템에 질문 전달
+            case "청약일정":
                 setTimeout(() => {
                     setChatHistory(prevHistory => [...prevHistory, { 
                         role: "model", 
-                        text: "생각중...",
+                        text: "아직 준비중인 서비스 입니다. 좌측 화면에서 이용해주세요 *^^*",
                         timestamp: Date.now()
                     }]);
-                    generateBotResponse([{ role: "user", text: buttonText }]);
+
+                    // 종료 메시지 출력
+                    setTimeout(() => {
+                        setChatHistory(prev => [...prev, {
+                            role: "model",
+                            type: "card_button",
+                            text: "청약이와의 대화가 도움이 되었나요? 추가 질문이 있다면 언제든지 저에게 질문해주세요.",
+                            timestamp: Date.now(),
+                            buttons: [
+                                { 
+                                text: "청약이란?",
+                                image: whatIsImage
+                                },
+                                { 
+                                text: "청약 통장이란?",
+                                image: bankImage
+                                },
+                                { 
+                                text: "나에게 가능한 청약은?",
+                                image: possibleImage
+                                },
+                                { 
+                                text: "청약체험 및 연습",
+                                image: practiceImage
+                                }
+                            ] 
+                        }]);                    
+                    }, 1000);
                 }, 600);
-                break;
-            
-            case "청약일정":
-                window.open('청약캘린더_URL', '_blank');
                 break;
         }
     };

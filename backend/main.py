@@ -17,13 +17,24 @@ from pydantic import BaseModel
 from rag import rag_chat
 from scenario import get_scenario_response
 from dotenv import load_dotenv
+from pymongo import MongoClient
 
 load_dotenv()
 ROOT_PATH = os.environ.get("ROOT_PATH")
 
 app = FastAPI(root_path=ROOT_PATH)
 
+# MongoDB 연결 설정
+user = os.environ.get('MONGODB_USER')
+password = os.environ.get('MONGODB_PASSWORD')
+host = os.environ.get('MONGODB_HOST') # 탄력적ip사용해야할듯 ..
+port = os.environ.get('MONGODB_PORT')
+client = MongoClient(f'mongodb://{user}:{password}@{host}:{port}/?authSource=admin&retryWrites=true&w=majority')
 
+MONGO_DB = "lgu"
+COLLECTION_NAME = "chatbot"
+db = client[MONGO_DB]
+collection = db[COLLECTION_NAME]
 
 
 app.add_middleware(
@@ -114,8 +125,6 @@ async def id_search(name: str = Form(...), email: str = Form(...)):
         return {"error": "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요."}
     except Exception as e:
         return {"error": "서버 오류가 발생했습니다. 관리자에게 문의하세요."}
-
-
 
 @app.put("/api/password_update")
 async def id_search(
@@ -383,18 +392,79 @@ class ChatRequest(BaseModel):
 async def chat_endpoint(request: ChatRequest):
     try:
         user_message = request.message
+        current_time = datetime.now()
+
+        print(f"사용자 메시지 저장 시도: {user_message}")
+
+        # 사용자 메시지 저장
+        await collection.insert_one({
+            "role": "user",
+            "text": user_message,
+            "timestamp": current_time
+        })
+        print(f"사용자 메시지 저장 완료: {user_message}")
 
         # 시나리오 응답 확인
         scenario_response = get_scenario_response(user_message)
 
         if scenario_response:
+            # 시나리오 봇 응답 저장
+            await collection.insert_one({
+                "role": "bot",
+                "text": scenario_response["text"],
+                "type": "scenario_button",
+                "buttons": scenario_response["buttons"],
+                "timestamp": current_time
+            })
+
             return {
-                "response": scenario_response["text"],
-                "buttons": scenario_response.get("buttons", None)
+                "response": {
+                    "role": "model",
+                    "type": "scenario_button",  # 시나리오 버튼 타입 지정
+                    "text": scenario_response["text"],
+                    "buttons": scenario_response["buttons"],
+                    "timestamp": int(time.time() * 1000)
+                }
+            }
+        
+        # 맞춤형 청약 플로우 응답 확인
+        personalized_response = get_personalized_response(user_message)
+        if personalized_response:
+            await collection.insert_one({
+                "role": "bot",
+                "text": personalized_response["text"],
+                "type": "scenario_button",
+                "buttons": personalized_response.get("buttons", []),  # buttons가 없을 수 있음
+                "requiresInput": personalized_response.get("requiresInput", None),  # 입력 필요 여부
+                "timestamp": current_time
+            })
+            return {
+                "response": {
+                    "role": "model",
+                    "type": "scenario_button",
+                    "text": personalized_response["text"],
+                    "buttons": personalized_response.get("buttons", []),
+                    "requiresInput": personalized_response.get("requiresInput", None),
+                    "timestamp": int(time.time() * 1000)
+                }
             }
         
         rag_response = rag_chat(user_message)
-        return {"response": rag_response}
+
+        # RAG 봇 응답 저장
+        await collection.insert_one({
+            "role": "bot",
+            "text": rag_response,
+            "timestamp": current_time
+        })
+
+        return {
+            "response": {
+                "role": "model",
+                "text": rag_response,
+                "timestamp": int(time.time() * 1000)
+            }
+        }
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

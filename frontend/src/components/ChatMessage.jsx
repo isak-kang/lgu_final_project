@@ -1,4 +1,4 @@
-import ChatbotIcon from "./ChatbotIcon" 
+import ChatbotIcon from "./ChatbotIcon"
 
 const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
   // 현재 시간을 포맷팅하는 함수
@@ -18,7 +18,7 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
       text: buttonText,
       timestamp: Date.now()
     }]);
-  
+
     // 생각중... 메시지 추가
     setTimeout(() => {
       setChatHistory(prevHistory => [...prevHistory, { 
@@ -29,6 +29,29 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
   
       // 봇 응답 생성 - 직접 배열 생성
       generateBotResponse([{ role: "user", text: buttonText }]);
+    }, 600);
+  };
+  
+  // 시나리오 버튼 클릭 핸들러 추가
+  const handleScenarioButtonClick = async (nextQuestion) => {
+    // 사용자 메시지 추가
+    setChatHistory(prevHistory => [...prevHistory, {
+      role: "user", 
+      text: nextQuestion,
+      timestamp: Date.now()
+    }]);
+  
+  
+    // 생각중... 메시지 추가
+    setTimeout(() => {
+      setChatHistory(prevHistory => [...prevHistory, { 
+        role: "model", 
+        text: "생각중...",
+        timestamp: Date.now()
+      }]);
+  
+      // 봇 응답 생성 - 직접 배열 생성
+      generateBotResponse([{ role: "user", text: nextQuestion }]);
     }, 600);
   };
 
@@ -52,6 +75,22 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
                   <span>{button.text}</span>
                 </button>
               ))}
+            </div>
+          </div>
+        );
+
+      case 'scenario_button': // 시나리오 버튼 타입
+        return (
+          <div className="scenario-message">
+            <div className="message-content">
+              <p className="message-text">{chat.text}</p>
+              <div className="scenario-button-container">
+                {chat.buttons.map((button, index) => (
+                  <button key={index} className="scenario-button" onClick={() => handleScenarioButtonClick(button.nextQuestion)}>
+                    {button.text}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         );
