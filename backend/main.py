@@ -22,6 +22,8 @@ from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
 from personalized_flow import determine_income_level
 from motor.motor_asyncio import AsyncIOMotorClient
+import time
+
 
 load_dotenv()
 ROOT_PATH = os.environ.get("ROOT_PATH")
