@@ -4,6 +4,7 @@ import numpy as np
 
 ### 세대구성원 수 + 소득으로 도시근로자 기준 월평균 소득 계산
 def determine_income_level(income_list, num_family):
+  
   income_series = np.array([3482964,
                           5415712,
                           7198649,
@@ -74,7 +75,7 @@ class UserState:
     
 # 사용자 상태 저장 dict
 try:
-   user_state
+   user_state 
 except:
   user_state = UserState()
 

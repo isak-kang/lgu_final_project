@@ -17,7 +17,7 @@ from pydantic import BaseModel
 from rag import rag_chat
 from scenario import get_scenario_response
 from dotenv import load_dotenv
-from pymongo import MongoClient
+
 from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
 from personalized_flow import determine_income_level
@@ -35,12 +35,12 @@ user = os.environ.get('MONGODB_USER')
 password = os.environ.get('MONGODB_PASSWORD')
 host = os.environ.get('MONGODB_HOST') # 탄력적ip사용해야할듯 ..
 port = os.environ.get('MONGODB_PORT')
-client = MongoClient(f'mongodb://{user}:{password}@{host}:{port}/?authSource=admin&retryWrites=true&w=majority')
+client = AsyncIOMotorClient(f'mongodb://{user}:{password}@{host}:{port}/?authSource=admin&retryWrites=true&w=majority')
 
-MONGO_DB = "lgu"
-COLLECTION_NAME = "chatbot"
-db = client[MONGO_DB]
-collection = db[COLLECTION_NAME]
+
+
+db = client["lgu"]
+collection = db["chatbot"]
 
 
 app.add_middleware(
@@ -403,7 +403,7 @@ async def chat_endpoint(request: ChatRequest):
         print(f"사용자 메시지 저장 시도: {user_message}")
 
         # 사용자 메시지 저장
-        await collection.insert_one({
+        collection.insert_one({
             "role": "user",
             "text": user_message,
             "timestamp": current_time
@@ -412,7 +412,7 @@ async def chat_endpoint(request: ChatRequest):
 
         # 시나리오 응답 확인
         scenario_response = get_scenario_response(user_message)
-
+        print("시나리오 응답확인")
         if scenario_response:
             # 시나리오 봇 응답 저장
             await collection.insert_one({
@@ -422,6 +422,7 @@ async def chat_endpoint(request: ChatRequest):
                 "buttons": scenario_response["buttons"],
                 "timestamp": current_time
             })
+            
 
             return {
                 "response": {
@@ -456,14 +457,14 @@ async def chat_endpoint(request: ChatRequest):
             }
         
         rag_response = rag_chat(user_message)
-
+        print("rag")
         # RAG 봇 응답 저장
         await collection.insert_one({
             "role": "bot",
             "text": rag_response,
             "timestamp": current_time
         })
-
+        print("응답 저장")
         return {
             "response": {
                 "role": "model",

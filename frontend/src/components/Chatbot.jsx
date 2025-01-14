@@ -124,7 +124,7 @@ const Chatbot = () => {
       };
   
       try {
-        const response = await fetch(`http://${API_URL}/chat`, {
+        const response = await fetch(`http://localhost:7777/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
