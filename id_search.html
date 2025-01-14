@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST" action="/id_search">
+        <input type="text" placeholder="Name" name="name">
+        <br>
+        <input type="text" placeholder="Email" name="email">
+        <br>
+        <input type="submit" value="입력" class="btn">
+    </form>
+
+    {% if id %}
+        <p>Your ID: {{ id }}</p>
+    {% endif %}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <a href="/">뒤로가기</a>
+</body>
+</html>

@@ -104,29 +104,22 @@ async def protected_api(current_user: str = Depends(get_current_user)):
 
 
 
-# @app.api_route("/id_search", methods=["GET", "POST"], response_class=HTMLResponse)
-# async def id_search(
-#     request: Request,
-#     name: str = Form(None),
-#     email: str = Form(None),
-# ):
-#     if request.method == "GET":
-#         return templates.TemplateResponse("id_search.html", context={"request": request})
-
-#     elif request.method == "POST":
-#         try:
-#             id = select_id(name,email)[0][0]
-#             return templates.TemplateResponse("id_search.html",{
-#             "request": request,
-#             "id": id
-#         })
-#         except Exception as e:
-#             error_message = f"An error occurred: {e}"
-#             print(error_message)  # 서버 로그에 에러 출력
-#             return templates.TemplateResponse("id_search.html", {
-#                 "request": request,
-#                 "error": "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요."
-#             })
+@app.post("/api/id_search")
+async def id_search(
+    request: Request,
+    name: str = Form(None), 
+    email: str = Form(None),
+):
+    try:
+        id = select_id(name,email)[0][0]
+        return ({
+        "request": request,
+        "id": id
+    })
+    except Exception as e:
+        return ("id_search.html", {
+            "error": "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요."
+        })
             
 
 

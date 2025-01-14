@@ -332,7 +332,7 @@ const Main = () => {
     <button
          className="carousel-control-prev"
          type="button"
-         data-bs-target="#carouselExampleAutoplaying"
+         data-bs-target="#newsCarousel"
          data-bs-slide="prev"
          style={{
            position: "absolute",
@@ -353,7 +353,7 @@ const Main = () => {
        <button
          className="carousel-control-next"
          type="button"
-         data-bs-target="#carouselExampleAutoplaying"
+         data-bs-target="#newsCarousel"
          data-bs-slide="next"
          style={{
            position: "absolute",
@@ -420,7 +420,6 @@ const Main = () => {
     </div>
   </div>
 </div>
-
 
    <div 
   className="d-flex flex-wrap justify-content-around" 

@@ -10,6 +10,7 @@ import MyInfo from "./components/my_info.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Analysis from "./components/Analysis.jsx";
 // import Competition from "./components/Competition.jsx";
+import IdSearch from "./components/Id_search.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/join" element={<Join />} />
           <Route path="/myInfo" element={<MyInfo />} />
           <Route path="/analysis" element={<Analysis />} />
+          <Route path="/id_search" element={<IdSearch />} />
         </Routes>
       </BrowserRouter>
     </div>
