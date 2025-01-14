@@ -105,7 +105,7 @@ const Login = () => {
                     <Link to="/id_search">아이디 찾기</Link>
                   </td>
                   <td className="id_search">
-                    <a href="/password_update">비밀번호 재설정</a>
+                  <Link to="/password_update">비밀번호 재설정</Link>
                   </td>
                 </tr>
               </tbody>

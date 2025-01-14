@@ -117,32 +117,22 @@ async def id_search(name: str = Form(...), email: str = Form(...)):
 
 
 
-# @app.api_route("/password_update", methods=["GET", "POST"], response_class=HTMLResponse)
-# async def id_search(
-#     request: Request,
-#     name: str = Form(None),
-#     email: str = Form(None),
-#     id : str = Form(None),
-#     password : str = Form(None)
-# ):
-#     if request.method == "GET":
-#         return templates.TemplateResponse("password_update.html", context={"request": request})
-
-#     elif request.method == "POST":
-#         try:
-#             update_password(name,id,email,password)
-
-#             return templates.TemplateResponse("password_update.html",{
-#             "request": request,
-#             "complete": "비밀번호 재설정이 성공적으로 완료됐습니다."
-#         })
-#         except Exception as e:
-#             error_message = f"An error occurred: {e}"
-#             print(error_message)  # 서버 로그에 에러 출력
-#             return templates.TemplateResponse("password_update.html", {
-#                 "request": request,
-#                 "error": "비밀번호를 찾을 수 없습니다. 입력 정보를 확인해주세요."
-#             })
+@app.put("/api/password_update")
+async def id_search(
+    name: str = Form(None),
+    email: str = Form(None),
+    id : str = Form(None),
+    password : str = Form(None)
+):
+    try:
+        update_password(name,id,email,password)
+        return {
+        "complete": "비밀번호 재설정이 성공적으로 완료됐습니다."
+    }
+    except Exception as e:
+        return {
+            "error": "입력된 정보가 정확하지 않습니다. 입력 정보를 확인해주세요."
+        }
 
 
 
