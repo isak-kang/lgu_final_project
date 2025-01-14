@@ -32,3 +32,4 @@ processed_output.json
 *.sln
 *.sw?
 
+chroma_db_1/

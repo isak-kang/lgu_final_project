@@ -75,9 +75,9 @@ class UserState:
     
 # 사용자 상태 저장 dict
 try:
-   user_state 
+    user_state 
 except:
-  user_state = UserState()
+    user_state = UserState()
 
 
 # 시나리오 데이터
