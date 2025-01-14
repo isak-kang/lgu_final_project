@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const IdSearch = () => {
     const [name, setName] = useState("");
@@ -10,26 +11,28 @@ const IdSearch = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("/api/id_search", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({ name, email }),
-            });
+            const response = await axios.post(
+                "/api/id_search",
+                new URLSearchParams({ name, email }).toString(),
+                {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                }
+            );
 
-            if (response.ok) {
-                const data = await response.json();
-                setId(data.id);
-                setError(null);
-            } else {
-                const errorData = await response.json();
-                setId(null);
-                setError(errorData.error || "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
-            }
+            setId(response.data.id);
+            setError(null);
         } catch (err) {
-            setId(null);
-            setError("서버에 연결할 수 없습니다. 나중에 다시 시도해주세요.");
+            if (err.response) {
+                // 서버에서 반환한 에러 응답 처리
+                setId(null);
+                setError(err.response.data.error || "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
+            } else {
+                // 네트워크 오류 등 처리
+                setId(null);
+                setError("서버에 연결할 수 없습니다. 나중에 다시 시도해주세요.");
+            }
         }
     };
 
