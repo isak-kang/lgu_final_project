@@ -29,6 +29,7 @@ function Analysis() {
 
   return (
     <div>
+      <p>{API_URL}</p>
       <h1>지역 및 년도별 경쟁률 분석</h1>
       <form onSubmit={handleSubmit}>
         {/* 지역 선택 */}

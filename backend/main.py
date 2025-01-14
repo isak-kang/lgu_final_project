@@ -105,22 +105,15 @@ async def protected_api(current_user: str = Depends(get_current_user)):
 
 
 @app.post("/api/id_search")
-async def id_search(
-    request: Request,
-    name: str = Form(None), 
-    email: str = Form(None),
-):
+async def id_search(name: str = Form(...), email: str = Form(...)):
     try:
-        id = select_id(name,email)[0][0]
-        return ({
-        "request": request,
-        "id": id
-    })
+        # DB 쿼리 예제
+        id = select_id(name, email)[0][0]  # `select_id`는 DB 검색 함수로 가정
+        return {"id": id}
+    except IndexError:
+        return {"error": "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요."}
     except Exception as e:
-        return ("id_search.html", {
-            "error": "ID를 찾을 수 없습니다. 입력 정보를 확인해주세요."
-        })
-            
+        return {"error": "서버 오류가 발생했습니다. 관리자에게 문의하세요."}
 
 
 
