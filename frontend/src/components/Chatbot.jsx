@@ -27,6 +27,7 @@ const Chatbot = () => {
       setNoResponseCount(0);
     };
     const chatBodyRef = useRef();
+    const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
   
     // 웰컴 메시지를 위한 useEffect 추가
     useEffect(() => {
@@ -123,7 +124,7 @@ const Chatbot = () => {
       };
   
       try {
-        const response = await fetch('http://localhost:8000/chat', {
+        const response = await fetch(`http://${API_URL}/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
