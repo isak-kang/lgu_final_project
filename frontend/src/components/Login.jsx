@@ -64,7 +64,7 @@ const Login = () => {
                       style={{
                         color: "#000",
                         backgroundColor: "#fff",
-                        fontFamily: "Arial, Helvetica, sans-serif", // 기본 글씨체로 설정
+                        fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
                       }}
                       required
                     />
@@ -83,7 +83,7 @@ const Login = () => {
                     style={{
                       color: "#000",
                       backgroundColor: "#fff",
-                      fontFamily: "Arial, Helvetica, sans-serif", // 기본 글씨체로 설정
+                      fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
                     }}
                   />
                   </td>
