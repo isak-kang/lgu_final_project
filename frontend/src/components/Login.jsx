@@ -50,6 +50,14 @@ const Login = () => {
               <tbody>
                 <tr>
                   <td>
+                    <h2                     
+                      style={{
+                      color: "#000",
+                      backgroundColor: "#fff",
+                      fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
+                    }}>로그인</h2>
+                    <h2
+                      className="login-input">로그인</h2>
                     <h2>로그인</h2>
                   </td>
                 </tr>
@@ -61,11 +69,7 @@ const Login = () => {
                       name="id"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
-                      style={{
-                        color: "#000",
-                        backgroundColor: "#fff",
-                        fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
-                      }}
+                      className="login-input"
                       required
                     />
                   </td>
@@ -80,11 +84,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
-                    style={{
-                      color: "#000",
-                      backgroundColor: "#fff",
-                      fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
-                    }}
+                    className="login-input"
                   />
                   </td>
                 </tr>

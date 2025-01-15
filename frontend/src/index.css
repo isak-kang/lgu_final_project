@@ -6,8 +6,13 @@
   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/OTWelcomeRA.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
-}
+} 
 
+.login-input {
+  color: #000;
+  background-color: #fff;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+}
 
 /* 전체 요소 기본 설정 */
 * {
