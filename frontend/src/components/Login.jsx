@@ -81,7 +81,7 @@ const Login = () => {
                       padding: "8px",
                       border: "1px solid #ccc",
                       borderRadius: "4px",
-                      fontFamily: "Arial, sans-serif"
+                      fontFamily: "굴림"
                     }}
                   />
                   </td>
