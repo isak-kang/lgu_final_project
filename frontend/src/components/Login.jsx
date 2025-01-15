@@ -67,15 +67,22 @@ const Login = () => {
                 </tr>
                 <tr>
                   <td>
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={8}
-                    />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={8}
+                    style={{
+                      color: "#000", // 텍스트 색상
+                      backgroundColor: "#fff", // 배경색
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                    }}
+                  />
                   </td>
                 </tr>
                 <tr>

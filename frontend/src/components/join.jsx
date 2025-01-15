@@ -103,6 +103,13 @@ function Join() {
               value={formData.password}
               onChange={handleChange}
               minLength={8}
+              style={{
+                color: "#000", // 텍스트 색상
+                backgroundColor: "#fff", // 배경색
+                padding: "8px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
               required
             />
           </div>
@@ -113,6 +120,13 @@ function Join() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
+              style={{
+                color: "#000", // 텍스트 색상
+                backgroundColor: "#fff", // 배경색
+                padding: "8px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
               required
             />
           </div>
