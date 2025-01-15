@@ -6,9 +6,12 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 // 
 import Chatbot from './Chatbot';
+import { UserContext } from "./UserContext.jsx";
+
 
 const Main = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useContext(UserContext);
+  // const [user, setUser] = useState(null);
   const [news, setNews] = useState([]);
   const [apt_upcoming_data, setAptUpcoming] = useState(null);
   const [unranked_upcoming_data, setUnrankedUpcoming] = useState(null);

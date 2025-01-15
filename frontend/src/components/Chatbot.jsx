@@ -4,6 +4,7 @@ import ChatForm from "./ChatForm"
 import ChatMessage from "./ChatMessage"
 import QuickMenu from "./QuickMenu";
 import { Link } from 'react-router-dom';
+import { UserContext } from "./UserContext.jsx";
 
 
 import whatIsImage from '../assets/whatIsImage.png';
@@ -19,6 +20,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const Chatbot = () => {
     const [chatHistory, setChatHistory] = useState([]);
     const [showChatbot, setShowChatbot] = useState(false);
+    const { user } = useContext(UserContext);
     const [lastActivityTime, setLastActivityTime] = useState(Date.now());
     const [lastBotResponseTime, setLastBotResponseTime] = useState(Date.now());
     const [noResponseCount, setNoResponseCount] = useState(0); // 무응답 횟수 카운트
