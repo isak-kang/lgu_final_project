@@ -4,7 +4,6 @@ import ChatForm from "./ChatForm"
 import ChatMessage from "./ChatMessage"
 import QuickMenu from "./QuickMenu";
 import { Link } from 'react-router-dom';
-import { UserContext } from "./UserContext.jsx";
 
 
 import whatIsImage from '../assets/whatIsImage.png';
@@ -18,12 +17,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const Chatbot = () => {
-    const userContext = useContext(UserContext); // useContext 호출
-    const user = userContext?.user || null; // userContext가 없으면 null 할당
-    
     const [chatHistory, setChatHistory] = useState([]);
     const [showChatbot, setShowChatbot] = useState(false);
-
     const [lastActivityTime, setLastActivityTime] = useState(Date.now());
     const [lastBotResponseTime, setLastBotResponseTime] = useState(Date.now());
     const [noResponseCount, setNoResponseCount] = useState(0); // 무응답 횟수 카운트
@@ -112,49 +107,50 @@ const Chatbot = () => {
       return () => clearInterval(inactivityTimer);
   }, [lastBotResponseTime, noResponseCount]);
   
-  const generateBotResponse = async (history) => {
-    const updateHistory = (text, isError = false) => {
-      setChatHistory(prev => [...prev.filter(msg => msg.text !== "생각중..."),
-        {
-          role: "model",
-          text: typeof text === 'object' ? text.text : text,
-          buttons: text.buttons,
-          type: text.buttons ? "scenario_button" : undefined,
-          isError,
-          timestamp: Date.now()
-        }
-      ]);
-      setLastBotResponseTime(Date.now());
-      setNoResponseCount(0);
-    };
+    const generateBotResponse = async (history) => {
+      // Helper function to update chat history
+      const updateHistory = (text, isError = false) => {
+        setChatHistory(prev => [...prev.filter(msg => msg.text !== "생각중..."),
+          { role: "model", 
+            text: typeof text === 'object' ? text.text : text,
+            buttons: text.buttons,
+            type: text.buttons ? "scenario_button" : undefined, 
+            isError, 
+            timestamp: Date.now()
+          }
+        ]);
+        setLastBotResponseTime(Date.now()); // 봇 응답시간 업데이트
+        setNoResponseCount(0); // 카운트 초기화
+      };
   
-    try {
-      const response = await fetch(`http://${API_URL}/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: history[history.length - 1].text,
-          userId: user?.id // user.id를 추가
-        })
-      });
-  
-      if (!response.ok) throw new Error('서버 응답 오류');
-      const data = await response.json();
-  
-      if (typeof data.response === 'object') {
-        updateHistory(data.response);
-      } else {
-        updateHistory({
-          text: data.response,
-          buttons: data.buttons
+      try {
+        const response = await fetch(`http://${API_URL}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: history[history.length - 1].text
+          })
         });
+  
+        if (!response.ok) throw new Error('서버 응답 오류');
+        const data = await response.json();
+  
+        if (typeof data.response === 'object') {
+          updateHistory(data.response);
+        } else {
+          updateHistory({
+            text: data.response,
+            buttons: data.buttons
+          });
+        }
+      
+        
+      } catch (error) {
+        updateHistory("죄송합니다. 오류가 발생했습니다.", true);
       }
-    } catch (error) {
-      updateHistory("죄송합니다. 오류가 발생했습니다.", true);
-    }
-  };
+    };
   
     useEffect(() => {
       // Auto-scroll whenever chat history updates

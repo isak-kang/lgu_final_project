@@ -6,12 +6,9 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 // 
 import Chatbot from './Chatbot';
-import { UserContext } from "./UserContext.jsx";
-
 
 const Main = () => {
-  const { user } = useContext(UserContext);
-  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [news, setNews] = useState([]);
   const [apt_upcoming_data, setAptUpcoming] = useState(null);
   const [unranked_upcoming_data, setUnrankedUpcoming] = useState(null);
@@ -44,6 +41,34 @@ const Main = () => {
     setIsModalOpen(false);
     setModalData(null);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      axios
+        .get(`http://${API_URL}/api/protected`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setUser(response.data.user);
+        })
+        .catch((error) => {
+          console.error("Authorization failed:", error);
+          if (error.response?.status === 401) {
+            alert("Session expired. Please log in again.");
+            localStorage.removeItem("access_token");
+            setUser(null);
+            window.location.href = "/login";
+          }
+        });
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+
 
   const handleLogout = async () => {
     const token = localStorage.getItem("access_token");
