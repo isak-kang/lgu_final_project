@@ -18,9 +18,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const Chatbot = () => {
+    const userContext = useContext(UserContext); // useContext 호출
+    const user = userContext?.user || null; // userContext가 없으면 null 할당
+    
     const [chatHistory, setChatHistory] = useState([]);
     const [showChatbot, setShowChatbot] = useState(false);
-    const { user } = useContext(UserContext);
+
     const [lastActivityTime, setLastActivityTime] = useState(Date.now());
     const [lastBotResponseTime, setLastBotResponseTime] = useState(Date.now());
     const [noResponseCount, setNoResponseCount] = useState(0); // 무응답 횟수 카운트
