@@ -61,7 +61,11 @@ const Login = () => {
                       name="id"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
-                      className="password-input"
+                      style={{
+                        color: "#000",
+                        backgroundColor: "#fff",
+                        fontFamily: "Arial, Helvetica, sans-serif", // 기본 글씨체로 설정
+                      }}
                       required
                     />
                   </td>
@@ -76,7 +80,11 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
-                    className="password-input"
+                    style={{
+                      color: "#000",
+                      backgroundColor: "#fff",
+                      fontFamily: "Arial, Helvetica, sans-serif", // 기본 글씨체로 설정
+                    }}
                   />
                   </td>
                 </tr>
