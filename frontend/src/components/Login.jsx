@@ -103,10 +103,10 @@ const Login = () => {
                     <Link to="/join">회원가입</Link>
                   </td>
                   <td className="id_search">
-                    <Link to="/id_search">아이디 찾기</Link>
+                    <Link to="/id_search">아이디<br />찾기</Link>
                   </td>
                   <td className="id_search">
-                  <Link to="/password_update">비밀번호 재설정</Link>
+                  <Link to="/password_update">비밀번호<br />재설정</Link>
                   </td>
                 </tr>
               </tbody>
