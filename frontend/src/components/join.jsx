@@ -103,11 +103,7 @@ function Join() {
               value={formData.password}
               onChange={handleChange}
               minLength={8}
-              style={{
-                color: "#000",
-                backgroundColor: "#fff",
-                fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
-              }}
+              className="login-input"
               required
             />
           </div>
@@ -118,11 +114,7 @@ function Join() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              style={{
-                color: "#000",
-                backgroundColor: "#fff",
-                fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
-              }}
+              className="login-input"
               required
             />
           </div>
