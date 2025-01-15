@@ -109,6 +109,7 @@ function Join() {
                 padding: "8px",
                 border: "1px solid #ccc",
                 borderRadius: "4px",
+                fontFamily: "Arial, sans-serif"
               }}
               required
             />
@@ -126,6 +127,7 @@ function Join() {
                 padding: "8px",
                 border: "1px solid #ccc",
                 borderRadius: "4px",
+                fontFamily: "Arial, sans-serif"
               }}
               required
             />
