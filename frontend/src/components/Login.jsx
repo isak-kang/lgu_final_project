@@ -50,15 +50,7 @@ const Login = () => {
               <tbody>
                 <tr>
                   <td>
-                    <h2                     
-                      style={{
-                      color: "#000",
-                      backgroundColor: "#fff",
-                      fontFamily: "Arial, Helvetica, sans-serif !important", // 기본 글씨체로 설정
-                    }}>로그인1223</h2>
-                    <h2
-                      className="login-input">로그인12323</h2>
-                    <h2>로그인123</h2>
+                    <h2>로그인</h2>
                   </td>
                 </tr>
                 <tr>
@@ -69,7 +61,6 @@ const Login = () => {
                       name="id"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
-                      className="login-input"
                       required
                     />
                   </td>
@@ -115,7 +106,7 @@ const Login = () => {
                     <Link to="/id_search">아이디 찾기</Link>
                   </td>
                   <td className="id_search">
-                  <Link to="/password_update">비밀번호 재설정!!</Link>
+                  <Link to="/password_update">비밀번호 재설정</Link>
                   </td>
                 </tr>
               </tbody>
