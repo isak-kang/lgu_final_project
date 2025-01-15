@@ -61,6 +61,11 @@ const Login = () => {
                       name="id"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
+                      style={{
+                        color: "#000",
+                        backgroundColor: "#fff", 
+                        fontFamily: "Dotum"
+                      }}
                       required
                     />
                   </td>
@@ -76,12 +81,9 @@ const Login = () => {
                     required
                     minLength={8}
                     style={{
-                      color: "#000", // 텍스트 색상
-                      backgroundColor: "#fff", // 배경색
-                      padding: "8px",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      fontFamily: "굴림"
+                      color: "#000",
+                      backgroundColor: "#fff", 
+                      fontFamily: "Dotum"
                     }}
                   />
                   </td>
