@@ -20,7 +20,6 @@ from dotenv import load_dotenv
 
 from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
-from personalized_flow import determine_income_level
 from motor.motor_asyncio import AsyncIOMotorClient
 import time
 
