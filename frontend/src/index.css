@@ -8,6 +8,11 @@
   font-style: normal;
 }
 
+.password-input {
+  font-family: '돋움', 'Gothic', Arial, sans-serif;
+  font-size: 16px;
+}
+
 /* 전체 요소 기본 설정 */
 * {
   margin: 0;
@@ -22,6 +27,8 @@ body {
   min-height: 100vh;
   background: linear-gradient(#f0f7ff, #e0efff);
 }
+
+
 
 /* 챗봇 토글 버튼 스타일 */
 #chatbot-toggler {

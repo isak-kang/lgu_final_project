@@ -335,9 +335,15 @@ const Main = () => {
       data-bs-target="#apt_competiton"
       data-bs-slide="prev"
       style={{
-        color: "#000",
-        backgroundColor: "#fff", 
-        fontFamily: "Dotum"
+        position: "absolute",
+        top: "60px",
+        padding: "4px 6px",
+        width: "25px",
+        height: "25px",
+        backgroundColor: "#57b6fe",
+        color: "white",
+        borderRadius: "50%",
+        fontSize: "10px",
       }}
     >
       <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -349,9 +355,15 @@ const Main = () => {
       data-bs-target="#apt_competiton"
       data-bs-slide="next"
       style={{
-        color: "#000",
-        backgroundColor: "#fff", 
-        fontFamily: "Dotum"
+        position: "absolute",
+        top: "60px",
+        padding: "4px 6px",
+        width: "25px",
+        height: "25px",
+        backgroundColor: "#57b6fe",
+        color: "white",
+        borderRadius: "50%",
+        fontSize: "10px",
       }}
     >
       <span className="carousel-control-next-icon" aria-hidden="true"></span>

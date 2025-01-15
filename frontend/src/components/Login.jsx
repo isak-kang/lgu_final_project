@@ -61,11 +61,7 @@ const Login = () => {
                       name="id"
                       value={id}
                       onChange={(e) => setId(e.target.value)}
-                      style={{
-                        color: "#000",
-                        backgroundColor: "#fff", 
-                        fontFamily: "Dotum"
-                      }}
+                      className="password-input"
                       required
                     />
                   </td>
@@ -80,11 +76,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
-                    style={{
-                      color: "#000",
-                      backgroundColor: "#fff", 
-                      fontFamily: "Dotum"
-                    }}
+                    className="password-input"
                   />
                   </td>
                 </tr>
