@@ -398,7 +398,7 @@ async def chat_endpoint(request: ChatRequest):
     try:
         user_message = request.message
         current_time = datetime.now()
-
+        print(request.message)
         print(f"사용자 메시지 저장 시도: {user_message}")
 
         # 사용자 메시지 저장
