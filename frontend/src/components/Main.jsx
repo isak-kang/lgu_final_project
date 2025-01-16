@@ -534,12 +534,12 @@ const Main = () => {
   </div>
 )}
         <button className="carousel-control-prev" type="button" data-bs-target="#apt_upcoming_applications" data-bs-slide="prev" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", zIndex: 1, adding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button className="carousel-control-next" type="button" data-bs-target="#apt_upcoming_applications" data-bs-slide="next" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", top: "50px", zIndex: 1, padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
@@ -585,12 +585,12 @@ const Main = () => {
           </div>
         )}
         <button className="carousel-control-prev" type="button" data-bs-target="#unranked_upcoming_data" data-bs-slide="prev" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", zIndex: 1, top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button className="carousel-control-next" type="button" data-bs-target="#unranked_upcoming_data" data-bs-slide="next" 
-          style={{ position: "absolute", top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
+          style={{ position: "absolute", zIndex: 1, top: "50px", padding: "3px 5px", width: "25px", height: "25px", backgroundColor: "#57b6fe", color: "white", borderRadius: "50%", fontSize: "10px" }}>
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>

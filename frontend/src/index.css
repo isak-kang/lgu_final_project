@@ -1,3 +1,4 @@
+
 /* 폰트 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
@@ -7,6 +8,12 @@
   font-weight: normal;
   font-style: normal;
 } 
+
+:root {
+  --bs-progress-bar-color: #fff;  /* 텍스트 색상 */
+  --bs-progress-bar-bg: #57b6fe;  /* 진행 바 배경색 */
+  --bs-progress-bar-transition: width 0.3s ease;  /* 애니메이션 */
+}
 
 .login-input {
   color: #000;
@@ -67,6 +74,7 @@ body {
 
 /* 챗봇 팝업창 스타일 */
 .chatbot-popup {
+  z-index: 999;
   position: fixed;
   opacity: 0; /* 초기에는 숨김 상태 */
   pointer-events: none;

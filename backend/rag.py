@@ -227,12 +227,8 @@ def rag_chat(chat):
             # './data/pdf_to_parsing.json',
             
             './data/FAQ_Crawling.json',
-            './data/test_result.json',
-            apt_base,
-            apt_competiton,
-            un_base,
-            un_competion_1,
-            un_competion_2,
+            './data/result.json',
+
 
             # './data/test_result_1.json',
             # './data/test_result_2.json',

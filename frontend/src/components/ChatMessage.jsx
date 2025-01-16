@@ -1,5 +1,5 @@
 import ChatbotIcon from "./ChatbotIcon"
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "./ProgressBar"
 
 const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
   // 현재 시간을 포맷팅하는 함수

@@ -584,7 +584,7 @@ def get_personalized_response(question: str) -> Optional[FlowResponse]:
   income_digit = re.compile(r"[0-9]{1,5}")
   match_digit = income_digit.search(question)
 
-  if match_digit:
+  if match_digit and user_state.current_scenario not in ["L5_0","L5_16", "L5_17", "L5_18", "L5_19", "L5_20"]:
     # 본인 / 배우자의 소득 묻기
     if current_state == "L5_5": # 미혼
       income_indiv = int(match_digit.group())
@@ -692,7 +692,3 @@ SCENARIOS["L5_19"] = FlowResponse(
 #     apt_name = instance['region']
 #     announcement_date = instance['region']
 #     txt += f"{region}"
-  
-
-
-
