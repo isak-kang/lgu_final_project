@@ -3,12 +3,12 @@ import re
 from collections import defaultdict
 import numpy as np
 import pandas as pd
-# import pymysql
+import pymysql
 from dotenv import load_dotenv
 from datetime import datetime
 import os
-# from sqlalchemy.orm import sessionmaker
-# from sqlalchemy import create_engine, text, MetaData, Table, Column, Integer, String, Date
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, text, MetaData, Table, Column, Integer, String, Date
 
 load_dotenv()
 
@@ -36,20 +36,23 @@ mapping_question = {
 
     "L5_18" : "나의 청약 신청 유형 보러 가기",
     "L5_19" : "나만의 청약 신청 유형 보러 가기",
+    "L5_20" : "내 유형으로 신청 가능한 청약 보기",
+    "L5_21" : "모집 중인 무순위 청약 보기"
+
 }
 
 # 진행 단계 정의
 FLOW_STEPS = {
     "L5_0": 1,  # 무주택세대구성원 확인
     "L5_1": 2,  # 혼인상태 확인
-    "L5_3": 3, "L5_4": 3, "L5_5": 3,  # 자녀/신혼부부 상태
+    "L5_3": 3, "L5_4": 3,  # 자녀 상태
     "L5_6": 4, "L5_7": 4, "L5_8": 4,  # 소득활동 형태
-    "L5_9": 5, "L5_10": 5,  # 소득정보 입력
+    "L5_5": 5, "L5_9": 5, "L5_9_1": 5, "L5_10": 5,  # 소득정보 입력 (본인 및 배우자)
     "L5_11": 6,  # 부동산가액 확인
     "L5_12": 7, "L5_13": 7,  # 세대구성원 수
     "L5_14": 8,  # 세대구성원 소득
     "L5_15": 9,  # 소득세 납부여부
-    "L5_2": 10, "L5_18": 10, "L5_19": 10  # 결과 확인
+    "L5_2": 10, "L5_16": 10, "L5_17": 10, "L5_18": 10  # 결과 확인
 }
 
 class Button(dict):
@@ -356,7 +359,7 @@ SCENARIOS = customDict(
   ),
   L5_2 = FlowResponse(
       text = """무주택세대구성원이 아니시군요! 무순위 청약을 안내해드릴게요.""",
-      buttons = []
+      buttons = [{"text" : "모집 중인 무순위 청약 보기", "nextQuestion" : mapping_question.get("L5_21")}]
   ),
 
   L5_3 = FlowResponse(
@@ -561,6 +564,9 @@ def get_personalized_response(question: str) -> Optional[FlowResponse]:
 
       "나의 청약 신청 유형 보러 가기" : "L5_18",
       "나만의 청약 신청 유형 보러 가기" : "L5_19",
+
+      "내 유형으로 신청 가능한 청약 보기" : "L5_20",
+      "모집 중인 무순위 청약 보기" : "L5_21"
   }
 
   global user_state
@@ -584,7 +590,7 @@ def get_personalized_response(question: str) -> Optional[FlowResponse]:
   income_digit = re.compile(r"[0-9]{1,5}")
   match_digit = income_digit.search(question)
 
-  if match_digit and user_state.current_scenario not in ["L5_0","L5_16", "L5_17", "L5_18", "L5_19", "L5_20"]:
+  if match_digit and user_state.current_scenario not in ["L5_0", "L5_16", "L5_17", "L5_18", "L5_19", "L5_20"]:
     # 본인 / 배우자의 소득 묻기
     if current_state == "L5_5": # 미혼
       income_indiv = int(match_digit.group())
@@ -660,35 +666,67 @@ def get_personalized_response(question: str) -> Optional[FlowResponse]:
 
 SCENARIOS["L5_19"] = FlowResponse(
     text = return_text(SCENARIOS["L5_18"]["content"]),
-    buttons = [],
+    buttons = [
+      {"text" : "내 유형으로 신청 가능한 청약 보기", "nextQuestion" : mapping_question.get("L5_20")}
+    ],
   )
 
 
 
-# # MySQL DB Connect --- 신청 마감되지 않은 청약 공고 가져오기
-# host = os.getenv("MYSQL_HOST")
-# username = os.getenv("MYSQL_USER")
-# password = os.getenv("MYSQL_PASSWORD")
-# database = os.getenv("MYSQL_DB")
+# MySQL DB Connect --- 신청 마감되지 않은 청약 공고 가져오기
+host = os.getenv("MYSQL_HOST")
+username = os.getenv("MYSQL_USER")
+password = os.getenv("MYSQL_PASSWORD")
+database = os.getenv("MYSQL_DB")
 
-# engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db}")
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(f"mysql+pymysql://{username}:{password}@{host}/{database}")
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# def call_apt_table():
-#   query = """
-#   SELECT region, apartment_name, announcement_date, application_period_start, application_period_end 
-#   FROM apt_housing_application_basic_info
-#   WHERE application_period_end >= date(now())
-#   """ 
-#   with engine.connect() as conn:
-#     df = pd.read_sql(query, conn)
-#   return df
+def call_apt_table(user_state):
+    apply_type = user_state.determine_apply_type()
+    if len(apply_type) == 0:
+        query = """
+        SELECT region, apartment_name, announcement_date, application_period_start, application_period_end 
+        FROM unranked_housing_application_basic_info
+        WHERE application_period_end >= date(now());"""
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
+            return df
+    else:
+        query = """
+        SELECT region, apartment_name, announcement_date, application_period_start, application_period_end
+        FROM apt_housing_application_basic_info
+        WHERE application_period_end >= date(now());"""
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
+            return df
 
-# def return_text_from_table(table):
-#   txt = str()
-  
-#   for instance in table:
-#     region = instance['region']
-#     apt_name = instance['region']
-#     announcement_date = instance['region']
-#     txt += f"{region}"
+def return_text_from_table(table):
+    if len(table) == 0:
+        return """현재 모집 중인 청약 공고가 없어요.
+예정된 청약은 청약캘린더에서 확인하실 수 있어요."""
+
+    txt = """현재 모집 중인 청약 공고를 알려드릴게요. 알려드린 맞춤형 청약 유형으로 신청해보세요.
+지역 | 아파트명 | 모집공고일 | 신청마감일
+"""
+    for idx, instance in table.iterrows():
+        region = instance['region']
+        apt_name = instance['apartment_name']
+        announcement_date = instance['announcement_date']
+        application_period_end = instance['application_period_end']
+        txt += f"""{region} | {apt_name} | {announcement_date} | {application_period_end}
+"""
+    txt += "청약홈에서 신청하기 >>> https://www.applyhome.co.kr"
+    return txt
+
+SCENARIOS["L5_21"] = FlowResponse(
+    text = return_text_from_table(call_apt_table(user_state)),
+    buttons = None,
+  )
+
+SCENARIOS["L5_20"] = FlowResponse(
+    text = return_text_from_table(call_apt_table(user_state)),
+    buttons = None,
+  )
+
+

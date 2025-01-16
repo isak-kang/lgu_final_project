@@ -43,9 +43,10 @@ const Login = () => {
     }};
 
     return (
+      
       <div style={styles.centeredContainer}>
         <div className="login-container" style={styles.formContainer}>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleLogin} >
             <table>
               <tbody>
                 <tr>
@@ -99,15 +100,21 @@ const Login = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="join">
-                    <Link to="/join">회원가입</Link>
-                  </td>
-                  <td className="id_search">
-                    <Link to="/id_search">아이디<br />찾기</Link>
-                  </td>
-                  <td className="id_search">
-                  <Link to="/password_update">비밀번호<br />재설정</Link>
-                  </td>
+                <td className="join" > 
+                  <Link to="/join" className="btn btn-primary" style={{ backgroundColor: "#57b6fe", border: "none" }}>
+                    회원가입
+                  </Link>
+                </td>
+                <td className="id_search">
+                  <Link to="/id_search" className="btn btn-primary" style={{ backgroundColor: "#57b6fe", border: "none" }}>
+                    아이디<br />찾기
+                  </Link>
+                </td>  
+                <td className="password_change">
+                  <Link to="/password_update" className="btn btn-primary" style={{ backgroundColor: "#57b6fe", border: "none" }}>
+                  비밀번호<br />재설정
+                  </Link>
+                </td>                    
                 </tr>
               </tbody>
             </table>
