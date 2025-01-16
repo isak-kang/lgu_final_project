@@ -11,6 +11,27 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
     return `${hours}:${minutes}`;
   };
 
+  const convertLinksToAnchors = (text) => {
+    
+    console.log('Converting text:', text);
+
+    const urlRegex = /(https?:\/\/[^\s)]+)/g;
+    const matches = text.match(urlRegex);
+
+    console.log('Found URLs:', matches);
+
+    return text.split(urlRegex).map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a key={index} href={part} target="_blank" rel="noopener coreferrer" className="chat-link">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   // 버튼 클릭 핸들러 추가
   const handleButtonClick = async (buttonText) => {
     // 사용자 메시지 추가
@@ -90,7 +111,7 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
               />
             )}
             <div className="message-content">
-              <p className="message-text">{chat.text}</p>
+              <p className="message-text">{convertLinksToAnchors(chat.text)}</p>
               <div className="scenario-button-container">
                 {chat.buttons.map((button, index) => (
                   <button key={index} className="scenario-button" onClick={() => handleScenarioButtonClick(button.nextQuestion)}>
@@ -103,7 +124,7 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
         );
 
       default: //text type
-        return <p className="message-text">{chat.text}</p>;
+        return <p className="message-text">{convertLinksToAnchors(chat.text)}</p>;
     }
   };
 

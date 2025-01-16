@@ -506,7 +506,15 @@ body {
   }
 }
 
+.chat-link {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all;
+}
 
+.chat-link:hover {
+  color: #004499;
+}
 
 
 /* 캘린더 컨테이너 */
