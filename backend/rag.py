@@ -215,43 +215,50 @@ class RAGChatbot:
 
 def rag_chat(chat):
     try:
-        # DB 데이터 로드
-        apt_base = select_json("apt_housing_application_basic_info")
-        apt_competition = select_json("apt_housing_competition_rate")
-        un_base = select_json("unranked_housing_application_basic_info")
-        un_competition_1 = select_json("unranked_housing_competition_rate_1")
-        un_competition_2 = select_json("unranked_housing_competition_rate_2")
 
-        # 파일 데이터 로드
+        apt_base=select_json("apt_housing_application_basic_info")
+        apt_competiton=select_json("apt_housing_competition_rate")
+        un_base=select_json("unranked_housing_application_basic_info")
+        un_competion_1=select_json("unranked_housing_competition_rate_1")
+        un_competion_2=select_json("unranked_housing_competition_rate_2")
+
+        # 여러 JSON 파일 로드
         file_paths = [
+            # './data/pdf_to_parsing.json',
+            
             './data/FAQ_Crawling.json',
-            './data/result.json',
+            './data/test_result.json',
+            apt_base,
+            apt_competiton,
+            un_base,
+            un_competion_1,
+            un_competion_2,
+
+            # './data/test_result_1.json',
+            # './data/test_result_2.json',
+            # './Cheongyak/data/processed_output.json'
         ]
-        file_data = load_pdf_data(file_paths)
 
-        # DB 데이터와 파일 데이터 병합
-        all_data = {
-            "db_data": {
-                "apt_base": apt_base,
-                "apt_competition": apt_competition,
-                "un_base": un_base,
-                "un_competition_1": un_competition_1,
-                "un_competition_2": un_competition_2,
-            },
-            "file_data": file_data
-        }
 
+
+        data = load_pdf_data(file_paths)
+
+        
         # 챗봇 초기화
-        chatbot = RAGChatbot(all_data)
-        print("챗봇이 준비되었습니다.")
-
-        # 사용자의 질문 처리
-        try:
-            response = chatbot.generate_response(chat)
-            return response
-        except Exception as e:
-            return f"응답 생성 중 오류가 발생했습니다: {str(e)}"
-
+        chatbot = RAGChatbot(data)
+        print("챗봇이 준비되었습니다. 종료하려면 'quit'를 입력하세요.")
+        while True:
+            user_input = chat
+            if user_input.lower() == 'quit':
+                break
+                
+            try:
+                response = chatbot.generate_response(user_input)
+                return response
+            except Exception as e:
+                print(f"응답 생성 중 오류가 발생했습니다: {str(e)}")
+                
     except Exception as e:
-        return f"초기화 중 오류가 발생했습니다: {str(e)}"
+        print(f"초기화 중 오류가 발생했습니다: {str(e)}")
+
 
