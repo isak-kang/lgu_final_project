@@ -1,4 +1,5 @@
 import ChatbotIcon from "./ChatbotIcon"
+import ProgressBar from "./ProgressBar";
 
 const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
   // 현재 시간을 포맷팅하는 함수
@@ -82,6 +83,12 @@ const ChatMessage = ({ chat, setChatHistory, generateBotResponse }) => {
       case 'scenario_button': // 시나리오 버튼 타입
         return (
           <div className="scenario-message">
+            {chat.currentStep && (
+              <ProgressBar
+                currentStep={chat.currentStep}
+                totalSteps={chat.totalSteps}
+              />
+            )}
             <div className="message-content">
               <p className="message-text">{chat.text}</p>
               <div className="scenario-button-container">

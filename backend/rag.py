@@ -210,7 +210,7 @@ class RAGChatbot:
         )
         
         return response.choices[0].message.content
-
+    
 
 def rag_chat(chat):
     try:

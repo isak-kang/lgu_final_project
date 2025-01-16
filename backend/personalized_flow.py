@@ -38,6 +38,19 @@ mapping_question = {
     "L5_19" : "나만의 청약 신청 유형 보러 가기",
 }
 
+# 진행 단계 정의
+FLOW_STEPS = {
+    "L5_0": 1,  # 무주택세대구성원 확인
+    "L5_1": 2,  # 혼인상태 확인
+    "L5_3": 3, "L5_4": 3, "L5_5": 3,  # 자녀/신혼부부 상태
+    "L5_6": 4, "L5_7": 4, "L5_8": 4,  # 소득활동 형태
+    "L5_9": 5, "L5_10": 5,  # 소득정보 입력
+    "L5_11": 6,  # 부동산가액 확인
+    "L5_12": 7, "L5_13": 7,  # 세대구성원 수
+    "L5_14": 8,  # 세대구성원 소득
+    "L5_15": 9,  # 소득세 납부여부
+    "L5_2": 10, "L5_18": 10, "L5_19": 10  # 결과 확인
+}
 
 class Button(dict):
     text: str            # 버튼에 표시될 텍스트
@@ -557,7 +570,15 @@ def get_personalized_response(question: str) -> Optional[FlowResponse]:
     user_state.update_scenario(mapped_key)
     # 으아
     print(f'시나리오 로그 : {user_state.scenario_logs}')
-    return SCENARIOS.get(mapped_key)
+
+    response = SCENARIOS.get(mapped_key)
+    # 진행 단계 정보 추가
+    response["currentStep"] = FLOW_STEPS.get(mapped_key, 1)
+    response["totalSteps"] = 10
+
+    print("Flow Response:", response)
+
+    return response
   
   current_state = user_state.current_scenario
   income_digit = re.compile(r"[0-9]{1,5}")

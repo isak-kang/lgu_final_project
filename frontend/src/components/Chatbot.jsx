@@ -115,6 +115,8 @@ const Chatbot = () => {
             text: typeof text === 'object' ? text.text : text,
             buttons: text.buttons,
             type: text.buttons ? "scenario_button" : undefined, 
+            currentStep: text.currentStep,
+            totalSteps: text.totalSteps,
             isError, 
             timestamp: Date.now()
           }

@@ -279,7 +279,6 @@ async def login_api(
 
 @app.post("/api/logout")
 async def logout(current_user: str = Depends(get_current_user)):
-    # 서버 측에서는 추가 작업 없이 로그아웃 요청 수락
     return {"message": "Successfully logged out"}
     
 
@@ -393,17 +392,22 @@ async def get_competition_data(apartment_name: str):
 class ChatRequest(BaseModel):
     message: str
 
+
+
+
+
+
+
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
     try:
         user_message = request.message
         current_time = datetime.now()
-        print(request)
 
         print(f"사용자 메시지 저장 시도: {user_message}")
 
         # 사용자 메시지 저장
-        collection.insert_one({
+        await collection.insert_one({
             "role": "user",
             "text": user_message,
             "timestamp": current_time
@@ -412,7 +416,7 @@ async def chat_endpoint(request: ChatRequest):
 
         # 시나리오 응답 확인
         scenario_response = get_scenario_response(user_message)
-        print("시나리오 응답확인")
+
         if scenario_response:
             # 시나리오 봇 응답 저장
             await collection.insert_one({
@@ -422,7 +426,6 @@ async def chat_endpoint(request: ChatRequest):
                 "buttons": scenario_response["buttons"],
                 "timestamp": current_time
             })
-            
 
             return {
                 "response": {
@@ -437,11 +440,14 @@ async def chat_endpoint(request: ChatRequest):
         # 맞춤형 청약 플로우 응답 확인
         personalized_response = get_personalized_response(user_message)
         if personalized_response:
+
             await collection.insert_one({
                 "role": "bot",
                 "text": personalized_response["text"],
                 "type": "scenario_button",
                 "buttons": personalized_response.get("buttons", []),  # buttons가 없을 수 있음
+                "currentStep": personalized_response.get("currentStep", 1),
+                "totalSteps": personalized_response.get("totalSteps", 10),
                 "requiresInput": personalized_response.get("requiresInput", None),  # 입력 필요 여부
                 "timestamp": current_time
             })
@@ -451,20 +457,22 @@ async def chat_endpoint(request: ChatRequest):
                     "type": "scenario_button",
                     "text": personalized_response["text"],
                     "buttons": personalized_response.get("buttons", []),
+                    "currentStep": personalized_response.get("currentStep"),
+                    "totalSteps": personalized_response.get("totalSteps"),
                     "requiresInput": personalized_response.get("requiresInput", None),
                     "timestamp": int(time.time() * 1000)
                 }
             }
         
         rag_response = rag_chat(user_message)
-        print("rag")
+
         # RAG 봇 응답 저장
         await collection.insert_one({
             "role": "bot",
             "text": rag_response,
             "timestamp": current_time
         })
-        print("응답 저장")
+
         return {
             "response": {
                 "role": "model",
@@ -472,6 +480,6 @@ async def chat_endpoint(request: ChatRequest):
                 "timestamp": int(time.time() * 1000)
             }
         }
-
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

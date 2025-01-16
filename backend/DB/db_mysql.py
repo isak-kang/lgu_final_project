@@ -693,6 +693,16 @@ def update_password(name, id ,email,password):
 
 
 
+def select_json(table):
+    session = SessionLocal()
+    try:
+        query = text(f"select * from {table}")  # text로 쿼리 작성
+        result = session.execute(query)
+        rows = result.mappings().all()  # Row 객체를 dict 형태로 변환
+        return [dict(row) for row in rows]  # 각 행을 dict로 변환하여 리스트로 반환
+    finally:
+        session.close()
+
 
 if __name__ == "__main__":
     # csv_file_path = "./data/한국부동산원_지역별 청약 경쟁률 정보_20241130.csv"
@@ -703,10 +713,12 @@ if __name__ == "__main__":
     # tabel_name = "housing_price"
     # csv_save(csv_file_path, tabel_name)
     
-    # table = "competition"
-    # a = select_all(table)
-    # print(a)
+    table = "competition"
+    a = select_json(table)
+    print(a)
 
     # print(select_id("강이삭","wbsldj59@naver.com")[0][0])
+
+    
 
     pass
