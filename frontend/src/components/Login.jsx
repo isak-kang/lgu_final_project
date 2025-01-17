@@ -123,7 +123,7 @@ const Login = () => {
       </div>
     );
   };
-  
+
   // 스타일 정의
   const styles = {
     centeredContainer: {
