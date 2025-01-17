@@ -28,9 +28,6 @@ export const UserProvider = ({ children }) => {
             window.location.href = "/login";
           }
         });
-    } else {
-      alert("로그인 정보가 없습니다. 로그인 페이지로 갑니다.");
-      window.location.href = "/login";
     }
   }, []);
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-
 function MyInfo() {
   const [user, setUser] = useState(null);
   const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
@@ -24,11 +23,12 @@ function MyInfo() {
             alert("Session expired. Please log in again.");
             localStorage.removeItem("access_token");
             setUser(null);
-            window.location.href = "/login";
           }
         });
     } else {
-      setUser(null);
+      // 토큰이 없으면 알림 메시지를 표시하고 로그인 페이지로 리다이렉트
+      alert("로그인 정보가 없습니다. 로그인 페이지로 갑니다.");
+      window.location.href = "/login";
     }
   }, []);
 

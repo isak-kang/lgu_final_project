@@ -33,7 +33,7 @@ const Chatbot = () => {
     
     if (showChatbot) { // 챗봇이 열릴 때
       setTimeout(() => {
-        setChatHistory([
+        setChatHistory(prev => [...prev,
           {
             role: "model",
             text: "안녕하세요, 청약 도우미 청약이입니다. 현재 청약 관련 FAQ와 최근 1년간의 청약 정보를 제공해드리고 있습니다. 특히 신혼부부 및 생애최초 특별공급 관련 상세 정보를 확인하실 수 있습니다."
@@ -65,6 +65,17 @@ const Chatbot = () => {
         ]);
       }, 500); // 0.5초 후에 메시지 표시
     }
+  }, [showChatbot]);
+
+  // 챗봇이 닫혔을 때 5분 후 chatHistory 초기화
+  useEffect(() => {
+    let timer;
+    if (!showChatbot) {
+      timer = setTimeout(() => {
+        setChatHistory([]); // 5분 후 history 초기화
+      }, 5 * 60 * 1000); 
+    }
+    return () => clearTimeout(timer); // 컴포넌트가 언마운트되거나 챗봇이 다시 열리면 타이머 취소
   }, [showChatbot]);
 
   // 무응답 타이머 상태 관리

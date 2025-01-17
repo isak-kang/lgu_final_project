@@ -719,6 +719,4 @@ if __name__ == "__main__":
 
     # print(select_id("강이삭","wbsldj59@naver.com")[0][0])
 
-    
-
     pass

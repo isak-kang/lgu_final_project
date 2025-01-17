@@ -115,7 +115,6 @@ async def protected_api(current_user: str = Depends(get_current_user)):
 
     # 첫 번째 행을 딕셔너리로 변환
     user_data = matched_user.iloc[0].to_dict()
-
     return {"user": user_data}
 
 
@@ -164,6 +163,14 @@ async def api_events(
     """
     /api/schedule 엔드포인트 - 필터 조건을 통해 일정 가져오기
     """
+    print(get_filtered_schedule(
+        start=start, 
+        end=end, 
+        special=special, 
+        priority1=priority1, 
+        priority2=priority2, 
+        unranked=unranked,
+    ))
     return get_filtered_schedule(
         start=start, 
         end=end, 
