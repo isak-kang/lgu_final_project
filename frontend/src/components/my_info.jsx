@@ -1,55 +1,30 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
+import { UserContext } from "./UserContext.jsx";
 
 function MyInfo() {
-  const [user, setUser] = useState(null);
-  const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
-  
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      axios
-        .get(`http://${API_URL}/api/protected`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          setUser(response.data.user);
-        })
-        .catch((error) => {
-          console.error("Authorization failed:", error);
-          if (error.response?.status === 401) {
-            alert("Session expired. Please log in again.");
-            localStorage.removeItem("access_token");
-            setUser(null);
-          }
-        });
-    } else {
-      // 토큰이 없으면 알림 메시지를 표시하고 로그인 페이지로 리다이렉트
-      alert("로그인 정보가 없습니다. 로그인 페이지로 갑니다.");
-      window.location.href = "/login";
-    }
-  }, []);
+  const { user } = useContext(UserContext);
 
   if (!user) {
-    return null; // 사용자 정보가 로드되기 전에는 아무것도 표시하지 않음
+    alert("로그인 정보가 없습니다. 로그인 페이지로 갑니다.");
+    window.location.href = "/login";
   }
 
-  return (
-    <div>
-      <h1>어서오세요, {user.name}님</h1>
-      <br />
-      <h2>기본 정보</h2>
-      <p>이름: {user.name}</p>
-      <p>생년월일: {user.resident_number}</p>
-      <p>주소지: {user.address}</p>
-      <br />
-      <h2>연락처 정보</h2>
-      <p>이메일: {user.email}</p>
-      <p>휴대전화: {user.phone_number}</p>
-    </div>
-  );
+  return <UserInfoView user={user} />;
 }
+
+const UserInfoView = ({ user }) => (
+  <div>
+    <h1>어서오세요, {user?.name || "사용자"}님</h1>
+    <br />
+    <h2>기본 정보</h2>
+    <p>이름: {user?.name || "정보 없음"}</p>
+    <p>생년월일: {user?.resident_number || "정보 없음"}</p>
+    <p>주소지: {user?.address || "정보 없음"}</p>
+    <br />
+    <h2>연락처 정보</h2>
+    <p>이메일: {user?.email || "정보 없음"}</p>
+    <p>휴대전화: {user?.phone_number || "정보 없음"}</p>
+  </div>
+);
 
 export default MyInfo;

@@ -12,14 +12,14 @@ import Analysis from "./components/Analysis.jsx";
 // import Competition from "./components/Competition.jsx";
 import IdSearch from "./components/Id_search.jsx";
 import PasswordUpdate from "./components/Password_update.jsx";
-// import { UserProvider } from "./components/UserContext.jsx";
+import { UserProvider } from "./components/UserContext.jsx";
 
 function App() {
   return (
     <div>
-      {/* <UserProvider> */}
+      <UserProvider>
       <BrowserRouter>
-      <Navbar /> {/* 모든 페이지에 Navbar 추가 */}
+      <Navbar />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
@@ -33,7 +33,7 @@ function App() {
           <Route path="/password_update" element={<PasswordUpdate />} />
         </Routes>
       </BrowserRouter>
-      {/* </UserProvider> */}
+      </UserProvider>
     </div>
   );
 }

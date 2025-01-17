@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext} from "react";
 import ChatbotIcon from "./ChatbotIcon";
 import ChatForm from "./ChatForm"
 import ChatMessage from "./ChatMessage"
 import QuickMenu from "./QuickMenu";
-
+import { UserContext } from "./UserContext.jsx";
 
 import whatIsImage from '../assets/whatIsImage.png';
 import bankImage from '../assets/bankImage.png';
@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const Chatbot = () => {
+  const { user } = useContext(UserContext);
   const [chatHistory, setChatHistory] = useState([]);
   const [showChatbot, setShowChatbot] = useState(false);
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
@@ -142,10 +143,10 @@ const Chatbot = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: history[history.length - 1].text
+          message: history[history.length - 1].text,
+          user_id: user?.id || null
         })
       });
-
       if (!response.ok) throw new Error('서버 응답 오류');
       const data = await response.json();
 
