@@ -32,3 +32,5 @@ processed_output.json
 *.sw?
 
 chroma_db_1/
+
+dist
