@@ -1,12 +1,12 @@
-// Navbar.js
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useRef, useState, useEffect, useContext, createContext } from "react";
 import { UserContext } from "./UserContext.jsx";
+import axios from "axios";  // axios를 사용한다고 가정
 
 const Navbar = () => {
 
   const { user } = useContext(UserContext);
+
   const handleLogout = async () => {
     const token = localStorage.getItem("access_token");
     if (token) {
@@ -23,10 +23,8 @@ const Navbar = () => {
 
     // 토큰 삭제 및 페이지 리디렉션
     localStorage.removeItem("access_token");
-    
     window.location.href = "/";
   };
-
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,11 +42,10 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
+          <ul className="navbar-nav">
             <li className="nav-item">
               <Link to="/term" className="nav-link">용어</Link>
             </li>
-            
             <li className="nav-item">
               <Link to="/calendar" className="nav-link">청약캘린더</Link>
             </li>
@@ -61,9 +58,11 @@ const Navbar = () => {
             <li className="nav-item">
               <Link to="/myInfo" className="nav-link">내정보</Link>
             </li>
-
-            <li>
-            {user ? (
+          </ul>
+          {/* 로그인/로그아웃 버튼을 오른쪽 끝에 배치 */}
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              {user ? (
                 <>
                   <Link 
                     to="/login" 
