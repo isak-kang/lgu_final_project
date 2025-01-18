@@ -34,7 +34,7 @@ function Analysis() {
         {/* 지역 선택 */}
         <label>
           지역 선택:
-          <select value={region} onChange={(e) => setRegion(e.target.value)} required>
+          <select value={region} style={styles.select} onChange={(e) => setRegion(e.target.value)} required >
             <option value="" disabled>지역 선택</option>
             <option value="강원">강원</option>
             <option value="경기">경기</option>
@@ -58,7 +58,7 @@ function Analysis() {
         {/* 년도 선택 */}
         <label>
           년도 선택:
-          <select value={year} onChange={(e) => setYear(e.target.value)} required>
+          <select value={year} style={styles.select} onChange={(e) => setYear(e.target.value)} required>
             <option value="" disabled>년도 선택</option>
             <option value="2020">2020</option>
             <option value="2021">2021</option>
@@ -71,7 +71,7 @@ function Analysis() {
         {/* 청약 선택 */}
         <label>
           청약 선택:
-          <select value={home} onChange={(e) => setHome(e.target.value)} required>
+          <select value={home} style={styles.select} onChange={(e) => setHome(e.target.value)} required>
             <option value="" disabled>청약 선택</option>
             <option value="general">일반 공급</option>
             <option value="special">특별 공급</option>
@@ -91,5 +91,35 @@ function Analysis() {
     </div>
   );
 }
+const styles = {
+  select: {
+    width: "100%",
+    padding: "10px 15px",
+    fontSize: "18px", // 글씨 크기 조정
+    fontFamily: "'Arial', sans-serif", // 기본 폰트 적용
+    lineHeight: "1.5", // 줄 간격을 적당히 조정하여 가독성 향상
+    color: "#333",
+    backgroundColor: "#f8f9fa",
+    border: "1px solid #ced4da",
+    borderRadius: "8px",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+    transition: "all 0.2s ease-in-out",
+    height: "auto", // 높이 자동으로 조정
+  },
+  selectFocus: {
+    borderColor: "#80bdff",
+    outline: "none",
+    boxShadow: "0 0 5px rgba(0, 123, 255, 0.5)",
+  },
+  option: {
+    padding: "10px",
+    fontSize: "16px", // 옵션 글씨 크기 조정
+    fontFamily: "'Arial', sans-serif", // 옵션에 폰트 적용
+  },
+  selectDisabled: {
+    backgroundColor: "#e9ecef",
+    color: "#6c757d",
+  },
+};
 
 export default Analysis;

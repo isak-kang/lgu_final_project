@@ -518,10 +518,14 @@ def get_article_image(news_url):
 
 def naver_news_crawling():
     # 검색할 키워드 설정 (UTF-8 인코딩)
-    encText = urllib.parse.quote("청약")
+    encText1 = urllib.parse.quote("부동산 청약")
+    encText2 = urllib.parse.quote("부동산 정책")
+
+    # 두 검색어를 'and'로 결합
+    query = encText1 + "+" + encText2
 
     # 뉴스 검색 API URL 설정 (날짜순 정렬, 10개의 기사 요청)
-    url = "https://openapi.naver.com/v1/search/news?query=" + encText + "&display=10&sort=sim"  # 정확도순, 10개의 기사
+    url = "https://openapi.naver.com/v1/search/news?query=" + query + "&display=10&sort=sim"  # 정확도순, 10개의 기사
 
 
     # API 요청 설정
