@@ -142,8 +142,8 @@ const Main = () => {
                 className="card-img-left"
                 alt={item.title}
                 style={{
-                  width: "350px",
-                  height: "350px",
+                  width: "250px",
+                  height: "250px",
                   objectFit: "cover",
                   borderRadius: "10px",
                 }}
@@ -186,7 +186,7 @@ const Main = () => {
          data-bs-slide="prev"
          style={{
            position: "absolute",
-           top: "150px",
+           top: "130px",
            padding: "4px 6px",
            width: "40px",
            height: "40px",
@@ -207,7 +207,7 @@ const Main = () => {
          data-bs-slide="next"
          style={{
            position: "absolute",
-           top: "150px",
+           top: "130px",
            padding: "4px 6px",
            width: "40px",
            height: "40px",
@@ -221,53 +221,6 @@ const Main = () => {
          <span className="visually-hidden">Next</span>
        </button>
 
-  </div>
-
-  {/* Login/User Card */}
-  <div
-  className="d-flex justify-content-center align-items-center"
-  style={{
-    flex: 1,
-    maxWidth: "100%", // 카드 느낌을 없애기 위해 너비를 조정
-    height: "40vh",
-    textAlign: "center",
-    // background: "linear-gradient(#f0f7ff, #e0efff)", // 배경만 유지
-    padding: "20px",
-  }}
->
-    <div className="card" style={{ width: "100%" }}>
-      <div className="card-body">
-        {user ? (
-          <>
-            <h5 className="card-title" style={{ fontSize: "1.5rem", color: "#57b6fe" }}>
-              어서오세요, {user.name}님!
-            </h5>
-            <p className="card-text" style={{ fontSize: "1rem", color: "#555" }}>
-              많은 청약 정보를 탐색해 보세요!
-            </p>
-            <button 
-              className="btn btn-primary" 
-              onClick={handleLogout}
-              style={{ backgroundColor: "#57b6fe", border: "none" }}
-            >
-              로그아웃
-            </button>
-          </>
-        ) : (
-          <>
-            <h5 className="card-title" style={{ fontSize: "1.5rem", color: "#57b6fe" }}>
-              로그인이 필요합니다
-            </h5>
-            <p className="card-text" style={{ fontSize: "1rem", color: "#555" }}>
-              내게 필요한 청약 정보를 알아보세요.
-            </p>
-            <Link to="/login" className="btn btn-primary" style={{ backgroundColor: "#57b6fe", border: "none" }}>
-              로그인
-            </Link>
-          </>
-        )}
-      </div>
-    </div>
   </div>
 </div>
 

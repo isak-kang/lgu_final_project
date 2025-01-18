@@ -1,9 +1,33 @@
 // Navbar.js
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useRef, useState, useEffect, useContext, createContext } from "react";
+import { UserContext } from "./UserContext.jsx";
 
 const Navbar = () => {
+
+  const { user } = useContext(UserContext);
+  const handleLogout = async () => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      try {
+        await axios.post(`http://${API_URL}/api/logout`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error("Failed to log out from the server:", error);
+      }
+    }
+
+    // 토큰 삭제 및 페이지 리디렉션
+    localStorage.removeItem("access_token");
+    
+    window.location.href = "/";
+  };
+
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -35,6 +59,29 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link to="/analysis" className="nav-link">경쟁률 분석</Link>
+            </li>
+            <li>
+            {user ? (
+                <>
+                  <Link 
+                    to="/login" 
+                    className="nav-link"
+                    onClick={async (e) => {
+                      e.preventDefault(); // Link 기본 동작 방지
+                      await handleLogout(); // 로그아웃 처리
+                      window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+                    }}
+                  >
+                    로그아웃
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="nav-link">
+                    로그인
+                  </Link>
+                </>
+              )}
             </li>
           </ul>
         </div>
