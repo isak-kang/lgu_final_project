@@ -22,7 +22,7 @@ from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
 from motor.motor_asyncio import AsyncIOMotorClient
 import time
-
+from DB.db_mongodb import select_id_data
 
 load_dotenv()
 ROOT_PATH = os.environ.get("ROOT_PATH")
@@ -404,16 +404,7 @@ async def chat_endpoint(request: ChatRequest):
     try:
         user_message = request.message
         current_time = datetime.now()
-        print(request)
-        print(f"사용자 메시지 저장 시도: {user_message}")
-
-        # 사용자 메시지 저장
-        await collection.insert_one({
-            "role": "user",
-            "text": user_message,
-            "timestamp": current_time
-        })
-        print(f"사용자 메시지 저장 완료: {user_message}")
+        user_id = request.user_id
 
         # 시나리오 응답 확인
         scenario_response = get_scenario_response(user_message)
@@ -421,10 +412,9 @@ async def chat_endpoint(request: ChatRequest):
         if scenario_response:
             # 시나리오 봇 응답 저장
             await collection.insert_one({
-                "role": "bot",
-                "text": scenario_response["text"],
-                "type": "scenario_button",
-                "buttons": scenario_response["buttons"],
+                "user" : user_id,
+                "유저": user_message,
+                "봇": scenario_response["text"],
                 "timestamp": current_time
             })
 
@@ -443,13 +433,9 @@ async def chat_endpoint(request: ChatRequest):
         if personalized_response:
 
             await collection.insert_one({
-                "role": "bot",
-                "text": personalized_response["text"],
-                "type": "scenario_button",
-                "buttons": personalized_response.get("buttons", []),  # buttons가 없을 수 있음
-                "currentStep": personalized_response.get("currentStep", 1),
-                "totalSteps": personalized_response.get("totalSteps", 10),
-                "requiresInput": personalized_response.get("requiresInput", None),  # 입력 필요 여부
+                "user" : user_id,
+                "유저": user_message,
+                "봇": personalized_response["text"],
                 "timestamp": current_time
             })
             return {
@@ -469,8 +455,9 @@ async def chat_endpoint(request: ChatRequest):
 
         # RAG 봇 응답 저장
         await collection.insert_one({
-            "role": "bot",
-            "text": rag_response,
+            "user" : user_id,
+            "유저": user_message,
+            "봇": rag_response,
             "timestamp": current_time
         })
 
@@ -484,3 +471,10 @@ async def chat_endpoint(request: ChatRequest):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/chat/log")
+async def chat_log(request: ChatRequest):
+    user_id = request.user_id  # 여기서 user_id를 추출
+    print(f"Received user_id: {user_id}")
+    # 데이터 처리 로직
+    return {"data": []}

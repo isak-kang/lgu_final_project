@@ -49,19 +49,17 @@ def select(collection):
 
     return select_data
 
-
-
+def select_id_data(user):
+    mycollection = db['chatbot']
+    select_data = mycollection.find({"user": f"{user}"})
+    return list(select_data)  # 커서를 리스트로 변환하여 반환
 
 if __name__ == "__main__":
-
-    # collection = 'news'
-    # print(select(collection))
-    # data = select (collection)
-    # images = [item["image"] for item in data]
-
-    
-
+    data = select_id_data("wbsldj59")
+    print({"data": data})  # 리스트 형태로 출력
     pass
+
+
 
 
 

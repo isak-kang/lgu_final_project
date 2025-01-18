@@ -13,6 +13,7 @@ import Analysis from "./components/Analysis.jsx";
 import IdSearch from "./components/Id_search.jsx";
 import PasswordUpdate from "./components/Password_update.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
+import ChatbotLog from "./components/ChatLog.jsx";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/id_search" element={<IdSearch />} />
           <Route path="/password_update" element={<PasswordUpdate />} />
+          <Route path="/chat_log" element={<ChatbotLog />} />
         </Routes>
       </BrowserRouter>
       </UserProvider>
