@@ -103,239 +103,275 @@ const Main = () => {
     <div>
 
    
-   <div 
-  className="d-flex justify-content-between align-items-start flex-wrap" 
-  style={{ maxWidth: "1600px", margin: "auto", gap: "20px", padding: "40px 0" }}
->
-  {/* News Carousel */}
-  <div 
-    id="newsCarousel" 
-    className="carousel slide" 
-    data-bs-ride="carousel" 
-    style={{ flex: 2, maxWidth: "1600px" }}
-  >
-    <div className="carousel-inner">
-    {news.map((item, index) => (
     <div 
-      key={index} 
-      className={`carousel-item ${index === 0 ? "active" : ""}`}
-    >
-      <div
-        className="card d-flex flex-row align-items-center"
-        style={{
-          width: "100%",
-          margin: "auto",
-          padding: "20px",
-          backgroundColor: "#f9f9f9",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-        }}
+  className="d-flex flex-wrap justify-content-around" 
+  style={{ 
+    maxWidth: "1600px", margin: "40px auto", gap: "10px", display: "flex", justifyContent: "center", alignItems: "center",  }}>
+<div 
+  id="newsCarousel" 
+  className="carousel slide" 
+  data-bs-ride="carousel" 
+  style={{ flex: 2, maxWidth: "1600px" }}
+> <h3>최신 청약 뉴스</h3>
+  <div className="carousel-inner">
+    
+    {news.map((item, index) => (
+      <div 
+        key={index} 
+        className={`carousel-item ${index === 0 ? "active" : ""}`}
       >
-        <a
-          href={item.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ 
-            flex: 1, 
-            textDecoration: "none", 
-            display: "block", // 링크를 블록 요소로 변경하여 이미지와 텍스트 영역을 구분
-            maxWidth: "250px", // 이미지 영역 크기를 맞추기 위해 링크 크기 제한
+        <div
+          className="card d-flex flex-row align-items-center"
+          style={{
+            width: "100%",
+            margin: "auto",
+            padding: "20px",
+            backgroundColor: "#f9f9f9",
+            border: "1px solid #ddd",
+            borderRadius: "10px",
           }}
         >
-          <img
-            src={item.image}
-            className="card-img-left"
-            alt={item.title}
-            style={{
-              width: "250px",
-              height: "250px",
-              objectFit: "cover",
-              borderRadius: "10px",
-            }}
-          />
-        </a>
-        <div 
-          className="card-body" 
-          style={{ 
-            flex: 2, 
-            paddingLeft: "20px", // 텍스트 위치 조정
-            paddingRight: "10px",
-          }}
-        >
+          {/* Left Section: Image */}
           <a
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="card-title"
-            style={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              textDecoration: "none",
-              color: "#57b6fe",
+            style={{ 
+              flex: 1, 
+              textDecoration: "none", 
+              display: "block", 
+              maxWidth: "250px",
             }}
           >
-            {item.title}
+            <img
+              src={item.image}
+              className="card-img-left"
+              alt={item.title}
+              style={{
+                width: "250px",
+                height: "250px",
+                objectFit: "cover",
+                borderRadius: "10px",
+              }}
+            />
           </a>
-          <p
-            className="card-text"
-            style={{
-              fontSize: "1rem",
-              color: "#555",
-              marginTop: "10px",
+
+          {/* Right Section: Title, Date, and Description */}
+          <div 
+            className="card-body" 
+            style={{ 
+              flex: 2, 
+              paddingLeft: "20px", 
+              paddingRight: "10px",
             }}
           >
-            {item.description}
-          </p>
-        </div>
-      </div>
-    </div>
-      ))}
-    </div>
-    <button
-         className="carousel-control-prev"
-         type="button"
-         data-bs-target="#newsCarousel"
-         data-bs-slide="prev"
-         style={{
-           position: "absolute",
-           top: "130px",
-           padding: "4px 6px",
-           width: "40px",
-           height: "40px",
-           backgroundColor: "#57b6fe",
-           color: "white",
-           borderRadius: "50%",
-           fontSize: "14px",
-         }}
-       >
-         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-         <span className="visually-hidden">Previous</span>
-       </button>
+            
+            {/* Date */}
+            <p
+              style={{
+                fontSize: "0.9rem",
+                color: "#888",
+                marginBottom: "5px",
+              }}
+            >
+              {new Date(item.pubDate).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </p>
 
-       <button
-         className="carousel-control-next"
-         type="button"
-         data-bs-target="#newsCarousel"
-         data-bs-slide="next"
-         style={{
-           position: "absolute",
-           top: "130px",
-           padding: "4px 6px",
-           width: "40px",
-           height: "40px",
-           backgroundColor: "#57b6fe",
-           color: "white",
-           borderRadius: "50%",
-           fontSize: "14px",
-         }}
-       >
-         <span className="carousel-control-next-icon" aria-hidden="true"></span>
-         <span className="visually-hidden">Next</span>
-       </button>
+            {/* Title */}
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-title"
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                textDecoration: "none",
+                color: "#57b6fe",
+              }}
+            >
+              {item.tetle} {/* Note: Fix typo in key if needed */}
+            </a>
 
-  </div>
-</div>
-
-   <div 
-  className="d-flex flex-wrap justify-content-around" 
-  style={{ 
-    maxWidth: "1600px", margin: "40px auto", gap: "20px", display: "flex", justifyContent: "center", alignItems: "center",  }}>
-
-  <div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
-  <h3 style={{ textAlign: "center", marginBottom: "15px", fontSize: "1.5rem" }}>최신 경쟁률</h3>
-  <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
-  <div id="apt_competiton" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250" }}>
-    <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>아파트</h4>
-    <div className="carousel-inner">
-      {apt_grouped_data && apt_grouped_data.map((group, index) => (
-        <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-          <div className="card" style={{ width: "14rem", margin: "auto" }}>
-            <div className="card-body">
-              <a
-                style={{ textDecoration: "none", color: "inherit", fontSize: "1.2rem", fontWeight: "bold" }}
-              >
-                {group.apartment_name}
-              </a>
-              <br /><br />
-              <div><p style={{ fontSize: "0.9rem" }}>경쟁률: {group.total_competition_rate}</p></div>
-              <div><p style={{ fontSize: "0.9rem" }}>상태: {group.application_result}</p></div>
-              <button
-                onClick={() => handleButtonClick(group.apartment_name)}
-                style={{
-                  backgroundColor: "#57b6fe",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 20px",
-                  borderRadius: "5px",
-                  fontSize: "0.9rem",
-                  cursor: "pointer",
-                }}
-              >
-                더보기
-              </button>
-            </div>
+            {/* Description */}
+            <p
+              className="card-text"
+              style={{
+                fontSize: "1rem",
+                color: "#555",
+                marginTop: "10px",
+              }}
+            >
+              {item.description}
+            </p>
           </div>
         </div>
-      ))}
-    </div>
-{isModalOpen && (
-  <div className="modal" style={modalStyles.modal}>
-    <div style={modalStyles.modalContent}>
-      <button onClick={closeModal} style={modalStyles.closeButton}>
-        &times;
-      </button>
-      <h2>{modalData?.apartment_name}</h2>
-      <div style={{ width: "100%", overflowX: "auto", marginTop: "20px" }}>
-        {/* modalData에 HTML 테이블이 포함된 경우 */}
-        <div dangerouslySetInnerHTML={{ __html: modalData }} />
       </div>
-    </div>
-  </div>
-)}
-    <button
-      className="carousel-control-prev"
-      type="button"
-      data-bs-target="#apt_competiton"
-      data-bs-slide="prev"
-      style={{
-        position: "absolute",
-        top: "110px",
-        padding: "4px 6px",
-        width: "25px",
-        height: "25px",
-        backgroundColor: "#57b6fe",
-        color: "white",
-        borderRadius: "50%",
-        fontSize: "10px",
-      }}
-    >
-      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span className="visually-hidden">Previous</span>
-    </button>
-    <button
-      className="carousel-control-next"
-      type="button"
-      data-bs-target="#apt_competiton"
-      data-bs-slide="next"
-      style={{
-        position: "absolute",
-        top: "110px",
-        padding: "4px 6px",
-        width: "25px",
-        height: "25px",
-        backgroundColor: "#57b6fe",
-        color: "white",
-        borderRadius: "50%",
-        fontSize: "10px",
-      }}
-    >
-      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-      <span className="visually-hidden">Next</span>
-    </button>
+    ))}
   </div>
 
+  {/* Carousel Controls */}
+  <button
+    className="carousel-control-prev"
+    type="button"
+    data-bs-target="#newsCarousel"
+    data-bs-slide="prev"
+    style={{
+      position: "absolute",
+      top: "130px",
+      padding: "4px 6px",
+      width: "40px",
+      height: "40px",
+      backgroundColor: "#57b6fe",
+      color: "white",
+      borderRadius: "50%",
+      fontSize: "14px",
+    }}
+  >
+    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span className="visually-hidden">Previous</span>
+  </button>
 
-<div className="d-flex justify-content-around flex-wrap" style={{ gap: "20px" }}>
+  <button
+    className="carousel-control-next"
+    type="button"
+    data-bs-target="#newsCarousel"
+    data-bs-slide="next"
+    style={{
+      position: "absolute",
+      top: "130px",
+      padding: "4px 6px",
+      width: "40px",
+      height: "40px",
+      backgroundColor: "#57b6fe",
+      color: "white",
+      borderRadius: "50%",
+      fontSize: "14px",
+    }}
+  >
+    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+    <span className="visually-hidden">Next</span>
+  </button>
+</div>
+</div>
+
+<div 
+  className="d-flex flex-wrap justify-content-start" // 'justify-content-center' -> 'justify-content-start'
+  style={{ 
+    maxWidth: "1600px", 
+    margin: "40px auto", 
+    gap: "0px", 
+    display: "flex", 
+    alignItems: "center",
+  }}
+>
+  {/* 최신 경쟁률 제목 */}
+  <h3 style={{ textAlign: "left"}}>최신 경쟁률</h3> {/* 텍스트 왼쪽 정렬 */}
+  
+  <div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
+    <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
+      <div id="apt_competiton" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250" }}>
+        <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>아파트</h4>
+        <div className="carousel-inner">
+          {apt_grouped_data && apt_grouped_data.map((group, index) => (
+            <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+              <div className="card" style={{ width: "14rem", margin: "auto" }}>
+                <div className="card-body">
+                  <a
+                    style={{ textDecoration: "none", color: "inherit", fontSize: "1.2rem", fontWeight: "bold" }}
+                  >
+                    {group.apartment_name}
+                  </a>
+                  <br /><br />
+                  <div><p style={{ fontSize: "0.9rem" }}>경쟁률: {group.total_competition_rate}</p></div>
+                  <div><p style={{ fontSize: "0.9rem" }}>상태: {group.application_result}</p></div>
+                  <button
+                    onClick={() => handleButtonClick(group.apartment_name)}
+                    style={{
+                      backgroundColor: "#57b6fe",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 20px",
+                      borderRadius: "5px",
+                      fontSize: "0.9rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    더보기
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {isModalOpen && (
+          <div className="modal" style={modalStyles.modal}>
+            <div style={modalStyles.modalContent}>
+              <button onClick={closeModal} style={modalStyles.closeButton}>
+                &times;
+              </button>
+              <h2>{modalData?.apartment_name}</h2>
+              <div style={{ width: "100%", overflowX: "auto", marginTop: "20px" }}>
+                {/* modalData에 HTML 테이블이 포함된 경우 */}
+                <div dangerouslySetInnerHTML={{ __html: modalData }} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#apt_competiton"
+          data-bs-slide="prev"
+          style={{
+            position: "absolute",
+            top: "110px",
+            padding: "4px 6px",
+            width: "25px",
+            height: "25px",
+            backgroundColor: "#57b6fe",
+            color: "white",
+            borderRadius: "50%",
+            fontSize: "10px",
+          }}
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#apt_competiton"
+          data-bs-slide="next"
+          style={{
+            position: "absolute",
+            top: "110px",
+            padding: "4px 6px",
+            width: "25px",
+            height: "25px",
+            backgroundColor: "#57b6fe",
+            color: "white",
+            borderRadius: "50%",
+            fontSize: "10px",
+          }}
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
+
+
+
+
+
+
 <div id="unranked_competiton" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "300px" }}>
   <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>무순위</h4>
   <div className="carousel-inner">
@@ -429,9 +465,10 @@ const Main = () => {
 </div>
 </div>
 </div>
-
-<div className="container" style={{ maxWidth: "750px", margin: "auto", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
-    <h3 style={{ textAlign: "center", marginBottom: "15px", fontSize: "1.5rem" }}>다가올 청약</h3>
+  {/* 최신 경쟁률 제목 */}
+  <h3 style={{ textAlign: "left"}}>다가올 청약</h3> {/* 텍스트 왼쪽 정렬 */}
+  <div className="container" style={{ maxWidth: "750px", margin: "0px", border: "2px solid #57b6fe", borderRadius: "10px", padding: "15px", backgroundColor: "#f9f9f9" }}>
+    
     <div className="d-flex justify-content-around flex-wrap" style={{ gap: "15px" }}>
       <div id="apt_upcoming_applications" className="carousel slide" data-bs-ride="carousel" style={{ maxWidth: "250px" }}>
         <h4 style={{ textAlign: "center", marginBottom: "8px", fontWeight: "bold", color: "#6a75ca", fontSize: "1.2rem" }}>아파트</h4>
@@ -537,7 +574,7 @@ const Main = () => {
   </div>
   </div>
 
-</div>
+
 
 
 <div><Chatbot /></div>

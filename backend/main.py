@@ -214,7 +214,7 @@ async def get_news(request: Request):
     collection = 'news'
     data = select (collection)
     news = [{"tetle" :item['title'], "link" : item['link'],"description" : item['description'],"pubDate" : item['pubDate'], "image" : item['image']} for item in data]
-    
+    print(news)
     return {"news": news}
 
 

@@ -379,6 +379,8 @@ body {
   
 }
 
+
+
 .menu-button {
   padding: 12px;
   border: 1px solid #57b6fe;
@@ -389,10 +391,30 @@ body {
   transition: background-color 0.2s;
   font-size: 12px;
 
+
+
 }
+
+
+.menu-button.another-question {
+  padding: 12px;
+  border: 1px solid #57b6fe;
+  border-radius: 8px;
+  background: #57b6fe;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 12px;
+}
+
 
 .menu-button:hover {
   background: #f0f7ff;
+}
+
+.menu-button.another-question:hover {
+  background: #4590c5; /* 좀 더 진한 색상 */
+  transform: scale(1.05);    /* 살짝 커지는 효과 */
 }
 
 .toggle-button {
