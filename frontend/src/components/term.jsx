@@ -27,8 +27,8 @@ const Terms = () => {
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={{ ...styles.tableHeader, width: "60%" }}>용어</th> {/* 용어 컬럼 확장 */}
-            <th style={{ ...styles.tableHeader, width: "40%" }}>개념</th>
+            <th style={{ ...styles.tableHeader, width: "20%" }}>용어</th> {/* 용어 컬럼 확장 */}
+            <th style={{ ...styles.tableHeader, width: "80%" }}>개념</th>
           </tr>
         </thead>
         <tbody>
@@ -68,7 +68,7 @@ const styles = {
     color: "#2c3e50",
     fontSize: "2.5rem",
     marginBottom: "20px",
-    borderBottom: "2px solid #3f51b5",
+    borderBottom: "2px solid #57b6fe",
     paddingBottom: "10px",
   },
   errorMessage: {
@@ -85,7 +85,7 @@ const styles = {
   },
   tableHeader: {
     padding: "14px",
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#57b6fe",
     color: "white",
     textAlign: "left",
     fontSize: "1.2rem",
