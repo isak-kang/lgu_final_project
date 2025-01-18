@@ -44,12 +44,16 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+        <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link to="/term" className="nav-link">용어</Link>
+            </li>
+            
             <li className="nav-item">
               <Link to="/calendar" className="nav-link">청약캘린더</Link>
             </li>
             <li className="nav-item">
-              <Link to="/term" className="nav-link">용어</Link>
+              <Link to="/analysis" className="nav-link">경쟁률 분석</Link>
             </li>
             <li className="nav-item">
               <Link to="/faq" className="nav-link">FAQ</Link>
@@ -57,9 +61,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link to="/myInfo" className="nav-link">내정보</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/analysis" className="nav-link">경쟁률 분석</Link>
-            </li>
+
             <li>
             {user ? (
                 <>

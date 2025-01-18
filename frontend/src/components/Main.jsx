@@ -102,7 +102,7 @@ const Main = () => {
   return (
     <div>
 
-   <br /><br /><br /><br />
+   
    <div 
   className="d-flex justify-content-between align-items-start flex-wrap" 
   style={{ maxWidth: "1600px", margin: "auto", gap: "20px", padding: "40px 0" }}
@@ -112,71 +112,83 @@ const Main = () => {
     id="newsCarousel" 
     className="carousel slide" 
     data-bs-ride="carousel" 
-    style={{ flex: 2, maxWidth: "1050px" }}
+    style={{ flex: 2, maxWidth: "1600px" }}
   >
     <div className="carousel-inner">
-      {news.map((item, index) => (
-        <div 
-          key={index} 
-          className={`carousel-item ${index === 0 ? "active" : ""}`}
+    {news.map((item, index) => (
+    <div 
+      key={index} 
+      className={`carousel-item ${index === 0 ? "active" : ""}`}
+    >
+      <div
+        className="card d-flex flex-row align-items-center"
+        style={{
+          width: "100%",
+          margin: "auto",
+          padding: "20px",
+          backgroundColor: "#f9f9f9",
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+        }}
+      >
+        <a
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ 
+            flex: 1, 
+            textDecoration: "none", 
+            display: "block", // 링크를 블록 요소로 변경하여 이미지와 텍스트 영역을 구분
+            maxWidth: "250px", // 이미지 영역 크기를 맞추기 위해 링크 크기 제한
+          }}
         >
-          <div
-            className="card d-flex flex-row align-items-center"
+          <img
+            src={item.image}
+            className="card-img-left"
+            alt={item.title}
             style={{
-              width: "100%",
-              margin: "auto",
-              padding: "20px",
-              backgroundColor: "#f9f9f9",
-              border: "1px solid #ddd",
+              width: "250px",
+              height: "250px",
+              objectFit: "cover",
               borderRadius: "10px",
             }}
+          />
+        </a>
+        <div 
+          className="card-body" 
+          style={{ 
+            flex: 2, 
+            paddingLeft: "20px", // 텍스트 위치 조정
+            paddingRight: "10px",
+          }}
+        >
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card-title"
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              textDecoration: "none",
+              color: "#57b6fe",
+            }}
           >
-            <a
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ flex: 1, textDecoration: "none" }}
-            >
-              <img
-                src={item.image}
-                className="card-img-left"
-                alt={item.title}
-                style={{
-                  width: "250px",
-                  height: "250px",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                }}
-              />
-            </a>
-            <div className="card-body" style={{ flex: 2, paddingLeft: "20px" }}>
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card-title"
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "1.5rem",
-                  textDecoration: "none",
-                  color: "#57b6fe",
-                }}
-              >
-                {item.title}
-              </a>
-              <p
-                className="card-text"
-                style={{
-                  fontSize: "1rem",
-                  color: "#555",
-                  marginTop: "10px",
-                }}
-              >
-                {item.description}
-              </p>
-            </div>
-          </div>
+            {item.title}
+          </a>
+          <p
+            className="card-text"
+            style={{
+              fontSize: "1rem",
+              color: "#555",
+              marginTop: "10px",
+            }}
+          >
+            {item.description}
+          </p>
         </div>
+      </div>
+    </div>
       ))}
     </div>
     <button

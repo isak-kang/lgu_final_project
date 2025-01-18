@@ -17,24 +17,24 @@ import ChatbotLog from "./components/ChatLog.jsx";
 
 function App() {
   return (
-    <div>
+    <div style={{ maxWidth: "800px", margin: "auto", padding: "0 20px" }}>
       <UserProvider>
-      <BrowserRouter>
-      <Navbar />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/term" element={<Terms />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/join" element={<Join />} />
-          <Route path="/myInfo" element={<MyInfo />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/id_search" element={<IdSearch />} />
-          <Route path="/password_update" element={<PasswordUpdate />} />
-          <Route path="/chat_log" element={<ChatbotLog />} />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/term" element={<Terms />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/myInfo" element={<MyInfo />} />
+            <Route path="/analysis" element={<Analysis />} />
+            <Route path="/id_search" element={<IdSearch />} />
+            <Route path="/password_update" element={<PasswordUpdate />} />
+            <Route path="/chat_log" element={<ChatbotLog />} />
+          </Routes>
+        </BrowserRouter>
       </UserProvider>
     </div>
   );
