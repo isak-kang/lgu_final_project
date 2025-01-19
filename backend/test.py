@@ -6,6 +6,8 @@ from chromadb.utils import embedding_functions
 import os
 from dotenv import load_dotenv
 import gc
+from DB.db_mysql import rag_data
+from datetime import date
 
 # 환경 변수 로드
 load_dotenv()
@@ -92,12 +94,10 @@ def _process_document_data(data):
             
     return processed
 
-def _process_csv_data(csv_data, file_path):
+def _process_csv_apt_data(csv_data):
     """CSV 데이터 처리 함수 (새로운 형식 지원)"""
     processed = []
     try:
-        # 파일 이름에서 월 정보 추출 (예: 1.csv -> '1')
-        month = os.path.basename(file_path).split('.')[0]
 
         # CSV 데이터를 행 단위로 처리
         for _, row in csv_data.iterrows():
@@ -114,6 +114,18 @@ def _process_csv_data(csv_data, file_path):
             result_announcement = row.get('result_announcement', '정보 없음')
             # 데이터 포맷 정의
             # print(row.get('apartment_name'))  # 해당 값을 출력하여 확인
+
+
+            if isinstance(announcement_date, date):
+                announcement_date = announcement_date.isoformat()
+            if isinstance(application_period_start, date):
+                application_period_start = application_period_start.isoformat()
+            if isinstance(application_period_end, date):
+                application_period_end = application_period_end.isoformat()
+            if isinstance(result_announcement, date):
+                result_announcement = result_announcement.isoformat()
+
+
             content = (
                 f"지역: {region}\n"
                 f"주택 유형: {housing_type}\n"
@@ -129,23 +141,143 @@ def _process_csv_data(csv_data, file_path):
 
             # 처리된 데이터를 리스트에 추가
             processed.append({
-                'title': f'CSV_{month}월 데이터',
+                'title': f'{apartment_name}_기본정보_데이터',
                 'content': content,
                 'type': 'csv_content',
                 'metadata': {
                     'source_type': 'csv',
-                    'month': month,
+                    'start_date' : application_period_start,
+                    'end_date' : application_period_end,
+                    'result_date' : result_announcement,
                     'region': region,
                     'housing_type': housing_type,
+                    'contact' : contact,
                     'has_table': True
                 }
             })
 
     except Exception as e:
-        print(f"CSV 데이터 처리 중 오류 발생: {str(e)}")
+        print(f"APT 데이터 처리 중 오류 발생: {str(e)}")
     return processed
 
-def load_all_data(file_paths, csv_paths):
+def _process_csv_unranked_data(csv_data):
+    """CSV 데이터 처리 함수 (새로운 형식 지원)"""
+    processed = []
+    try:
+        # CSV 데이터를 행 단위로 처리
+        for _, row in csv_data.iterrows():
+            # 필수 데이터 추출
+            region = row.get('region', '정보 없음')
+            subscription_type = row.get('subscription_type', '정보 없음')
+            apartment_name = row.get('apartment_name', '정보 없음')
+            construction_company = row.get('construction_company', '정보 없음')
+            announcement_date = row.get('announcement_date', '정보 없음')
+            application_period_start = row.get('application_period_start', '정보 없음')
+            application_period_end = row.get('application_period_end', '정보 없음')
+            result_announcement = row.get('result_announcement', '정보 없음')
+
+
+            if isinstance(announcement_date, date):
+                announcement_date = announcement_date.isoformat()
+            if isinstance(application_period_start, date):
+                application_period_start = application_period_start.isoformat()
+            if isinstance(application_period_end, date):
+                application_period_end = application_period_end.isoformat()
+            if isinstance(result_announcement, date):
+                result_announcement = result_announcement.isoformat()
+
+            # 데이터 포맷 정의
+            # print(row.get('apartment_name'))  # 해당 값을 출력하여 확인
+            content = (
+                f"지역: {region}\n"
+                f"주택 유형: {subscription_type}\n"
+                f"아파트 이름: {apartment_name}\n"
+                f"건설사: {construction_company}\n"
+                f"공고일: {announcement_date}\n"
+                f"청약 접수 시작: {application_period_start}\n"
+                f"청약 접수 종료: {application_period_end}\n"
+                f"결과 발표: {result_announcement}"
+            )
+
+            # 처리된 데이터를 리스트에 추가
+            processed.append({
+                'title': f'{apartment_name}_기본정보_데이터',
+                'content': content,
+                'type': 'csv_content',
+                'metadata': {
+                    'source_type': 'csv',
+                    'start_date' : application_period_start,
+                    'end_date' : application_period_end,
+                    'result_date' : result_announcement,
+                    'region': region,
+                    'subscription_type': subscription_type,
+                    'has_table': True
+                }
+            })
+
+    except Exception as e:
+        print(f"APT 데이터 처리 중 오류 발생: {str(e)}")
+    return processed
+
+def _process_csv_apt_competition_data(csv_data):
+    """CSV 데이터 처리 함수 (새 데이터 형식 지원)"""
+    processed = []
+    try:
+
+
+        # CSV 데이터를 행 단위로 처리
+        for _, row in csv_data.iterrows():
+            # 필수 데이터 추출 (새 데이터 구조에 맞게 수정)
+            house_type = row.get('house_type', '정보 없음')
+            apartment_name = row.get('apartment_name', '정보 없음')
+            supply_units = row.get('supply_units', '정보 없음')
+            rank = row.get('announcemeranknt_date', '정보 없음')
+            rank_region = row.get('rank_region', '정보 없음')
+            application_count = row.get('application_count', '정보 없음')
+            competition_rate = row.get('competition_rate', '정보 없음')
+            application_result = row.get('application_result', '정보 없음')
+            region = row.get('region', '정보 없음')
+            score_min = row.get('score_min', '정보 없음')
+            score_max = row.get('score_max', '정보 없음')
+            score_avg = row.get('score_avg', '정보 없음')
+
+
+            # 데이터 포맷 정의
+            content = (
+                f"지역: {region}\n"
+                f"아파트 이름: {apartment_name}\n"
+                f"공급 세대수: {supply_units}\n"
+                f"순위유형: {rank}\n"
+                f"주소지 해당 여부: {rank_region}\n"
+                f"청약 지원자 수: {application_count}\n"
+                f"경쟁률: {competition_rate}\n"
+                f"청약 진행도: {application_result}\n"
+                f"최소점수: {score_min}\n"
+                f"최대점수: {score_max}\n"
+                f"평균점수: {score_avg}\n"
+                f"타입: {house_type}\n"
+            )
+
+            # 처리된 데이터를 리스트에 추가
+            processed.append({
+                'title': f'{apartment_name}_경쟁률_데이터',
+                'content': content,
+                'type': 'csv_content',
+                'metadata': {
+                    'source_type': 'csv',
+                    'region': region,
+                    'apartment_name': apartment_name,
+                    'competition_rate': competition_rate,
+                    "house_type" : house_type,
+                    'has_table': True
+                }
+            })
+
+    except Exception as e:
+        print(f"APT 데이터 처리 중 오류 발생: {str(e)}")
+    return processed
+
+def load_all_data(file_paths):
     """모든 데이터를 로드하고 처리하는 함수"""
     processed_data = []
     
@@ -160,29 +292,31 @@ def load_all_data(file_paths, csv_paths):
                         faq_data = _process_faq_data(data)
                         processed_data.extend(faq_data)
                         print(f"FAQ 데이터 처리 완료: {len(faq_data)}개 항목")
-                    elif 'pdf_to_parsing_1.json' in file_path:
-                        doc_data = _process_document_data(data)
-                        processed_data.extend(doc_data)
-                        print(f"문서 데이터 처리 완료: {len(doc_data)}개 항목")
+
             else:
                 print(f"파일을 찾을 수 없습니다: {file_path}")
                     
         except Exception as e:
             print(f"파일 처리 중 오류 발생: {file_path} - {str(e)}")
     
-    # CSV 파일 처리
-    for csv_path in csv_paths:
-        try:
-            if os.path.exists(csv_path):  # 파일 존재 여부 확인
-                csv_data = pd.read_csv(csv_path)
-                csv_processed = _process_csv_data(csv_data, csv_path)
-                processed_data.extend(csv_processed)
-                print(f"CSV 파일 처리 완료: {csv_path} - {len(csv_processed)}개 항목")
-            else:
-                print(f"파일을 찾을 수 없습니다: {csv_path}")
-        except Exception as e:
-            print(f"CSV 파일 처리 중 오류 발생: {csv_path} - {str(e)}")
     
+    apt_data = rag_data("apt_housing_application_basic_info")
+    apt_processed = _process_csv_apt_data(apt_data)
+    processed_data.extend(apt_processed)
+    print(f"APT 파일 처리 완료: {apt_data} - {len(apt_processed)}개 항목")
+
+
+    unranked_data = rag_data("unranked_housing_application_basic_info")
+    unranked_processed = _process_csv_unranked_data(unranked_data)
+    processed_data.extend(unranked_processed)
+    print(f"unranked 파일 처리 완료: {unranked_data} - {len(unranked_processed)}개 항목")
+
+    apt_competition_data = rag_data("apt_housing_competition_rate")
+    apt_competition_processed = _process_csv_apt_competition_data(apt_competition_data)
+    processed_data.extend(apt_competition_processed)
+    print(f"apt_competition 파일 처리 완료: {apt_competition_data} - {len(apt_competition_processed)}개 항목")
+    
+
     # 처리된 데이터가 없는 경우 에러 발생
     if not processed_data:
         raise ValueError("처리된 데이터가 없습니다. 파일 경로와 데이터를 확인해주세요.")
@@ -284,7 +418,7 @@ class RAGChatbot:
         # 메모리 문제를 방지하기 위해 배치 처리
         # print(documents)
 
-        batch_size = 10
+        batch_size = 100
         for i in range(0, len(documents), batch_size):
             batch_end = min(i + batch_size, len(documents))
             try:
@@ -405,11 +539,10 @@ def rag_chat(chat_input):
             os.path.join(base_dir, 'data', 'FAQ_Crawling.json'),
             # os.path.join(base_dir, 'data', 'pdf_to_parsing_1.json')
         ]
-        # csv_paths = [os.path.join(base_dir, 'data', f'{i}.csv') for i in range(1, 14)]
-        csv_paths = [os.path.join(base_dir, 'data', 'test_test.csv')]
+
         
         # 모든 데이터 로드
-        data = load_all_data(json_paths, csv_paths)
+        data = load_all_data(json_paths)
         chatbot = RAGChatbot(data)
         
         return chatbot.generate_response(chat_input)
@@ -427,11 +560,10 @@ if __name__ == "__main__":
             # os.path.join(base_dir, 'data', 'FAQ_Crawling.json'),
             # os.path.join(base_dir, 'data', 'pdf_to_parsing_1.json')
         ]
-        # csv_paths = [os.path.join(base_dir, 'data', f'{i}.csv') for i in range(1, 14)]
-        csv_paths = [os.path.join(base_dir, 'data', 'test_test.csv')]
+
 
         # 모든 데이터 로드
-        data = load_all_data(json_paths, csv_paths)
+        data = load_all_data(json_paths)
         chatbot = RAGChatbot(data)
         
         print("챗봇이 준비되었습니다. 종료하려면 'quit'를 입력하세요.")

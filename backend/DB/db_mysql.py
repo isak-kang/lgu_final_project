@@ -696,7 +696,12 @@ def update_password(name, id ,email,password):
     finally:
         session.close()
 
+def rag_data(table):
+    SQL = f"SELECT * FROM {table}" 
 
+    with engine.connect() as conn:
+        df = pd.read_sql(SQL, conn)
+    return df
 
 
 def select_json(table):
@@ -722,5 +727,6 @@ if __name__ == "__main__":
     # print(select_competiton_all("competition","서울",2024,"general_supply_competition_rate"))
 
     # print(select_id("강이삭","wbsldj59@naver.com")[0][0])
-
+    
+    print(rag_data("apt_housing_application_basic_info"))
     pass
