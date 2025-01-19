@@ -223,24 +223,21 @@ def _process_csv_apt_competition_data(csv_data):
     """CSV 데이터 처리 함수 (새 데이터 형식 지원)"""
     processed = []
     try:
-
-
         # CSV 데이터를 행 단위로 처리
         for _, row in csv_data.iterrows():
             # 필수 데이터 추출 (새 데이터 구조에 맞게 수정)
-            house_type = row.get('house_type', '정보 없음')
-            apartment_name = row.get('apartment_name', '정보 없음')
-            supply_units = row.get('supply_units', '정보 없음')
-            rank = row.get('announcemeranknt_date', '정보 없음')
-            rank_region = row.get('rank_region', '정보 없음')
-            application_count = row.get('application_count', '정보 없음')
-            competition_rate = row.get('competition_rate', '정보 없음')
-            application_result = row.get('application_result', '정보 없음')
-            region = row.get('region', '정보 없음')
-            score_min = row.get('score_min', '정보 없음')
-            score_max = row.get('score_max', '정보 없음')
-            score_avg = row.get('score_avg', '정보 없음')
-
+            house_type = row.get('house_type', '정보 없음') or '정보 없음'
+            apartment_name = row.get('apartment_name', '정보 없음') or '정보 없음'
+            supply_units = row.get('supply_units', '정보 없음') or '정보 없음'
+            rank = row.get('announcement_date', '정보 없음') or '정보 없음'  # 'announcement_date'로 수정
+            rank_region = row.get('rank_region', '정보 없음') or '정보 없음'
+            application_count = row.get('application_count', '정보 없음') or '정보 없음'
+            competition_rate = row.get('competition_rate', '정보 없음') or '정보 없음'
+            application_result = row.get('application_result', '정보 없음') or '정보 없음'
+            region = row.get('region', '정보 없음') or '정보 없음'
+            score_min = row.get('score_min', '정보 없음') or '정보 없음'
+            score_max = row.get('score_max', '정보 없음') or '정보 없음'
+            score_avg = row.get('score_avg', '정보 없음') or '정보 없음'
 
             # 데이터 포맷 정의
             content = (
@@ -268,7 +265,7 @@ def _process_csv_apt_competition_data(csv_data):
                     'region': region,
                     'apartment_name': apartment_name,
                     'competition_rate': competition_rate,
-                    "house_type" : house_type,
+                    "house_type": house_type,
                     'has_table': True
                 }
             })
@@ -276,6 +273,7 @@ def _process_csv_apt_competition_data(csv_data):
     except Exception as e:
         print(f"APT 데이터 처리 중 오류 발생: {str(e)}")
     return processed
+
 
 def load_all_data(file_paths):
     """모든 데이터를 로드하고 처리하는 함수"""
@@ -300,16 +298,16 @@ def load_all_data(file_paths):
             print(f"파일 처리 중 오류 발생: {file_path} - {str(e)}")
     
     
-    apt_data = rag_data("apt_housing_application_basic_info")
-    apt_processed = _process_csv_apt_data(apt_data)
-    processed_data.extend(apt_processed)
-    print(f"APT 파일 처리 완료: {apt_data} - {len(apt_processed)}개 항목")
+    # apt_data = rag_data("apt_housing_application_basic_info")
+    # apt_processed = _process_csv_apt_data(apt_data)
+    # processed_data.extend(apt_processed)
+    # print(f"APT 파일 처리 완료: {apt_data} - {len(apt_processed)}개 항목")
 
 
-    unranked_data = rag_data("unranked_housing_application_basic_info")
-    unranked_processed = _process_csv_unranked_data(unranked_data)
-    processed_data.extend(unranked_processed)
-    print(f"unranked 파일 처리 완료: {unranked_data} - {len(unranked_processed)}개 항목")
+    # unranked_data = rag_data("unranked_housing_application_basic_info")
+    # unranked_processed = _process_csv_unranked_data(unranked_data)
+    # processed_data.extend(unranked_processed)
+    # print(f"unranked 파일 처리 완료: {unranked_data} - {len(unranked_processed)}개 항목")
 
     apt_competition_data = rag_data("apt_housing_competition_rate")
     apt_competition_processed = _process_csv_apt_competition_data(apt_competition_data)
