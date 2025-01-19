@@ -44,19 +44,19 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to="/term" className="nav-link">용어</Link>
+              <Link to="/term" style={{ fontSize: "1.2rem" }} className="nav-link">용어</Link>
             </li>
             <li className="nav-item">
-              <Link to="/calendar" className="nav-link">청약캘린더</Link>
+              <Link to="/calendar" style={{ fontSize: "1.2rem" }} className="nav-link">청약캘린더</Link>
             </li>
             <li className="nav-item">
-              <Link to="/analysis" className="nav-link">경쟁률 분석</Link>
+              <Link to="/analysis" style={{ fontSize: "1.2rem" }} className="nav-link">경쟁률 분석</Link>
             </li>
             <li className="nav-item">
-              <Link to="/faq" className="nav-link">FAQ</Link>
+              <Link to="/faq" style={{ fontSize: "1.2rem" }} className="nav-link">FAQ</Link>
             </li>
             <li className="nav-item">
-              <Link to="/myInfo" className="nav-link">내정보</Link>
+              <Link to="/myInfo" style={{ fontSize: "1.2rem" }} className="nav-link">내정보</Link>
             </li>
           </ul>
           {/* 로그인/로그아웃 버튼을 오른쪽 끝에 배치 */}
@@ -72,13 +72,14 @@ const Navbar = () => {
                       await handleLogout(); // 로그아웃 처리
                       window.location.href = "/login"; // 로그인 페이지로 리다이렉트
                     }}
+                    style={{ fontSize: "1.2rem" }}
                   >
                     로그아웃
                   </Link>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="nav-link">
+                  <Link to="/login" style={{ fontSize: "1.2rem" }} className="nav-link">
                     로그인
                   </Link>
                 </>

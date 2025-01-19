@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; 
+import axios from "axios";
 
 const FAQ = () => {
   const [faqs, setFaqs] = useState([]); // FAQ 데이터 상태
   const [error, setError] = useState(""); // 에러 메시지 상태
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+  const [searchTerm, setSearchTerm] = useState(""); // 검색 상태
   const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
 
   useEffect(() => {
@@ -32,20 +33,36 @@ const FAQ = () => {
     );
   };
 
+  // 검색 필터 적용
+  const filteredFaqs = faqs.filter(
+    (faq) =>
+      faq[0].toLowerCase().includes(searchTerm.toLowerCase()) || // question
+      faq[1].toLowerCase().includes(searchTerm.toLowerCase())    // answer
+  );
+
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>FAQ</h1>
+
+      {/* 검색 입력 필드 */}
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={styles.searchInput}
+        />
+      </div>
+
       {isLoading ? (
         <p style={styles.loadingText}>로딩 중...</p>
       ) : error ? (
         <p style={styles.errorMessage}>{error}</p>
-      ) : (
-        faqs.map((faq, index) => (
+      ) : filteredFaqs.length > 0 ? (
+        filteredFaqs.map((faq, index) => (
           <div key={index} style={styles.faqItem}>
-            <div
-              style={styles.question}
-              onClick={() => toggleAnswer(index)}
-            >
+            <div style={styles.question} onClick={() => toggleAnswer(index)}>
               Q: {faq[0]} {/* question */}
             </div>
             {faq.isOpen && (
@@ -55,6 +72,8 @@ const FAQ = () => {
             )}
           </div>
         ))
+      ) : (
+        <p style={styles.noResults}>검색 결과가 없습니다.</p>
       )}
     </div>
   );
@@ -76,6 +95,18 @@ const styles = {
     color: "#57b6fe",
     fontSize: "2.5rem",
     marginBottom: "20px",
+  },
+  searchContainer: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  searchInput: {
+    padding: "10px",
+    width: "90%",
+    maxWidth: "600px",
+    borderRadius: "5px",
+    border: '1px solid #57b6fe',
+    fontSize: "1rem",
   },
   loadingText: {
     textAlign: "center",
@@ -103,6 +134,11 @@ const styles = {
     fontSize: "1rem",
     marginTop: "10px",
     paddingLeft: "15px",
+  },
+  noResults: {
+    textAlign: "center",
+    fontSize: "1.2rem",
+    color: "#777",
   },
 };
 

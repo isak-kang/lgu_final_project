@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid"; // 주간 및 일간 보기 플러그인
 import axios from "axios"; // Axios 추가
 import "../index.css"; // 스타일 추가
 
@@ -17,6 +16,14 @@ const Calendar = () => {
   });
   const [popup, setPopup] = useState({ visible: false, content: null });
   const [calendarRange, setCalendarRange] = useState({ start: null, end: null });
+
+  // 필터별 색상 정의
+  const color_map = {
+    special: "#F38EB8", // 특별공급
+    priority1: "#4361ee", // 1순위
+    priority2: "#57b6fe", // 2순위
+    unranked: "gray", // 무순위
+  };
 
   // 일정 가져오기
   const fetchEvents = async (start, end) => {
@@ -68,9 +75,8 @@ const Calendar = () => {
   };
 
   // 필터 업데이트
-  const updateFilters = (event) => {
-    const { id, checked } = event.target;
-    setFilterState((prev) => ({ ...prev, [id]: checked }));
+  const toggleFilter = (filterKey) => {
+    setFilterState((prev) => ({ ...prev, [filterKey]: !prev[filterKey] }));
   };
 
   // 달 변경 시 호출
@@ -97,23 +103,32 @@ const Calendar = () => {
 
   return (
     <div>
-      <div id="filters">
-        <label>
-          <input type="checkbox" id="special" checked={filterState.special} onChange={updateFilters} /> 특별공급
-        </label>
-        <label>
-          <input type="checkbox" id="priority1" checked={filterState.priority1} onChange={updateFilters} /> 1순위
-        </label>
-        <label>
-          <input type="checkbox" id="priority2" checked={filterState.priority2} onChange={updateFilters} /> 2순위
-        </label>
-        <label>
-          <input type="checkbox" id="unranked" checked={filterState.unranked} onChange={updateFilters} /> 무순위
-        </label>
+      <div id="filters" style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        {Object.keys(filterState).map((key) => (
+          <button
+            key={key}
+            onClick={() => toggleFilter(key)}
+            style={{
+              padding: "10px 20px",
+              cursor: "pointer",
+              backgroundColor: filterState[key] ? color_map[key] : "#E0E0E0",
+              color: filterState[key] ? "#FFF" : "#000",
+              border: "none",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              transition: "background-color 0.3s, color 0.3s",
+            }}
+          >
+            {key === "special" && "특별공급"}
+            {key === "priority1" && "1순위"}
+            {key === "priority2" && "2순위"}
+            {key === "unranked" && "무순위"}
+          </button>
+        ))}
       </div>
 
       <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]} // 시간 기반 뷰 플러그인 추가
+        plugins={[dayGridPlugin, interactionPlugin]} // 시간 기반 뷰 플러그인 추가
         initialView="dayGridMonth" // 기본 보기 설정
         locale="ko"
         events={events}
@@ -125,7 +140,7 @@ const Calendar = () => {
         headerToolbar={{
           left: "prev,next today",
           center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay", // 뷰 전환 버튼 추가
+          right: "dayGridMonth", // 뷰 전환 버튼 추가
         }}
       />
 

@@ -562,9 +562,9 @@ def get_filtered_schedule(
     results = execute_query(query, params)
 
     color_map = {
-        "특별공급": "red",
-        "1순위": "blue",
-        "2순위": "green",
+        "특별공급": "#F38EB8",
+        "1순위": "#4361ee",
+        "2순위": "#57b6fe",
         "무순위": "gray",
     }
 
@@ -581,6 +581,12 @@ def get_filtered_schedule(
 
 def select_all(table):
     query = f"select * from {table}"
+    with engine.connect() as conn:
+        df = pd.read_sql(query, conn)
+    return df
+
+def select_competiton_all(table,region,year,select):
+    query = f"SELECT month(`year_month`), {select} FROM {table} WHERE year(`year_month`) = {year} and region = '{region}'"
     with engine.connect() as conn:
         df = pd.read_sql(query, conn)
     return df
@@ -713,9 +719,7 @@ if __name__ == "__main__":
     # tabel_name = "housing_price"
     # csv_save(csv_file_path, tabel_name)
     
-    table = "competition"
-    a = select_json(table)
-    print(a)
+    # print(select_competiton_all("competition","서울",2024,"general_supply_competition_rate"))
 
     # print(select_id("강이삭","wbsldj59@naver.com")[0][0])
 

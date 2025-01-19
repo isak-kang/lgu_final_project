@@ -16,8 +16,12 @@ from DB.db_mysql import select_all
 mpl.rcParams['font.family'] = 'Malgun Gothic'
 mpl.rcParams['axes.unicode_minus'] = False  # U+2212 대신 ASCII '-' 사용
 
+
+# mysql_db에서 바꿔야함.
 table = "competition"
 df = select_all(table)
+
+print(df)
 
 
 

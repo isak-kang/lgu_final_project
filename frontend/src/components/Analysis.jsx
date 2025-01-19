@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import axios from "axios"; 
+import axios from "axios";
 
 function Analysis() {
   const [region, setRegion] = useState("");
   const [year, setYear] = useState("");
   const [home, setHome] = useState("");
-  const [graph, setGraph] = useState(null);
+  const [data, setData] = useState(null); // 데이터를 저장할 상태
   const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -18,23 +18,23 @@ function Analysis() {
       formData.append("home", home);
 
       const response = await axios.post(`http://${API_URL}/api/analysis`, formData);
-      const { graph } = response.data;
+      const { data } = response.data; // 서버에서 반환된 데이터 추출
 
-      setGraph(graph);
+      setData(data); // 데이터 상태 업데이트
     } catch (error) {
       console.error("Error during analysis:", error);
-      alert("그래프 생성 중 오류가 발생했습니다.");
+      alert("데이터를 불러오는 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div>
-      <h1>지역 및 년도별 경쟁률 분석</h1>
+      <br />
+      <h2>지역 및 연도별 경쟁률 분석</h2>
       <form onSubmit={handleSubmit}>
         {/* 지역 선택 */}
         <label>
-          지역 선택:
-          <select value={region} style={styles.select} onChange={(e) => setRegion(e.target.value)} required >
+          <select value={region} style={styles.select} onChange={(e) => setRegion(e.target.value)} required>
             <option value="" disabled>지역 선택</option>
             <option value="강원">강원</option>
             <option value="경기">경기</option>
@@ -57,7 +57,6 @@ function Analysis() {
 
         {/* 년도 선택 */}
         <label>
-          년도 선택:
           <select value={year} style={styles.select} onChange={(e) => setYear(e.target.value)} required>
             <option value="" disabled>년도 선택</option>
             <option value="2020">2020</option>
@@ -70,7 +69,6 @@ function Analysis() {
 
         {/* 청약 선택 */}
         <label>
-          청약 선택:
           <select value={home} style={styles.select} onChange={(e) => setHome(e.target.value)} required>
             <option value="" disabled>청약 선택</option>
             <option value="general">일반 공급</option>
@@ -81,44 +79,47 @@ function Analysis() {
         <button type="submit">분석</button>
       </form>
 
-      {/* 그래프 결과 */}
-      {graph && (
+      {/* 데이터 결과 */}
+      {data && (
         <div>
-          <h2>그래프 결과</h2>
-          <img src={`data:image/png;base64,${graph}`} alt="Competition Graph" />
+          <h2>결과 데이터</h2>
+          <ul style={styles.dataList}>
+            {data.map((item, index) => (
+              <li key={index}>
+                {item["month(`year_month`)"]}월에 경쟁률 {item["general_supply_competition_rate"]}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
   );
 }
+
 const styles = {
   select: {
     width: "100%",
     padding: "10px 15px",
-    fontSize: "18px", // 글씨 크기 조정
-    fontFamily: "'Arial', sans-serif", // 기본 폰트 적용
-    lineHeight: "1.5", // 줄 간격을 적당히 조정하여 가독성 향상
+    fontSize: "18px",
+    fontFamily: "'Arial', sans-serif",
+    lineHeight: "1.5",
     color: "#333",
     backgroundColor: "#f8f9fa",
     border: "1px solid #ced4da",
     borderRadius: "8px",
     boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
     transition: "all 0.2s ease-in-out",
-    height: "auto", // 높이 자동으로 조정
+    height: "auto",
   },
-  selectFocus: {
-    borderColor: "#80bdff",
-    outline: "none",
-    boxShadow: "0 0 5px rgba(0, 123, 255, 0.5)",
-  },
-  option: {
+  dataList: {
+    backgroundColor: "#f5f5f5",
     padding: "10px",
-    fontSize: "16px", // 옵션 글씨 크기 조정
-    fontFamily: "'Arial', sans-serif", // 옵션에 폰트 적용
-  },
-  selectDisabled: {
-    backgroundColor: "#e9ecef",
-    color: "#6c757d",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    fontFamily: "'Arial', sans-serif",
+    listStyleType: "disc",
+    margin: "20px 0",
+    lineHeight: "1.6",
   },
 };
 

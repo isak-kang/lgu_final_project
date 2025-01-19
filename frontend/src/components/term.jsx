@@ -3,15 +3,18 @@ import axios from "axios";
 
 const Terms = () => {
   const [terms, setTerms] = useState([]);
+  const [filteredTerms, setFilteredTerms] = useState([]); // 추가된 상태
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
   const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
 
-  // API 호출
+  // API 호출 (기존 코드 유지)
   useEffect(() => {
     const fetchTerms = async () => {
       try {
-        const response = await axios.get(`http://${API_URL}/api/term`); // FastAPI 엔드포인트
-        setTerms(response.data.terms); // terms 데이터를 상태로 설정
+        const response = await axios.get(`http://${API_URL}/api/term`);
+        setTerms(response.data.terms);
+        setFilteredTerms(response.data.terms); // 초기 필터링 데이터도 설정
       } catch (err) {
         setError("데이터를 가져오는 중 오류가 발생했습니다.");
       }
@@ -20,20 +23,43 @@ const Terms = () => {
     fetchTerms();
   }, []);
 
+  // 검색 로직 추가
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // 대소문자 구분 없이 검색
+    const filtered = terms.filter(([term]) => 
+      term.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredTerms(filtered);
+  };
+
   return (
     <div style={styles.container}>
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="용어 검색"
+          value={searchTerm}
+          onChange={handleSearch}
+          style={styles.searchInput}
+        />
+      </div>
+
       <h1 style={styles.header}>용어 설명</h1>
-      {error && <p style={styles.errorMessage}>{error}</p>} {/* 에러 메시지 */}
+      {error && <p style={styles.errorMessage}>{error}</p>}
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={{ ...styles.tableHeader, width: "20%" }}>용어</th> {/* 용어 컬럼 확장 */}
+            <th style={{ ...styles.tableHeader, width: "20%" }}>용어</th>
             <th style={{ ...styles.tableHeader, width: "80%" }}>개념</th>
           </tr>
         </thead>
         <tbody>
-          {terms.length > 0 ? (
-            terms.map(([term, definition], index) => (
+          {filteredTerms.length > 0 ? (
+            filteredTerms.map(([term, definition], index) => (
               <tr key={index}>
                 <td style={styles.tableCell}>{term}</td>
                 <td style={styles.tableCell}>{definition}</td>
@@ -42,7 +68,7 @@ const Terms = () => {
           ) : (
             <tr>
               <td colSpan="2" style={styles.loadingCell}>
-                용어 데이터를 불러오는 중입니다...
+                {searchTerm ? "검색 결과가 없습니다." : "용어 데이터를 불러오는 중입니다..."}
               </td>
             </tr>
           )}
@@ -51,6 +77,7 @@ const Terms = () => {
     </div>
   );
 };
+
 
 // 스타일링 객체
 const styles = {
@@ -112,6 +139,21 @@ const styles = {
       backgroundColor: "#e3f2fd",
     },
   },
+  searchContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: '20px'
+  },
+  searchInput : {
+    padding: '10px',
+    width: '250px',
+    borderRadius: '5px',
+    border: '1px solid #57b6fe', // 기본 테두리 색상 변경
+    fontSize: '1rem',
+    outline: 'none',
+    transition: 'border-color 0.3s ease',
+  }
+
 };
 
 export default Terms;

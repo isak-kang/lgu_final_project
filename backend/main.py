@@ -1,7 +1,7 @@
 from fastapi import Depends, status, FastAPI, Request, Form, HTTPException
 from fastapi import Query
 from fastapi.responses import JSONResponse
-from DB.db_mysql import login_save,login,check_duplicate_id,get_schedule_details,get_filtered_schedule,select_id,update_password
+from DB.db_mysql import login_save,login,check_duplicate_id,get_schedule_details,get_filtered_schedule,select_id,update_password,select_competiton_all
 from DB.db_mongodb import select
 import os
 from passlib.hash import bcrypt
@@ -184,26 +184,29 @@ async def api_event_details(apartment_name: str):
 
 # API
 
+
+
 @app.post("/api/analysis")
 async def analysis(
     region: str = Form(None),
     year: int = Form(None),
     home: str = Form(None),
 ):
-    if region and year and home:
-        # 청약 타입에 따라 적절한 그래프 생성
-        if home == "general":
-            graph = general_competition_graph(region, year)
-        elif home == "special":
-            graph = special_competition_graph(region, year)
-        else:
-            graph = None
-
-        return {"graph": graph}
+    if region and year and home: 
+        table = "competition"
         
+        if home == "general":
+            select = "general_supply_competition_rate"
+        elif home == "special":
+            select = "special_supply_competition_rate"
+        else:
+            return {"data": None}
 
-    # 입력값이 부족할 경우
-    return {"graph": None}
+        data = select_competiton_all(table, region, year, select)
+        return {"data": data.to_dict(orient="records")}  # JSON 변환하여 반환
+
+    return {"data": None}
+
 
 
 
