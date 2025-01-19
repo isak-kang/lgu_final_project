@@ -103,161 +103,167 @@ const Main = () => {
     <div>
 
    
-    <div 
-  className="d-flex flex-wrap justify-content-around" 
-  style={{ 
-    maxWidth: "1600px", margin: "40px auto", gap: "10px", display: "flex", justifyContent: "center", alignItems: "center",  }}>
-<div 
-  id="newsCarousel" 
-  className="carousel slide" 
-  data-bs-ride="carousel" 
-  style={{ flex: 2, maxWidth: "1600px" }}
-> <h3>최신 청약 뉴스</h3>
-  <div className="carousel-inner">
-    
-    {news.map((item, index) => (
-      <div 
-        key={index} 
-        className={`carousel-item ${index === 0 ? "active" : ""}`}
-      >
+<div
+  className="d-flex flex-wrap justify-content-around"
+  style={{
+    maxWidth: "1600px",
+    margin: "40px auto",
+    gap: "10px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  }}
+>
+  <div
+    id="newsCarousel"
+    className="carousel slide"
+    data-bs-ride="carousel"
+    style={{ flex: 2, maxWidth: "1600px" }}
+  >
+    <h3>최신 청약 뉴스</h3>
+    <div className="carousel-inner">
+      {news.map((item, index) => (
         <div
-          className="card d-flex flex-row align-items-center"
-          style={{
-            width: "100%",
-            margin: "auto",
-            padding: "20px",
-            backgroundColor: "#f9f9f9",
-            border: "1px solid #ddd",
-            borderRadius: "10px",
-          }}
+          key={index}
+          className={`carousel-item ${index === 0 ? "active" : ""}`}
         >
-          {/* Left Section: Image */}
-          <a
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ 
-              flex: 1, 
-              textDecoration: "none", 
-              display: "block", 
-              maxWidth: "250px",
+          <div
+            className="card d-flex flex-column flex-lg-row align-items-center"
+            style={{
+              width: "100%",
+              margin: "auto",
+              padding: "20px",
+              backgroundColor: "#f9f9f9",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
             }}
           >
-            <img
-              src={item.image}
-              className="card-img-left"
-              alt={item.title}
-              style={{
-                width: "250px",
-                height: "250px",
-                objectFit: "cover",
-                borderRadius: "10px",
-              }}
-            />
-          </a>
-
-          {/* Right Section: Title, Date, and Description */}
-          <div 
-            className="card-body" 
-            style={{ 
-              flex: 2, 
-              paddingLeft: "20px", 
-              paddingRight: "10px",
-            }}
-          >
-            
-            {/* Date */}
-            <p
-              style={{
-                fontSize: "0.9rem",
-                color: "#888",
-                marginBottom: "5px",
-              }}
-            >
-              {new Date(item.pubDate).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </p>
-
-            {/* Title */}
+            {/* 이미지 섹션 */}
             <a
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="card-title"
               style={{
-                fontWeight: "bold",
-                fontSize: "1.5rem",
+                flex: 1,
                 textDecoration: "none",
-                color: "#57b6fe",
+                display: "block",
+                maxWidth: "100%",
               }}
             >
-              {item.tetle} {/* Note: Fix typo in key if needed */}
+              <img
+                src={item.image}
+                className="card-img-left"
+                alt={item.title}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                }}
+              />
             </a>
 
-            {/* Description */}
-            <p
-              className="card-text"
+            {/* 텍스트 섹션 */}
+            <div
+              className="card-body"
               style={{
-                fontSize: "1rem",
-                color: "#555",
-                marginTop: "10px",
+                flex: 2,
+                textAlign: "center",
               }}
             >
-              {item.description}
-            </p>
+              {/* 날짜 */}
+              <p
+                style={{
+                  fontSize: "0.9rem",
+                  color: "#888",
+                  marginBottom: "5px",
+                }}
+              >
+                {new Date(item.pubDate).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+
+              {/* 제목 */}
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-title"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  textDecoration: "none",
+                  color: "#57b6fe",
+                }}
+              >
+                {item.title} {/* Note: Fix typo */}
+              </a>
+
+              {/* 설명 */}
+              <p
+                className="card-text"
+                style={{
+                  fontSize: "1rem",
+                  color: "#555",
+                  marginTop: "10px",
+                }}
+              >
+                {item.description}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    ))}
+      ))}
+    </div>
+
+    {/* Carousel Controls */}
+    <button
+      className="carousel-control-prev"
+      type="button"
+      data-bs-target="#newsCarousel"
+      data-bs-slide="prev"
+      style={{
+        position: "absolute",
+        top: "130px",
+        padding: "4px 6px",
+        width: "40px",
+        height: "40px",
+        backgroundColor: "#57b6fe",
+        color: "white",
+        borderRadius: "50%",
+        fontSize: "14px",
+      }}
+    >
+      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span className="visually-hidden">Previous</span>
+    </button>
+
+    <button
+      className="carousel-control-next"
+      type="button"
+      data-bs-target="#newsCarousel"
+      data-bs-slide="next"
+      style={{
+        position: "absolute",
+        top: "130px",
+        padding: "4px 6px",
+        width: "40px",
+        height: "40px",
+        backgroundColor: "#57b6fe",
+        color: "white",
+        borderRadius: "50%",
+        fontSize: "14px",
+      }}
+    >
+      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+      <span className="visually-hidden">Next</span>
+    </button>
   </div>
-
-  {/* Carousel Controls */}
-  <button
-    className="carousel-control-prev"
-    type="button"
-    data-bs-target="#newsCarousel"
-    data-bs-slide="prev"
-    style={{
-      position: "absolute",
-      top: "130px",
-      padding: "4px 6px",
-      width: "40px",
-      height: "40px",
-      backgroundColor: "#57b6fe",
-      color: "white",
-      borderRadius: "50%",
-      fontSize: "14px",
-    }}
-  >
-    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Previous</span>
-  </button>
-
-  <button
-    className="carousel-control-next"
-    type="button"
-    data-bs-target="#newsCarousel"
-    data-bs-slide="next"
-    style={{
-      position: "absolute",
-      top: "130px",
-      padding: "4px 6px",
-      width: "40px",
-      height: "40px",
-      backgroundColor: "#57b6fe",
-      color: "white",
-      borderRadius: "50%",
-      fontSize: "14px",
-    }}
-  >
-    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Next</span>
-  </button>
 </div>
-</div>
+
 
 <div 
   className="d-flex flex-wrap justify-content-start" // 'justify-content-center' -> 'justify-content-start'
