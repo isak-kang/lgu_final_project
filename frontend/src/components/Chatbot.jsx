@@ -171,12 +171,12 @@ const Chatbot = () => {
   }, [chatHistory]);
 
   return (
-    <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
+    <div className={`container ${showChatbot ? "show-chatbot" : ""}`} style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999 }}>
       <button onClick={() => setShowChatbot(prev => !prev)} id="chatbot-toggler">
         <span className="material-symbols-rounded">mode_comment</span>
         <span className="material-symbols-rounded">close</span>
       </button>
-
+  
       <div className="chatbot-popup">
         {/* Chatbot Header */}
         <div className="chat-header">
@@ -187,28 +187,26 @@ const Chatbot = () => {
           <div className="service-notice">
             청약이도 실수할 수 있어요. *^^*
           </div>
-          <button onClick={() => setShowChatbot(prev => !prev)}className="material-symbols-rounded">
+          <button onClick={() => setShowChatbot(prev => !prev)} className="material-symbols-rounded">
             keyboard_arrow_down</button>
         </div>
-
+  
         <div className="chat-date">
           {new Date().getFullYear()}.
           {(new Date().getMonth() + 1).toString().padStart(2, '0')}.
           {new Date().getDate().toString().padStart(2, '0')}
         </div>
-
+  
         {/* Chatbot Body */}
         <div ref={chatBodyRef} className="chat-body">
-          
-
           {/* Render the chat history dynamically */}
           {chatHistory.map((chat, index) => (
             <ChatMessage key={index} chat={chat} setChatHistory={setChatHistory} generateBotResponse={generateBotResponse} />
           ))}
         </div>
-
+  
         <QuickMenu setChatHistory={setChatHistory} generateBotResponse={generateBotResponse} />
-
+  
         {/* Chatbot Footer */}
         <div className="chat-footer">
           <ChatForm chatHistory={chatHistory} setChatHistory={setChatHistory} generateBotResponse={generateBotResponse} resetActivityTimer={resetActivityTimer} />
