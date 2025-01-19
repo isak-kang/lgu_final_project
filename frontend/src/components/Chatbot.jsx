@@ -171,7 +171,7 @@ const Chatbot = () => {
   }, [chatHistory]);
 
   return (
-    <div className={`container ${showChatbot ? "show-chatbot" : ""}`} style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999 }}>
+    <div className={`container ${showChatbot ? "show-chatbot" : ""}`} style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: showChatbot ? 999 : 0 }}>
       <button onClick={() => setShowChatbot(prev => !prev)} id="chatbot-toggler">
         <span className="material-symbols-rounded">mode_comment</span>
         <span className="material-symbols-rounded">close</span>
