@@ -210,7 +210,7 @@ class RAGChatbot:
         try:
             self.chroma_client = chromadb.PersistentClient(path="./backend/data/chroma_db")
             self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-                model_name='paraphrase-multilingual-MiniLM-L12-v2'
+                model_name='sentence-transformers/all-MiniLM-L6-v2'
             )
             self._setup_collection()
         except Exception as e:
@@ -284,31 +284,33 @@ class RAGChatbot:
         # 메모리 문제를 방지하기 위해 배치 처리
         # print(documents)
 
-        # 데이터 임베딩 코드 개선
         batch_size = 10
         for i in range(0, len(documents), batch_size):
+            batch_end = min(i + batch_size, len(documents))
             try:
-                batch_end = min(i + batch_size, len(documents))
                 print(f"Batch {i}-{batch_end} 추가 시작...")
                 
                 # 데이터 검증
                 for idx, (doc, meta, doc_id) in enumerate(zip(documents[i:batch_end], metadatas[i:batch_end], ids[i:batch_end])):
-                    assert isinstance(doc, str) and doc.strip(), f"문서가 비어있습니다. ID: {doc_id}"
-                    assert isinstance(meta, dict), f"메타데이터 오류. ID: {doc_id}"
-                    assert isinstance(doc_id, str) and doc_id.strip(), f"ID 오류. ID: {doc_id}"
-                
-                # 컬렉션에 데이터 추가
+                    assert isinstance(doc, str) and doc.strip(), f"유효하지 않은 문서 ID: {doc_id}"
+                    assert isinstance(meta, dict), f"유효하지 않은 메타데이터: {doc_id}"
+                    assert isinstance(doc_id, str) and doc_id.strip(), f"유효하지 않은 ID: {doc_id}"
+                print(i, batch_end)
+                # 데이터 추가
                 collection.add(
                     documents=documents[i:batch_end],
                     metadatas=metadatas[i:batch_end],
                     ids=ids[i:batch_end]
                 )
+
+                print(f"임베딩 진행 중... {batch_end}/{len(documents)}")
                 print(f"Batch {i}-{batch_end} 추가 완료. 현재 컬렉션 문서 수: {collection.count()}")
+                
+                # 메모리 정리
                 gc.collect()
             except Exception as e:
                 print(f"Batch {i}-{batch_end} 처리 중 오류 발생: {str(e)}")
                 continue
-
 
         print("임베딩 작업이 완료되었습니다.")
         return collection
