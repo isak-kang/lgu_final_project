@@ -199,7 +199,7 @@ const Main = () => {
                   color: "#57b6fe",
                 }}
               >
-                {item.title} {/* Note: Fix typo */}
+                {item.tetle} {/* Note: Fix typo */}
               </a>
 
               {/* 설명 */}

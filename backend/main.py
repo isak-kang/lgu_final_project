@@ -203,6 +203,7 @@ async def analysis(
             return {"data": None}
 
         data = select_competiton_all(table, region, year, select)
+        print(data)
         return {"data": data.to_dict(orient="records")}  # JSON 변환하여 반환
 
     return {"data": None}
