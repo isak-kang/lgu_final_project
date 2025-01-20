@@ -311,9 +311,9 @@ def load_all_data(file_paths):
     processed_data.extend(unranked_processed)
     # print(f"unranked 파일 처리 완료: {unranked_data} - {len(unranked_processed)}개 항목")
 
-    apt_competition_data = rag_data("apt_housing_competition_rate")
-    apt_competition_processed = _process_csv_apt_competition_data(apt_competition_data)
-    processed_data.extend(apt_competition_processed)
+    # apt_competition_data = rag_data("apt_housing_competition_rate")
+    # apt_competition_processed = _process_csv_apt_competition_data(apt_competition_data)
+    # processed_data.extend(apt_competition_processed)
     # print(f"apt_competition 파일 처리 완료: {apt_competition_data} - {len(apt_competition_processed)}개 항목")
     
 
