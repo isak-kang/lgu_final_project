@@ -143,9 +143,10 @@ def _process_csv_apt_data(csv_data):
             processed.append({
                 'title': f'{apartment_name}_기본정보_데이터',
                 'content': content,
-                'type': 'csv_content',
+                'type': 'apt_csv',
                 'metadata': {
-                    'source_type': 'csv',
+                    'source_type': 'apt_csv',
+                    'apartment_name' : apartment_name,
                     'start_date' : application_period_start,
                     'end_date' : application_period_end,
                     'result_date' : result_announcement,
@@ -203,9 +204,10 @@ def _process_csv_unranked_data(csv_data):
             processed.append({
                 'title': f'{apartment_name}_기본정보_데이터',
                 'content': content,
-                'type': 'csv_content',
+                'type': 'unranked_csv',
                 'metadata': {
-                    'source_type': 'csv',
+                    'source_type': 'unranked_csv',
+                    'apartment_name' : apartment_name,
                     'start_date' : application_period_start,
                     'end_date' : application_period_end,
                     'result_date' : result_announcement,
@@ -259,11 +261,11 @@ def _process_csv_apt_competition_data(csv_data):
             processed.append({
                 'title': f'{apartment_name}_경쟁률_데이터',
                 'content': content,
-                'type': 'csv_content',
+                'type': 'apt_competition_csv',
                 'metadata': {
-                    'source_type': 'csv',
-                    'region': region,
+                    'source_type': 'apt_competition_csv',
                     'apartment_name': apartment_name,
+                    'region': region,
                     'competition_rate': competition_rate,
                     "house_type": house_type,
                     'has_table': True
@@ -416,7 +418,7 @@ class RAGChatbot:
         # 메모리 문제를 방지하기 위해 배치 처리
         # print(documents)
 
-        batch_size = 100
+        batch_size = 30
         for i in range(0, len(documents), batch_size):
             batch_end = min(i + batch_size, len(documents))
             try:
@@ -447,7 +449,7 @@ class RAGChatbot:
         print("임베딩 작업이 완료되었습니다.")
         return collection
 
-    def find_most_similar_sections(self, query, top_k=100):
+    def find_most_similar_sections(self, query, top_k=300):
         """유사 문서 검색"""
         try:
             results = self.collection.query(
@@ -456,7 +458,7 @@ class RAGChatbot:
             )
             similar_sections = []
             for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0])):
-                section_data = {
+                section_data = {    
                     'title': metadata['title'],
                     'content': doc,
                     'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
@@ -478,11 +480,78 @@ class RAGChatbot:
                 if similarity > 0.3:  # 유사도 임계값
                     if section['metadata'].get('content_type') == 'qa_content':
                         context += f"FAQ 답변:\n{section['content']}\n\n"
-                    else:
+                    elif section['metadata'].get('source_type') == 'apt_csv':
                         context += f"문서: {section['title']}\n"
-                        if section['metadata'].get('Header 1'):
-                            context += f"섹션: {section['metadata']['Header 1']}\n"
-                        context += f"내용: {section['content']}\n\n"
+
+                        # CSV 데이터 필드 매핑
+                        metadata = section.get('metadata', {})
+                        region = metadata.get('region', '정보 없음')
+                        apartment_name = metadata.get('apartment_name', '정보 없음')
+                        housing_type = metadata.get('housing_type', '정보 없음')
+                        sale_or_lease = metadata.get('sale_or_lease', '정보 없음')
+                        contact = metadata.get('contact', '정보 없음')
+                        start_date = metadata.get('start_date', '정보 없음')
+                        end_date = metadata.get('end_date', '정보 없음')
+                        result_date = metadata.get('result_date', '정보 없음')
+
+                        print(apartment_name)
+                        # 데이터 내용을 구성
+                        context += (
+                            f"주택명: {apartment_name}\n"
+                            f"지역: {region}\n"
+                            f"주택 유형: {housing_type}\n"
+                            f"분양/임대: {sale_or_lease}\n"
+                            f"연락처: {contact}\n"
+                            f"청약 접수 시작: {start_date}\n"
+                            f"청약 접수 종료: {end_date}\n"
+                            f"결과 발표: {result_date}\n"
+                            f"내용: {section['content']}\n\n"
+                        )
+
+                    elif section['metadata'].get('source_type') == 'unranked_csv':
+                        context += f"문서: {section['title']}\n"
+
+                        # CSV 데이터 필드 매핑
+                        metadata = section.get('metadata', {})
+                        apartment_name = metadata.get('apartment_name', '정보 없음')
+                        region = metadata.get('region', '정보 없음')
+                        subscription_type = metadata.get('subscription_type', '정보 없음')
+                        start_date = metadata.get('start_date', '정보 없음')
+                        end_date = metadata.get('end_date', '정보 없음')
+                        result_date = metadata.get('result_date', '정보 없음')
+
+                        # 데이터 내용을 구성
+                        context += (
+                            f"지역: {region}\n"
+                            f"주택명: {apartment_name}\n"
+                            f"주택 유형: {subscription_type}\n"
+                            f"청약 접수 시작: {start_date}\n"
+                            f"청약 접수 종료: {end_date}\n"
+                            f"결과 발표: {result_date}\n"
+                            f"내용: {section['content']}\n\n"
+                        )
+
+                    elif section['metadata'].get('source_type') == 'apt_competition_csv':
+                        context += f"문서: {section['title']}\n"
+
+                        # CSV 데이터 필드 매핑
+                        metadata = section.get('metadata', {})
+                        region = metadata.get('region', '정보 없음')
+                        apartment_name = metadata.get('apartment_name', '정보 없음')
+                        competition_rate = metadata.get('competition_rate', '정보 없음')
+                        house_type = metadata.get('house_type', '정보 없음')
+
+                        # 데이터 내용을 구성
+                        context += (
+                            f"주택명: {apartment_name}\n"
+                            f"지역: {region}\n"
+                            f"주택 유형: {house_type}\n"
+                            f"경쟁률: {competition_rate}\n"
+                            f"내용: {section['content']}\n\n"
+                        )
+
+
+
             return context
         except Exception as e:
             print(f"컨텍스트 준비 중 오류 발생: {str(e)}")
