@@ -451,7 +451,7 @@ class RAGChatbot:
 
 
 
-    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=2.0, source_type_weight=1.3):
+    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=1.2, source_type_weight=2.0, start_weight=1.6):
         """
         유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
         :param query: 검색할 쿼리
@@ -470,7 +470,9 @@ class RAGChatbot:
             today = datetime.now()
 
             # '오늘' 또는 '가장 최근' 단어 확인
-            is_recent_query = any(keyword in query for keyword in ['오늘', '가장 최근'])
+            is_recent_query = any(keyword in query for keyword in ['오늘', '가장 최근', '최근'])
+            is_day_query = any(keyword in query for keyword in ['청약일', '청약신청일'])
+            is_title_query = 'title' in query.lower()  # title이 포함된 경우 확인
 
             # '경쟁률' 포함 여부 확인
             is_competition_query = '경쟁률' in query
@@ -480,11 +482,19 @@ class RAGChatbot:
                 base_distance = results['distances'][0][i]
                 adjusted_distance = base_distance
 
+                # title 가중치 우선 처리
+                if 'title' in metadata and query.lower() in metadata['title'].lower():
+                    adjusted_distance = 0.001  # 타이틀이 쿼리와 일치하면 최우선순위 설정
+
                 # 가중치 적용
                 if 'title' in metadata and query.lower() in metadata['title'].lower():
                     adjusted_distance /= title_weight
+
                 if 'region' in metadata and query.lower() in metadata['region'].lower():
                     adjusted_distance /= region_weight
+
+                if is_day_query and 'start_date' in metadata:
+                    adjusted_distance /= start_weight
 
                 # 경쟁률 가중치 적용 (경쟁률 쿼리인 경우)
                 if is_competition_query and 'competition_rate' in metadata:
@@ -517,7 +527,7 @@ class RAGChatbot:
                     start_date = datetime.fromisoformat(start_date_str) if start_date_str else None
                     end_date = datetime.fromisoformat(end_date_str) if end_date_str else None
 
-                    # 청약 신청 가능 여부 체크
+                    # 청약 신청 가능한 항목만 추가
                     is_active = start_date and end_date and start_date <= today <= end_date
 
                     # 청약 신청 가능한 항목만 추가
@@ -536,32 +546,7 @@ class RAGChatbot:
             # 거리 기준으로 정렬 (낮을수록 유사)
             similar_sections.sort(key=lambda x: x['distance'])
 
-            # '경쟁률' 쿼리에 대한 추가 처리
-            if is_competition_query:
-                processed_competition_data = [
-                    {
-                        'title': f"{metadata.get('apartment_name', '정보 없음')}_경쟁률_데이터",
-                        'content': (
-                            f"지역: {metadata.get('region', '정보 없음')}\n"
-                            f"아파트 이름: {metadata.get('apartment_name', '정보 없음')}\n"
-                            f"경쟁률: {metadata.get('competition_rate', '정보 없음')}\n"
-                            f"타입: {metadata.get('house_type', '정보 없음')}\n"
-                        ),
-                        'metadata': {
-                            'source_type': 'apt_competition_csv',
-                            'apartment_name': metadata.get('apartment_name', '정보 없음'),
-                            'region': metadata.get('region', '정보 없음'),
-                            'competition_rate': metadata.get('competition_rate', '정보 없음'),
-                            "house_type": metadata.get('house_type', '정보 없음'),
-                            'has_table': True
-                        },
-                        'distance': adjusted_distance
-                    }
-                    for metadata in results['metadatas'][0] if 'competition_rate' in metadata
-                ]
-
-                similar_sections.extend(processed_competition_data)
-
+            
             return similar_sections
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
