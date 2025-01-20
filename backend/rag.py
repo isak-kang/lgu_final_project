@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 import gc
 from DB.db_mysql import rag_data
-from datetime import date
+from datetime import date,datetime
 
 # 환경 변수 로드
 load_dotenv()
@@ -449,23 +449,113 @@ class RAGChatbot:
         print("임베딩 작업이 완료되었습니다.")
         return collection
 
-    def find_most_similar_sections(self, query, top_k=300):
-        """유사 문서 검색"""
+
+
+    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=2.0):
+        """
+        유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
+        :param query: 검색할 쿼리
+        :param top_k: 반환할 유사 문서 개수
+        :param title_weight: 'title' 필드에 가중치를 적용할 값
+        :param region_weight: 'region' 필드에 가중치를 적용할 값
+        :param competition_rate_weight: 'competition_rate' 필드에 가중치를 적용할 값
+        """
         try:
             results = self.collection.query(
                 query_texts=[query],
                 n_results=top_k
             )
             similar_sections = []
+            today = datetime.now()
+
+            # '오늘' 또는 '가장 최근' 단어 확인
+            is_recent_query = any(keyword in query for keyword in ['오늘', '가장 최근'])
+
+            # '경쟁률' 포함 여부 확인
+            is_competition_query = '경쟁률' in query
+
             for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0])):
-                section_data = {    
-                    'title': metadata['title'],
-                    'content': doc,
-                    'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
-                    'distance': results['distances'][0][i]
-                }
-                similar_sections.append(section_data)
-            
+                # 기본 거리 계산
+                base_distance = results['distances'][0][i]
+                adjusted_distance = base_distance
+
+                # 가중치 적용
+                if 'title' in metadata and query.lower() in metadata['title'].lower():
+                    adjusted_distance /= title_weight
+                if 'region' in metadata and query.lower() in metadata['region'].lower():
+                    adjusted_distance /= region_weight
+
+                # 경쟁률 가중치 적용 (경쟁률 쿼리인 경우)
+                if is_competition_query and 'competition_rate' in metadata:
+                    try:
+                        competition_rate = float(metadata['competition_rate'])
+                        adjusted_distance /= (1 + competition_rate / competition_rate_weight)
+                    except (ValueError, TypeError):
+                        pass  # 경쟁률 값이 없거나 형식이 잘못된 경우 무시
+
+                # '오늘' 또는 '가장 최근' 기준 추가
+                if is_recent_query and 'start_date' in metadata:
+                    try:
+                        start_date = datetime.fromisoformat(metadata['start_date'])
+                        days_difference = abs((today - start_date).days)
+                        adjusted_distance /= (1 + 1 / (1 + days_difference))  # 날짜가 가까울수록 유사도 증가
+                    except ValueError:
+                        pass  # start_date 형식이 잘못된 경우 무시
+
+                # 청약 신청 가능 여부 필터링
+                start_date_str = metadata.get('start_date')
+                end_date_str = metadata.get('end_date')
+
+                try:
+                    # 날짜 파싱
+                    start_date = datetime.fromisoformat(start_date_str) if start_date_str else None
+                    end_date = datetime.fromisoformat(end_date_str) if end_date_str else None
+
+                    # 청약 신청 가능 여부 체크
+                    is_active = start_date and end_date and start_date <= today <= end_date
+
+                    # 청약 신청 가능한 항목만 추가
+                    if is_active or not is_recent_query:  # '오늘' 또는 '가장 최근' 쿼리가 아닌 경우도 포함
+                        section_data = {
+                            'title': metadata.get('title', '정보 없음'),
+                            'content': doc,
+                            'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
+                            'distance': adjusted_distance
+                        }
+                        similar_sections.append(section_data)
+                except ValueError:
+                    # 날짜 형식 오류 발생 시 무시
+                    pass
+
+            # 거리 기준으로 정렬 (낮을수록 유사)
+            similar_sections.sort(key=lambda x: x['distance'])
+
+            # '경쟁률' 쿼리에 대한 추가 처리
+            if is_competition_query:
+                processed_competition_data = [
+                    {
+                        'title': f"{metadata.get('apartment_name', '정보 없음')}_경쟁률_데이터",
+                        'content': (
+                            f"지역: {metadata.get('region', '정보 없음')}\n"
+                            f"아파트 이름: {metadata.get('apartment_name', '정보 없음')}\n"
+                            f"경쟁률: {metadata.get('competition_rate', '정보 없음')}\n"
+                            f"타입: {metadata.get('house_type', '정보 없음')}\n"
+                        ),
+                        'metadata': {
+                            'source_type': 'apt_competition_csv',
+                            'apartment_name': metadata.get('apartment_name', '정보 없음'),
+                            'region': metadata.get('region', '정보 없음'),
+                            'competition_rate': metadata.get('competition_rate', '정보 없음'),
+                            "house_type": metadata.get('house_type', '정보 없음'),
+                            'has_table': True
+                        },
+                        'distance': adjusted_distance
+                    }
+                    for metadata in results['metadatas'][0] if 'competition_rate' in metadata
+                ]
+
+                similar_sections.extend(processed_competition_data)
+
             return similar_sections
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
@@ -495,6 +585,7 @@ class RAGChatbot:
                         result_date = metadata.get('result_date', '정보 없음')
 
                         print(apartment_name)
+                        
                         # 데이터 내용을 구성
                         context += (
                             f"주택명: {apartment_name}\n"
