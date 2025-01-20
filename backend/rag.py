@@ -451,7 +451,7 @@ class RAGChatbot:
 
 
 
-    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=2.0):
+    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=2.0, source_type_weight=1.3):
         """
         유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
         :param query: 검색할 쿼리
@@ -459,6 +459,7 @@ class RAGChatbot:
         :param title_weight: 'title' 필드에 가중치를 적용할 값
         :param region_weight: 'region' 필드에 가중치를 적용할 값
         :param competition_rate_weight: 'competition_rate' 필드에 가중치를 적용할 값
+        :param source_type_weight: 'source_type'이 unranked_csv 또는 apt_csv일 때 가중치를 적용할 값
         """
         try:
             results = self.collection.query(
@@ -492,6 +493,11 @@ class RAGChatbot:
                         adjusted_distance /= (1 + competition_rate / competition_rate_weight)
                     except (ValueError, TypeError):
                         pass  # 경쟁률 값이 없거나 형식이 잘못된 경우 무시
+
+                # source_type 가중치 적용 (경쟁률 쿼리가 아닌 경우)
+                if not is_competition_query and 'source_type' in metadata:
+                    if metadata['source_type'] in ['unranked_csv', 'apt_csv']:
+                        adjusted_distance /= source_type_weight
 
                 # '오늘' 또는 '가장 최근' 기준 추가
                 if is_recent_query and 'start_date' in metadata:
@@ -560,6 +566,7 @@ class RAGChatbot:
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
             raise
+
 
     def _prepare_context(self, sections):
         """컨텍스트 준비"""
