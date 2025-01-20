@@ -17,7 +17,7 @@ from pydantic import BaseModel
 # from rag import rag_chat
 from scenario import get_scenario_response
 from dotenv import load_dotenv
-from test import rag_chat
+from rag import rag_chat
 
 from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
