@@ -14,9 +14,10 @@ from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
 import jwt
 from pydantic import BaseModel
-from rag import rag_chat
+# from rag import rag_chat
 from scenario import get_scenario_response
 from dotenv import load_dotenv
+from test import rag_chat
 
 from scenario import get_scenario_response
 from personalized_flow import get_personalized_response
@@ -203,7 +204,8 @@ async def analysis(
             return {"data": None}
 
         data = select_competiton_all(table, region, year, select)
-        print(data)
+        # print(data)
+
         return {"data": data.to_dict(orient="records")}  # JSON 변환하여 반환
 
     return {"data": None}
@@ -218,7 +220,7 @@ async def get_news(request: Request):
     collection = 'news'
     data = select (collection)
     news = [{"tetle" :item['title'], "link" : item['link'],"description" : item['description'],"pubDate" : item['pubDate'], "image" : item['image']} for item in data]
-    print(news)
+    # print(news)
     return {"news": news}
 
 

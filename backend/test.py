@@ -298,21 +298,21 @@ def load_all_data(file_paths):
             print(f"파일 처리 중 오류 발생: {file_path} - {str(e)}")
     
     
-    # apt_data = rag_data("apt_housing_application_basic_info")
-    # apt_processed = _process_csv_apt_data(apt_data)
-    # processed_data.extend(apt_processed)
+    apt_data = rag_data("apt_housing_application_basic_info")
+    apt_processed = _process_csv_apt_data(apt_data)
+    processed_data.extend(apt_processed)
     # print(f"APT 파일 처리 완료: {apt_data} - {len(apt_processed)}개 항목")
 
 
-    # unranked_data = rag_data("unranked_housing_application_basic_info")
-    # unranked_processed = _process_csv_unranked_data(unranked_data)
-    # processed_data.extend(unranked_processed)
+    unranked_data = rag_data("unranked_housing_application_basic_info")
+    unranked_processed = _process_csv_unranked_data(unranked_data)
+    processed_data.extend(unranked_processed)
     # print(f"unranked 파일 처리 완료: {unranked_data} - {len(unranked_processed)}개 항목")
 
     apt_competition_data = rag_data("apt_housing_competition_rate")
     apt_competition_processed = _process_csv_apt_competition_data(apt_competition_data)
     processed_data.extend(apt_competition_processed)
-    print(f"apt_competition 파일 처리 완료: {apt_competition_data} - {len(apt_competition_processed)}개 항목")
+    # print(f"apt_competition 파일 처리 완료: {apt_competition_data} - {len(apt_competition_processed)}개 항목")
     
 
     # 처리된 데이터가 없는 경우 에러 발생
@@ -340,7 +340,7 @@ class RAGChatbot:
     def _initialize_chromadb(self):
         """ChromaDB 초기화 및 데이터 임베딩"""
         try:
-            self.chroma_client = chromadb.PersistentClient(path="./backend/data/chroma_db")
+            self.chroma_client = chromadb.PersistentClient(path="./data/chroma_db")
             self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name='sentence-transformers/all-MiniLM-L6-v2'
             )
