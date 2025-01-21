@@ -47,7 +47,7 @@ const Terms = () => {
           style={styles.searchInput}
         />
       </div>
-
+ 
       <h1 style={styles.header}>용어 설명</h1>
       {error && <p style={styles.errorMessage}>{error}</p>}
       <table style={styles.table}>
