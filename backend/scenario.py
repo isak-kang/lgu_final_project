@@ -144,13 +144,13 @@ SCENARIOS: Dict[str, ScenarioResponse] = {
 국민주택 : 철거주택 소유자 또는 거주자(세입자), 다문화가족, 탄광근로자, 재외동포 등
 민영주택 : 철거주택 소유 및 거주자, 해외취업근로자 등
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_4:{
         "text":"""입주자모집공고일 현재 미성년인 자녀 2명 이상을 둔 자(태아, 입양자녀 포함)
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_5:{
@@ -160,31 +160,31 @@ SCENARIOS: Dict[str, ScenarioResponse] = {
 
 ** 투기과열지구 또는 청약과열지역의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 자는 청약불가
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_6:{
         "text":"""입주자모집공고일 현재 청년(만19세 이상 만39세 이하로 혼인 중이 아니며, 과거 주택을 소유한 사실이 없는 사람)인 자
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_7:{
         "text":"""입주자모집공고일 현재 2세 미만(2세가 되는 날을 포함)의 자녀가 있는 분
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_8:{
         "text":"""입주자모집공고일 현재 해당기관 종사자로서 해당기관에서 ‘주택 특별공급대상자 확인서’를 발급받은 분
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L3_9:{
         "text":"""입주자모집공고일 현재 시도지사가 정한 외국인 중 무주택자
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L2_2:{
@@ -192,13 +192,13 @@ SCENARIOS: Dict[str, ScenarioResponse] = {
 
 행정구역 개편이나 도시 개발 등으로 인해 주거 환경이 변화된 지역 주민들의 주거 안정을 도모하고, 임대 사업 활성화를 지원하기 위한 정책적 목적을 가지고 있습니다.
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L2_3:{
         "text":"""일반공급은 특별공급이나 우선공급 대상에 해당하지 않는 일반적인 청약 신청자를 위한 공급 방식입니다. 청약통장 가입 등 일정한 자격 요건만 충족하면 누구나 신청할 수 있으나, 다양한 신청자가 경쟁하기 때문에 당첨 경쟁률이 높은 편입니다.
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L2_4:{
@@ -218,9 +218,7 @@ LH청약 플러스 : https://apply.lh.or.kr/lhapply/main.do
 청약통장은 다음과 같이 나뉩니다.
 주택청약종합저축 - 국민주택 및 민영주택을 공급받기 위해 가입하는 저축상품
 청년주택드림 청약통장 - 청년들(만19세 ~ 만34세)의 주택 구입과 자산 형성을 지원하기 위한 특별한 청약통장
-청약저축
-청약부금
-청약예금
+
 2015년 이후, 청약저축, 청약부금, 청약예금은 주택청약종합저툭으로 상품이 통합되어 가입이 종료된 상태입니다.
 """,
         "buttons":[
@@ -230,7 +228,7 @@ LH청약 플러스 : https://apply.lh.or.kr/lhapply/main.do
     },
 
     L2_5:{
-        "text":"""00님은 청년주택드림 청약통장 가입 대상이예요.(대상의 정보에 따라 표시)
+        "text":"""00님은 청년주택드림 청약통장 가입 대상이예요.
 인터넷 가입을 위해서는 본인 인증을 위한 신분증 등이 필요해요.
 """,
         "buttons":[
@@ -240,8 +238,9 @@ LH청약 플러스 : https://apply.lh.or.kr/lhapply/main.do
 
     L3_10:{
         "text":"""가입URL
+(은행어플과 연동시 사용가능)
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L2_6:{
@@ -256,14 +255,9 @@ LH청약 플러스 : https://apply.lh.or.kr/lhapply/main.do
 
     L3_11:{
         "text":"""변경 신청 URL
+(은행어플과 연동시 사용가능)
 """,
-        "buttons":[]
-    },
-
-    L1_3:{
-        "text":"""팝업창(청약캘린더)
-""",
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L1_4:{
@@ -291,14 +285,14 @@ LH청약 플러스 : https://apply.lh.or.kr/lhapply/main.do
         "text":"""청약홈에서 실제 청약 신청을 대비하여 체험해볼 수 있습니다.
 https://www.applyhome.co.kr/ap/app/reqst/selectSubscrtReqstAptMainView.do
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
     L2_9:{
         "text":"""공고단지 청약연습은 현재 모집공고 중인 단지의 정보로 실전과 같은 형태로 연습해볼 수 있습니다.
 https://www.applyhome.co.kr/ap/apr/reqst/selectSubscrtReqstAptMainView.do
 """,
-        "buttons":[]
+        "buttons":[{"text":"다른질문하기", "nextQuestion":"다른질문하기"}]
     },
 
 # FAQ
@@ -352,13 +346,16 @@ https://www.applyhome.co.kr/ap/apr/reqst/selectSubscrtReqstAptMainView.do
         ]
     },
 
-    "키워드":{
-        "text":"""답변 줄바꿈처리 그대로 적용됨
+    "다른질문하기":{
+        "text":"""안녕하세요, 청약 도우미 청약이입니다. 무엇을 도와드릴까요?
 """,
         "buttons":[
-            {"text":"버튼에 표시될 텍스트", "nextQuestion":"사용자 인풋값"}
+            {"text":L1_1, "nextQuestion":L1_1},
+            {"text":L1_2, "nextQuestion":L1_2},
+            {"text":L1_3, "nextQuestion":L1_3},
+            {"text":L1_4, "nextQuestion":L1_4}
         ]
-    },
+    }
     
 }
 
