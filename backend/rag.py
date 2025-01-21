@@ -403,7 +403,7 @@ class RAGChatbot:
                 if document_text and document_text.strip():
                     documents.append(document_text)
                     metadatas.append({
-                        "title": item.get('title', ''),
+                        "apartment_name": item.get('apartment_name', ''),
                         "content_type": item.get('type', ''),
                         **{k: v for k, v in item.get('metadata', {}).items()}
                     })
@@ -456,7 +456,7 @@ class RAGChatbot:
         유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
         :param query: 검색할 쿼리
         :param top_k: 반환할 유사 문서 개수
-        :param title_weight: 'title' 필드에 가중치를 적용할 값
+        :param title_weight: 'apartment_name' 필드에 가중치를 적용할 값
         :param region_weight: 'region' 필드에 가중치를 적용할 값
         :param competition_rate_weight: 'competition_rate' 필드에 가중치를 적용할 값
         :param source_type_weight: 'source_type'이 unranked_csv 또는 apt_csv일 때 가중치를 적용할 값
@@ -469,84 +469,67 @@ class RAGChatbot:
             similar_sections = []
             today = datetime.now()
 
-            # '오늘' 또는 '가장 최근' 단어 확인
+            # '오늘', '가장 최근' 쿼리 여부 확인
             is_recent_query = any(keyword in query for keyword in ['오늘', '가장 최근', '최근'])
             is_day_query = any(keyword in query for keyword in ['청약일', '청약신청일'])
-            is_title_query = 'title' in query.lower()  # title이 포함된 경우 확인
-
-            # '경쟁률' 포함 여부 확인
-            is_competition_query = '경쟁률' in query
 
             for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0])):
                 # 기본 거리 계산
                 base_distance = results['distances'][0][i]
                 adjusted_distance = base_distance
 
-                # title 가중치 우선 처리
-                if 'title' in metadata and query.lower() in metadata['title'].lower():
-                    adjusted_distance = 0.001  # 타이틀이 쿼리와 일치하면 최우선순위 설정
+                # 'apartment_name' 유사도 계산
+                if 'apartment_name' in metadata:
+                    apartment_name = metadata['apartment_name'].lower()
+                    query_lower = query.lower()
 
-                # 가중치 적용
-                if 'title' in metadata and query.lower() in metadata['title'].lower():
-                    adjusted_distance /= title_weight
+                    if query_lower in apartment_name:  # 정확 매칭 또는 포함 여부 확인
+                        if query_lower == apartment_name:  # 완전 일치
+                            adjusted_distance = 0.001  # 가장 높은 우선순위
+                        else:  # 부분 일치
+                            adjusted_distance /= title_weight
 
+                # 지역 가중치
                 if 'region' in metadata and query.lower() in metadata['region'].lower():
                     adjusted_distance /= region_weight
 
+                # 날짜 관련 가중치
                 if is_day_query and 'start_date' in metadata:
                     adjusted_distance /= start_weight
 
-                # 경쟁률 가중치 적용 (경쟁률 쿼리인 경우)
-                if is_competition_query and 'competition_rate' in metadata:
-                    try:
-                        competition_rate = float(metadata['competition_rate'])
-                        adjusted_distance /= (1 + competition_rate / competition_rate_weight)
-                    except (ValueError, TypeError):
-                        pass  # 경쟁률 값이 없거나 형식이 잘못된 경우 무시
-
-                # source_type 가중치 적용 (경쟁률 쿼리가 아닌 경우)
-                if not is_competition_query and 'source_type' in metadata:
-                    if metadata['source_type'] in ['unranked_csv', 'apt_csv']:
-                        adjusted_distance /= source_type_weight
-
-                # '오늘' 또는 '가장 최근' 기준 추가
+                # '오늘', '최근' 기준 추가
                 if is_recent_query and 'start_date' in metadata:
                     try:
                         start_date = datetime.fromisoformat(metadata['start_date'])
                         days_difference = abs((today - start_date).days)
-                        adjusted_distance /= (1 + 1 / (1 + days_difference))  # 날짜가 가까울수록 유사도 증가
+                        adjusted_distance /= (1 + 1 / (1 + days_difference))
                     except ValueError:
-                        pass  # start_date 형식이 잘못된 경우 무시
+                        pass
 
                 # 청약 신청 가능 여부 필터링
                 start_date_str = metadata.get('start_date')
                 end_date_str = metadata.get('end_date')
 
                 try:
-                    # 날짜 파싱
                     start_date = datetime.fromisoformat(start_date_str) if start_date_str else None
                     end_date = datetime.fromisoformat(end_date_str) if end_date_str else None
 
                     # 청약 신청 가능한 항목만 추가
                     is_active = start_date and end_date and start_date <= today <= end_date
-
-                    # 청약 신청 가능한 항목만 추가
-                    if is_active or not is_recent_query:  # '오늘' 또는 '가장 최근' 쿼리가 아닌 경우도 포함
+                    if is_active or not is_recent_query:
                         section_data = {
-                            'title': metadata.get('title', '정보 없음'),
+                            'apartment_name': metadata.get('apartment_name', '정보 없음'),
                             'content': doc,
-                            'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
+                            'metadata': {k: v for k, v in metadata.items() if k not in ['apartment_name']},
                             'distance': adjusted_distance
                         }
                         similar_sections.append(section_data)
                 except ValueError:
-                    # 날짜 형식 오류 발생 시 무시
                     pass
 
             # 거리 기준으로 정렬 (낮을수록 유사)
             similar_sections.sort(key=lambda x: x['distance'])
 
-            
             return similar_sections
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
