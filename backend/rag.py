@@ -403,7 +403,7 @@ class RAGChatbot:
                 if document_text and document_text.strip():
                     documents.append(document_text)
                     metadatas.append({
-                        "apartment_name": item.get('apartment_name', ''),
+                        "title": item.get('title', ''),
                         "content_type": item.get('type', ''),
                         **{k: v for k, v in item.get('metadata', {}).items()}
                     })
@@ -456,7 +456,7 @@ class RAGChatbot:
         유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
         :param query: 검색할 쿼리
         :param top_k: 반환할 유사 문서 개수
-        :param title_weight: 'apartment_name' 필드에 가중치를 적용할 값
+        :param title_weight: 'title' 필드에 가중치를 적용할 값
         :param region_weight: 'region' 필드에 가중치를 적용할 값
         :param competition_rate_weight: 'competition_rate' 필드에 가중치를 적용할 값
         :param source_type_weight: 'source_type'이 unranked_csv 또는 apt_csv일 때 가중치를 적용할 값
@@ -478,13 +478,13 @@ class RAGChatbot:
                 base_distance = results['distances'][0][i]
                 adjusted_distance = base_distance
 
-                # 'apartment_name' 유사도 계산
+                # 타이틀 유사도 계산
                 if 'apartment_name' in metadata:
-                    apartment_name = metadata['apartment_name'].lower()
+                    title = metadata['apartment_name'].lower()
                     query_lower = query.lower()
 
-                    if query_lower in apartment_name:  # 정확 매칭 또는 포함 여부 확인
-                        if query_lower == apartment_name:  # 완전 일치
+                    if query_lower in title:  # 정확 매칭 또는 포함 여부 확인
+                        if query_lower == title:  # 완전 일치
                             adjusted_distance = 0.001  # 가장 높은 우선순위
                         else:  # 부분 일치
                             adjusted_distance /= title_weight
@@ -518,9 +518,9 @@ class RAGChatbot:
                     is_active = start_date and end_date and start_date <= today <= end_date
                     if is_active or not is_recent_query:
                         section_data = {
-                            'apartment_name': metadata.get('apartment_name', '정보 없음'),
+                            'title': metadata.get('title', '정보 없음'),
                             'content': doc,
-                            'metadata': {k: v for k, v in metadata.items() if k not in ['apartment_name']},
+                            'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
                             'distance': adjusted_distance
                         }
                         similar_sections.append(section_data)
