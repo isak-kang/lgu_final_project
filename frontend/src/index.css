@@ -492,13 +492,17 @@ body {
   }
 
   .chatbot-popup {
-    right: 0;
-    bottom: 0;
+
+
     height: 100vh;
     border-radius: 0;
     width: 100%;
-    max-height: none;
-    position: relative;
+
+  }
+
+  .chat-header {
+    height: 8vh;  
+    padding: 2vh 3vw;
   }
 
   .chatbot-popup .chat-header {
@@ -506,22 +510,24 @@ body {
   }
 
   .chat-body {
-    height: calc(100% - 120px);
-    padding: 16px;
+    height: 75vh;
+    padding: 2vh 3vw;
   }
 
+
   .chat-body .message .message-text {
-    font-size: 18px;  /* 모바일에서 더 작은 폰트 */
-    max-width: 85%;
+    font-size: 1rem;
+    padding: 2vh 3vw;
   }
 
   .menu-buttons {
-    grid-template-columns: 1fr;  /* 모바일에서 한 줄로 */
+    grid-template-columns: repeat(4, 1fr);
     padding: 10px;
   }
 
   .chat-footer {
-    padding: 10px 15px 15px;
+    height: 10vh;
+    padding: 2vh 3vw;
   }
 }
 
