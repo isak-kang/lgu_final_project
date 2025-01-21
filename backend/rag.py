@@ -19,7 +19,7 @@ def chunk_text(text, max_chunk_size=1000, overlap=100):
     sentences = [s + '.' for s in sentences if s]
     chunks = []
     current_chunk = ""
-     
+    
     for sentence in sentences:
         if len(current_chunk) + len(sentence) > max_chunk_size:
             if current_chunk:
