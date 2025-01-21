@@ -17,6 +17,7 @@ import json
 import datetime
 from dateutil.parser import parse
 import shutil
+import html
 
 import sys
 import os
@@ -527,7 +528,6 @@ def naver_news_crawling():
     # 뉴스 검색 API URL 설정 (날짜순 정렬, 10개의 기사 요청)
     url = "https://openapi.naver.com/v1/search/news?query=" + query + "&display=10&sort=sim"  # 정확도순, 10개의 기사
 
-
     # API 요청 설정
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id", naver_client_id)
@@ -537,8 +537,10 @@ def naver_news_crawling():
     response = urllib.request.urlopen(request)
     rescode = response.getcode()
     collection = "news"
-    # 기존데이터삭제
+    
+    # 기존 데이터 삭제
     mongo_delete(collection)
+
     if rescode == 200:
         response_body = response.read().decode('utf-8')
 
@@ -547,15 +549,17 @@ def naver_news_crawling():
 
         # 각 뉴스 아이템에서 필요한 정보를 추출하고 출력
         for item in news_data['items']:
-            title = item['title'].replace('<b>', '').replace('</b>', '')  # HTML 태그 제거
+            # HTML 태그 및 특수문자 제거
+            title = html.unescape(item['title'].replace('<b>', '').replace('</b>', ''))
             link = item['link']
-            description = item['description'].replace('<b>', '').replace('</b>', '')
+            description = html.unescape(item['description'].replace('<b>', '').replace('</b>', ''))
             pubDate = item['pubDate']
 
             # 뉴스 상세 페이지에서 이미지 URL 추출
             image_url = get_article_image(link)
-            
-            data = select (collection)
+
+            # 중복 이미지 URL 확인
+            data = select(collection)
             images = [item["image"] for item in data]
             if image_url in images:
                 print(f"이미 존재하는 이미지 URL: {image_url}, 저장하지 않습니다.")
