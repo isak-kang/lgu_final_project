@@ -451,7 +451,7 @@ class RAGChatbot:
 
 
 
-    def find_most_similar_sections(self, query, top_k=300, title_weight=1.5, region_weight=1.2, competition_rate_weight=1.2, source_type_weight=2.0, start_weight=1.6):
+    def find_most_similar_sections(self, query, top_k=500, title_weight=1.5, region_weight=1.2, competition_rate_weight=1.2, source_type_weight=2.0, start_weight=1.6):
         """
         유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
         :param query: 검색할 쿼리
@@ -530,7 +530,7 @@ class RAGChatbot:
             # 거리 기준으로 정렬 (낮을수록 유사)
             similar_sections.sort(key=lambda x: x['distance'])
 
-            return similar_sections
+            return similar_sections[:30]
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
             raise
