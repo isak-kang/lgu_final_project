@@ -4,6 +4,29 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from DB.db_mysql import select_apt_competition,select_unranked_competition_1,select_upcoming_applications
  
+
+
+# 컬럼명을 영어 -> 한글로 매핑
+COLUMN_MAPPING = {
+    "region": "지역",
+    "housing_type": "주택 유형",
+    "sale_or_lease": "분양/임대",
+    "apartment_name": "아파트명",
+    "construction_company": "건설사",
+    "contact": "연락처",
+    "announcement_date": "공고일",
+    "application_period_start": "청약 접수 시작일",
+    "application_period_end": "청약 접수 종료일",
+    "result_announcement": "당첨자 발표일",
+    "subscription_type" : "주택 유형",
+    "house_type" : "주택 유형",
+    "supply_units" : "공급 세대수",
+    "application_count" : "신청자 수",
+    "competition_rate" : "경쟁률",
+    "application_result" : "청약 결과",
+    "rank" : "순위",
+    "rank_region" : "순위 별 지역",
+}
 def web_apt_competition():
     df = select_apt_competition()
 
@@ -12,7 +35,7 @@ def web_apt_competition():
     
     grouped = df.groupby('apartment_name')
     grouped_data = []
-
+    df.rename(columns=COLUMN_MAPPING, inplace=True)
     # 각 아파트 이름별로 출력
     for name, group in grouped:
         table_html = group.to_html(classes="table table-bordered", index=False)
@@ -74,6 +97,8 @@ def web_unranked_competition():
     
     grouped = df.groupby('apartment_name')
     grouped_data = []
+
+    df.rename(columns=COLUMN_MAPPING, inplace=True)
 
     # 각 아파트 이름별로 출력
     for name, group in grouped:
@@ -157,11 +182,14 @@ def web_upcoming_applications_simple(table):
 
 
 def web_upcoming_applications(table):
-    # 테이블 데이터를 조회
+    # 테이블 데이터를 조회 (예시 데이터프레임 생성)
     df = select_upcoming_applications(table)
 
     # None 데이터를 '-'로 대체
     df = df.fillna('-')
+
+    # 컬럼명을 한글로 변경
+    df.rename(columns=COLUMN_MAPPING, inplace=True)
 
     data = []
     for idx, row in df.iterrows():
@@ -169,7 +197,7 @@ def web_upcoming_applications(table):
         row_df = row.to_frame().T
         table_html = row_df.to_html(classes="table table-bordered", index=False, escape=False)
         data.append({
-            'apartment_name': row["apartment_name"],
+            'apartment_name': row["아파트명"],  # 한글 컬럼명으로 변경
             'data': table_html
         })
     return data
