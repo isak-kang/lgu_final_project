@@ -8,7 +8,9 @@ import practiceImage from '../assets/practiceImage.png';
 
 const QuickMenu = ({ setChatHistory }) => {
     const [isOpen, setIsOpen] = useState(false);
-    
+    const API_URL = import.meta.env.VITE_EC2_PUBLIC_IP;
+
+
     const handleQuickMenu = (buttonText) => {
         // 사용자가 선택한 버튼의 텍스트를 user-message로 추가
         setChatHistory(prevHistory => [...prevHistory, { 
@@ -37,13 +39,13 @@ const QuickMenu = ({ setChatHistory }) => {
                 break;
             
             case "자주묻는질문(FAQ)":
-                window.open("http://3.34.183.171/faq", "_blank");
+                window.open(`http://${API_URL}/faq`, "_blank");
                 break;
             case "청약 용어집":
-                window.open("http://3.34.183.171/term", "_blank");
+                window.open(`http://${API_URL}/term`, "_blank");
                 break;
             case "청약일정":
-                window.open("http://3.34.183.171/calendar", "_blank");
+                window.open(`http://${API_URL}/calendar`, "_blank");
                 break;
         }
     };
