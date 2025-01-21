@@ -185,7 +185,7 @@ const Chatbot = () => {
             <h2 className="logo-text">Chatbot</h2>
           </div>
           <div className="service-notice">
-            청약이도 실수할 수 있어요. *^^*
+            청약이도 실수할 수 있어요!
           </div>
           <button onClick={() => setShowChatbot(prev => !prev)} className="material-symbols-rounded">
             keyboard_arrow_down</button>

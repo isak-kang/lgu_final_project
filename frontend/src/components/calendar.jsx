@@ -58,14 +58,14 @@ const Calendar = () => {
         content: (
           <div>
             <h3>{data.apartment_name}</h3>
-            <p><strong>Start Date:</strong> {data.application_period_start || "N/A"}</p>
-            <p><strong>End Date:</strong> {data.application_period_end || "N/A"}</p>
-            <p><strong>Region:</strong> {data.region || "N/A"}</p>
-            <p><strong>Housing Type:</strong> {data.housing_type || "N/A"}</p>
-            <p><strong>Sale Or Lease:</strong> {data.sale_or_lease || "N/A"}</p>
-            <p><strong>Construction Company:</strong> {data.construction_company || "N/A"}</p>
-            <p><strong>Contact:</strong> {data.contact || "N/A"}</p>
-            <p><strong>Result Announcement:</strong> {data.result_announcement || "N/A"}</p>
+            <p><strong>청약 신청 시작일:</strong> {data.application_period_start || "N/A"}</p>
+            <p><strong>청약 신청 마감일:</strong> {data.application_period_end || "N/A"}</p>
+            <p><strong>지역:</strong> {data.region || "N/A"}</p>
+            <p><strong>주택유형:</strong> {data.housing_type || "N/A"}</p>
+            <p><strong>분양/임대:</strong> {data.sale_or_lease || "N/A"}</p>
+            <p><strong>시공사:</strong> {data.construction_company || "N/A"}</p>
+            <p><strong>전화번호:</strong> {data.contact || "N/A"}</p>
+            <p><strong>당첨자 발표일:</strong> {data.result_announcement || "N/A"}</p>
           </div>
         ),
       });
@@ -138,9 +138,9 @@ const Calendar = () => {
         }}
         datesSet={handleDateChange} // 달 변경 시 날짜 범위 가져오기
         headerToolbar={{
-          left: "prev,next today",
+          left: "prev,next",
           center: "title",
-          right: "dayGridMonth", // 뷰 전환 버튼 추가
+          right: "today", // 뷰 전환 버튼 추가
         }}
       />
 
