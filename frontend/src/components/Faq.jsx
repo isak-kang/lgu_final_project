@@ -25,10 +25,16 @@ const FAQ = () => {
   }, []);
 
   // 클릭 시 답변을 토글하는 함수
-  const toggleAnswer = (index) => {
+  const toggleAnswer = (filteredIndex) => {
+    // 원본 `faqs` 배열에서의 index를 계산
+    const originalIndex = faqs.findIndex(
+      (faq) => faq[0] === filteredFaqs[filteredIndex][0]
+    );
+  
+    // `faqs` 상태를 업데이트
     setFaqs((prevFaqs) =>
       prevFaqs.map((faq, i) =>
-        i === index ? { ...faq, isOpen: !faq.isOpen } : faq
+        i === originalIndex ? { ...faq, isOpen: !faq.isOpen } : faq
       )
     );
   };
