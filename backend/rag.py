@@ -716,7 +716,7 @@ if __name__ == "__main__":
         # 실제 파일 경로 설정
         base_dir = os.path.dirname(os.path.abspath(__file__))
         json_paths = [
-            # os.path.join(base_dir, 'data', 'FAQ_Crawling.json'),
+            os.path.join(base_dir, 'data', 'FAQ_Crawling.json'),
             # os.path.join(base_dir, 'data', 'pdf_to_parsing_1.json')
         ]
 
