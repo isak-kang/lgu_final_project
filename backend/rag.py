@@ -453,13 +453,7 @@ class RAGChatbot:
 
     def find_most_similar_sections(self, query, top_k=500, title_weight=1.5, region_weight=1.2, competition_rate_weight=1.2, source_type_weight=2.0, start_weight=1.6):
         """
-        유사 문서 검색 - '오늘', '가장 최근' 기준 및 경쟁률 데이터를 포함한 가중치 처리
-        :param query: 검색할 쿼리
-        :param top_k: 반환할 유사 문서 개수
-        :param title_weight: 'title' 필드에 가중치를 적용할 값
-        :param region_weight: 'region' 필드에 가중치를 적용할 값
-        :param competition_rate_weight: 'competition_rate' 필드에 가중치를 적용할 값
-        :param source_type_weight: 'source_type'이 unranked_csv 또는 apt_csv일 때 가중치를 적용할 값
+        유사 문서 검색 - 질문 의도 분석 및 답변 로직 강화
         """
         try:
             results = self.collection.query(
@@ -469,68 +463,75 @@ class RAGChatbot:
             similar_sections = []
             today = datetime.now()
 
-            # '오늘', '가장 최근' 쿼리 여부 확인
-            is_recent_query = any(keyword in query for keyword in ['오늘', '가장 최근', '최근'])
-            is_day_query = any(keyword in query for keyword in ['청약일', '청약신청일'])
+            # 질문 의도 분석: 아파트 이름과 청약일 관련 키워드 추출
+            query_lower = query.lower()
+            is_ask_date = "청약일" in query_lower
+            apartment_name = None
+
+            # 아파트 이름 추출 (예: "범어자이르네")
+            if " " in query_lower:
+                possible_names = query_lower.split(" ")
+                for word in possible_names:
+                    if len(word) > 2:  # 길이가 짧은 단어 제외
+                        apartment_name = word
+                        break
 
             for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0])):
-                # 기본 거리 계산
                 base_distance = results['distances'][0][i]
                 adjusted_distance = base_distance
 
-                # 타이틀 유사도 계산
+                # 타이틀 가중치
                 if 'apartment_name' in metadata:
                     title = metadata['apartment_name'].lower()
-                    query_lower = query.lower()
-
-                    if query_lower in title:  # 정확 매칭 또는 포함 여부 확인
-                        if query_lower == title:  # 완전 일치
-                            adjusted_distance = 0.001  # 가장 높은 우선순위
+                    if apartment_name and apartment_name in title:
+                        if apartment_name == title:  # 완전 일치
+                            adjusted_distance = 0.001
                         else:  # 부분 일치
                             adjusted_distance /= title_weight
 
-                # 지역 가중치
-                if 'region' in metadata and query.lower() in metadata['region'].lower():
-                    adjusted_distance /= region_weight
-
-                # 날짜 관련 가중치
-                if is_day_query and 'start_date' in metadata:
-                    adjusted_distance /= start_weight
-
-                # '오늘', '최근' 기준 추가
-                if is_recent_query and 'start_date' in metadata:
-                    try:
-                        start_date = datetime.fromisoformat(metadata['start_date'])
-                        days_difference = abs((today - start_date).days)
-                        adjusted_distance /= (1 + 1 / (1 + days_difference))
-                    except ValueError:
-                        pass
-
-                # 청약 신청 가능 여부 필터링
+                # 청약일 정보 처리
                 start_date_str = metadata.get('start_date')
                 end_date_str = metadata.get('end_date')
-
+                start_date = None
+                end_date = None
                 try:
-                    start_date = datetime.fromisoformat(start_date_str) if start_date_str else None
-                    end_date = datetime.fromisoformat(end_date_str) if end_date_str else None
-
-                    # 청약 신청 가능한 항목만 추가
-                    is_active = start_date and end_date and start_date <= today <= end_date
-                    if is_active or not is_recent_query:
-                        section_data = {
-                            'title': metadata.get('title', '정보 없음'),
-                            'content': doc,
-                            'metadata': {k: v for k, v in metadata.items() if k not in ['title']},
-                            'distance': adjusted_distance
-                        }
-                        similar_sections.append(section_data)
+                    if start_date_str:
+                        start_date = datetime.fromisoformat(start_date_str)
+                    if end_date_str:
+                        end_date = datetime.fromisoformat(end_date_str)
                 except ValueError:
                     pass
 
-            # 거리 기준으로 정렬 (낮을수록 유사)
+                if is_ask_date and apartment_name and start_date and end_date:
+                    section_data = {
+                        'title': metadata.get('apartment_name', '정보 없음'),
+                        'content': f"청약 시작일: {start_date.strftime('%Y-%m-%d')}, 청약 마감일: {end_date.strftime('%Y-%m-%d')}",
+                        'metadata': metadata,
+                        'distance': adjusted_distance
+                    }
+                    similar_sections.append(section_data)
+                elif not is_ask_date:  # 일반 검색 결과
+                    section_data = {
+                        'title': metadata.get('title', '정보 없음'),
+                        'content': doc,
+                        'metadata': metadata,
+                        'distance': adjusted_distance
+                    }
+                    similar_sections.append(section_data)
+
+            # 거리 기준 정렬
             similar_sections.sort(key=lambda x: x['distance'])
 
-            return similar_sections[:30]
+            # 답변 생성
+            if is_ask_date:
+                if not similar_sections:
+                    return [{
+                        "content": f"{apartment_name} 청약일에 대한 정보를 찾을 수 없습니다. "
+                                  "아파트 이름이 정확한지 확인하거나 다른 질문을 시도해 주세요."
+                    }]
+                return similar_sections[:50]
+
+            return similar_sections[:50]
         except Exception as e:
             print(f"유사 문서 검색 중 오류 발생: {str(e)}")
             raise
