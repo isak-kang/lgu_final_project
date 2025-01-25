@@ -453,7 +453,7 @@ class RAGChatbot:
 
     def find_most_similar_sections(self, query, top_k=500, title_weight=1.5, region_weight=1.2, competition_rate_weight=1.2, source_type_weight=2.0, start_weight=1.6):
         """
-        유사 문서 검색 - 질문 의도 분석 및 답변 로직 강화
+        유사 문서 검색 - 질문 의도 분석 및 가까운 청약 정보 처리 로직 강화
         """
         try:
             results = self.collection.query(
@@ -465,14 +465,13 @@ class RAGChatbot:
 
             # 질문 의도 분석: 아파트 이름과 청약일 관련 키워드 추출
             query_lower = query.lower()
-            is_ask_date = "청약일" in query_lower
-            apartment_name = None
+            is_ask_nearest = any(keyword in query_lower for keyword in ["가까운", "최근", "신청 가능한", "미래 청약","청약일","신청가능한"])
 
-            # 아파트 이름 추출 (예: "범어자이르네")
+            apartment_name = None
             if " " in query_lower:
                 possible_names = query_lower.split(" ")
                 for word in possible_names:
-                    if len(word) > 2:  # 길이가 짧은 단어 제외
+                    if len(word) > 2:
                         apartment_name = word
                         break
 
@@ -484,10 +483,10 @@ class RAGChatbot:
                 if 'apartment_name' in metadata:
                     title = metadata['apartment_name'].lower()
                     if apartment_name and apartment_name in title:
-                        if apartment_name == title:  # 완전 일치
-                            adjusted_distance = 0.001
-                        else:  # 부분 일치
-                            adjusted_distance /= title_weight
+                        if apartment_name == title:
+                            adjusted_distance = 0.001  # 완전 일치
+                        else:
+                            adjusted_distance /= title_weight  # 부분 일치
 
                 # 청약일 정보 처리
                 start_date_str = metadata.get('start_date')
@@ -502,32 +501,25 @@ class RAGChatbot:
                 except ValueError:
                     pass
 
-                if is_ask_date and apartment_name and start_date and end_date:
+                # 미래 청약 정보 필터링
+                if is_ask_nearest and start_date and start_date > today:
                     section_data = {
                         'title': metadata.get('apartment_name', '정보 없음'),
-                        'content': f"청약 시작일: {start_date.strftime('%Y-%m-%d')}, 청약 마감일: {end_date.strftime('%Y-%m-%d')}",
-                        'metadata': metadata,
-                        'distance': adjusted_distance
-                    }
-                    similar_sections.append(section_data)
-                elif not is_ask_date:  # 일반 검색 결과
-                    section_data = {
-                        'title': metadata.get('title', '정보 없음'),
-                        'content': doc,
+                        'content': f"청약 시작일: {start_date.strftime('%Y-%m-%d')}, 청약 마감일: {end_date.strftime('%Y-%m-%d')}" if end_date else "청약 마감일 정보 없음",
                         'metadata': metadata,
                         'distance': adjusted_distance
                     }
                     similar_sections.append(section_data)
 
-            # 거리 기준 정렬
-            similar_sections.sort(key=lambda x: x['distance'])
+            # 가까운 청약일 기준 정렬
+            if is_ask_nearest:
+                similar_sections.sort(key=lambda x: datetime.fromisoformat(x['metadata']['start_date']))
 
             # 답변 생성
-            if is_ask_date:
+            if is_ask_nearest:
                 if not similar_sections:
                     return [{
-                        "content": f"{apartment_name} 청약일에 대한 정보를 찾을 수 없습니다. "
-                                  "아파트 이름이 정확한지 확인하거나 다른 질문을 시도해 주세요."
+                        "content": "현재 날짜를 기준으로 가까운 청약 정보를 찾을 수 없습니다. 다른 질문을 시도해 보세요."
                     }]
                 return similar_sections[:50]
 
