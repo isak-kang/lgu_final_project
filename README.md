@@ -1,3 +1,14 @@
+<div>
+
+# 🎥시연영상
+
+  <a href="https://www.youtube.com/watch?v=F4uLerXovjk" target="_blank">
+    <img src="https://img.youtube.com/vi/F4uLerXovjk/0.jpg" alt="시연영상">
+  </a>
+
+</div>
+<br>
+
 # <div> 🧿 청약 정보 제공 챗봇 </div>
 <div> 
   <p>LGU+ 2기 Final Project Team 1</p>
@@ -158,7 +169,7 @@
         - MongoDB에 저장된 용어 정보제공 (용어, 설명 )
         </details>
 ## 프론트엔드
-1. 사용 기술 <br>
+1. 사용 기술 설명<br>
    - <details>
         <summary>vite</summary> 
         - 빌드와 서버 구동 시간이 매우 빨라 사용
@@ -169,7 +180,6 @@
         - 이로 인해 axios는 코드를 간결하고 직관적으로 하는데 유리함.
         </details>
 2. 느낌점 <br>
-    - 프론트엔드는 내가 하고 싶은 진로가 아니므로 기술적으로 더 작성하기 보다는 느낀 점으로 대체하겠음.
     - <details>
         <summary>SSR과 CSR</summary> 
         - 청약캘린더를 만들 때 필터링 기능을 만든적이 있다. 이 때는 서버와 클라이언트의 개념이 제대로 잡히지 않았을 시점이었는데 나는 아무것도 모르고 js에서 필터링 데이터도 받아오고 캘린더 정보도 받아오고 디테일한 청약정보도 가져왔다. 그 결과 처음 화면에 띄우는 과정은 빨랐지만 클라이언트에서 부담할 일이 커지다보니 필터링하는 버튼을 누르면 렉이 엄청 걸렸다. 그래서 어떻게 해결할지 모를 시점에 같이 학원다니는 분이 SSR과 CSR에 대해 공부를 해봐라 라고 해서 공부를 했고 서버에서 data를 api로 쏴주는 방식으로 바꾸니 해결이 렉이 걸리는 문제가 해결이 되었다.       </details>
@@ -187,16 +197,115 @@
         2. 로그인 기능을 만들었지만 사용못한점... 이건 마지막에 총 후기에서 다시 설명하겠다.
         </details>
 
-## CI/CD 구축
-
-
-
-## 크롤링 및 크롤링 자동화
-
-## 배포
-
 ## DB 구축 및 관리
+
+## CI/CD 구축
+원래는 학원에서 이 부분에 대해 배우고 싶었는데 그러질 못했다.<br>
+그래서 나는 스스로 구글링과 유튜브 강의를 통해 학습하였고 이번 프로젝트에서 CI/CD를 한번 구축해 보았다. <br>
+
+1. 크롤링 자동화<br>
+    - <details>
+        <summary>구성(아키텍처)</summary> 
+
+        ![image](https://github.com/user-attachments/assets/26cbdbdb-3b7a-4f4e-a7d5-79baf86b9392)
+    </details>
+
+    - <details>
+        <summary>크롤링 데이터와 장소</summary> 
+         - MySQL : 청약명, 일정, 시공사 등의 기본정보와 경쟁률, 모집현황의 정형화된 데이터들을 MySQL에 적재한다.
+         <br>
+         - S3 : PDF로 돼있는 모집공고문을 S3에 적재한다.
+        </details>
+    
+    - <details>
+        <summary>자동화 방법</summary> 
+         1. 크롤링 코드 작성<br>
+         알고리즘 : <br>
+         -> 기본정보는 db에 있는 데이터와 대조하여 있는 데이터 발견 시 크롤링 중지<br>
+         -> 경쟁률, 모집현황 같은 경우에는 new아이콘이 떠있는 것만 크롤링하여 업데이트.(5page에서 stop)<br>
+         -> 모집공고문 같은 경우에는 오늘을 기준으로 앞뒤로 30일 이내에 것만 크롤링 하므로 S3에 있는 모집공고문은 모두 삭제하고 다시 크롤링 진행.<br>
+         2. GitHub Action에서 crontab을 활용하여 매일 일정시간(0시)에 크롤링 작업수행
+         <br>
+         - on : cron : "0 0 * * *"<br>
+         - run : 크롤링에 필요한 모듈설치<br>
+         - run : .env파일 설정 (setting -> Actions secrets and variables - > Actions에서 Repository secrets 설정 (비밀키, id, passwd, host설정))<br>
+         - run : Chrome 설치 <br>
+         - run : chrome 버전에 맞는 chromedriver 설치 (-> 이것까지 자동화 못함. -> ubuntu에서는 버전에 맞는 chromedriver를 직접 설치해야함....) <br>
+         - run : 파이썬 script파일 실행.
+         <br>
+         3. 이 과정은 다해서 6분 내외로 걸리고 그 후 DB에 반영된다.
+        </details>
+
+2. 자동 배포<br>
+    - <details>
+        <summary>구성(아키텍처)</summary> 
+
+        ![image](https://github.com/user-attachments/assets/b131e974-e552-42ea-9756-bf2c9d8efbdc)
+    </details>
+
+    - <details>
+        <summary>AWS IAM</summary> 
+        1. ec2에서 s3, CodeDelpoy에 배포하기 위한 역할 생성 및 권한 설정
+        2. CodeDelpoy에서 ec에 s3데이터를 저장하기 위한 역할 생성 및 권한 설정
+        3. github에서 S3에 저장하고 Codedeploy 하기위한 역할 생성 및 권한 설정
+        4. 액세스 키 만들기.
+    </details>
+
+    - <details>
+        <summary>ec2 및 역할, IAM 환경 구성</summary> 
+        1. 코드를 배포할 최상위 디렉토리에 가상환경과 .env파일을 설정하기.<br>
+        2. nginx 설치 및 파일 구성<br>
+        
+        ```
+        vi /etc/nginx/sites-available/default
+        ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+        ```
+        
+        ```
+        server {
+            listen 80;
+            server_name 12.34.56.789;  # 또는 도메인 이름으로 변경
+
+            # React 앱 서비스
+            location / {
+                root /home/ubuntu/lgu_final_project/lgu_final/frontend/dist;
+                index index.html;
+                try_files $uri $uri/ /index.html;
+            }
+
+            # FastAPI 애플리케이션 서비스
+            location /fastapi/ {
+                proxy_pass http://127.0.0.1:8000;  # FastAPI 서버 주소
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+        }
+        ```
+        3. CodeDeploy 설치 및 설정.
+     </details>
+     
+    - <details>
+        <summary>CI/CD</summary> 
+         1. GitHub Action을 통해 main브랜치로 push 시 배포할 수 있게 구성.<br>
+         - run : push 파일 압축 -> (tar cvfz ./lgu-final.tar.gz *)<br>
+         - run :AWS configure credentials (IAM 인증)<br>
+         - run :S3에 압축파일 업로드<br>
+         - run :AWS CodeDeploy 실행<br>
+         2. AWS CodeDeploy<br>
+         - appspec.yml파일 생성 및 scripts생성.<br>
+         -> stop servers (uvicorn stop)<br>
+         -> code파일 전부 삭제<br>
+         -> 가상환경 활성화 및 requirments.txt로 업데이트된 라이브러리 다운로드<br>
+         -> 프론트 단에 .env파일 복사생성<br>
+         -> start servers(build 후 nginx restart 및 uvicorn start)<br>
+        </details>
+
 
 </div>
 
-# <div> 기능 </div>
+<br>
+
+# <div> 😭후기... </div>
+
