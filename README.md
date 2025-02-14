@@ -1,5 +1,19 @@
 <div>
 
+# 프로젝트 하면서 한 일들 메모한 장소
+
+</div>
+<br>
+
+<div>
+<a href="https://github.com/whynotsw-camp/wh02-3rd-1team-CHEONGYAGI">Project Main Git</a> <- 산출물 및 메인프로젝트 내용이 저장되있는 장소
+
+</div>
+<br>
+<br>
+
+<div>
+
 # 🎥시연영상
 
   <a href="https://www.youtube.com/watch?v=F4uLerXovjk" target="_blank">
@@ -8,6 +22,7 @@
 
 </div>
 <br>
+
 
 # <div> 🧿 청약 정보 제공 챗봇 </div>
 <div> 
