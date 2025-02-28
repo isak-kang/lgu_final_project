@@ -1,14 +1,11 @@
 <div>
 
-# 프로젝트 하면서 한 일들 메모한 장소
+# <a href="https://github.com/whynotsw-camp/wh02-3rd-1team-CHEONGYAGI">Project Main Git</a>
 
 </div>
+🔝🔝🔝🔝🔝🔝🔝🔝🔝🔝
 <br>
-
-<div>
-<a href="https://github.com/whynotsw-camp/wh02-3rd-1team-CHEONGYAGI">Project Main Git</a> <- 산출물 및 메인프로젝트 내용이 저장되있는 장소
-
-</div>
+프로젝트 메인 깃 주소
 <br>
 <br>
 
