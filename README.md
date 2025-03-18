@@ -23,7 +23,11 @@
 3.클라우드서버구축및배포(WEB, DB 서버)<br>
 4.CI/CD구축(GitHub Action, AWS CodeDeploy, S3 이용)<br>
 5.크롤링자동화(Selenium, CronTab, GitHubAction)<br>
-  
+
+### 사용기술
+Python, FastAPI, React, MongoDB, MySQL, Nginx, Selenium,
+GitHub Action, AWS EC2, S3, CodeDeploy
+
 </div>
 
 
