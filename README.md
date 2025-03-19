@@ -9,6 +9,37 @@
 <br>
 <br>
 
+</div>
+
+# 🎥시연영상
+
+  <a href="https://www.youtube.com/watch?v=F4uLerXovjk" target="_blank">
+    <img src="https://img.youtube.com/vi/F4uLerXovjk/0.jpg" alt="시연영상">
+  </a>
+
+</div>
+<br>
+
+
+# <div> 🧿 청약 정보 제공 챗봇 </div>
+<div> 
+  <p>LGU+ 2기 Final Project Team 1</p>
+  <br>
+  <h3>🎯 주제</h3>
+  <p>상담 이력 기반 가상상담 시스템</p>
+  <br>
+  <h3>🎉 서비스 내용</h3>
+  <p>청약 시장 진입을 준비하는 사회초년생을 대상으로 하는 청약 도우미 챗봇 서비스를 제공하고 있습니다!<br>
+  청약에 관련된 다양한 부가 서버스인 청약캘린더, 경쟁률 분석, 다가올 청약 등의 정보도 제공하고 있습니다!</p>
+  <br>
+  <h3>🗓️ 프로젝트 수행 기간</h3>
+  <p>2024.11.28 ~ 2025.01.25</p>
+  <br>
+</div>
+
+
+
+
 <div>
 
 ### 맡은역할 (개발기여도: 70 + a %)
@@ -312,35 +343,6 @@ GitHub Action, AWS EC2, S3, CodeDeploy
         </details>
         
 # <div> 😭후기...(나중에 추가) </div>
-
-</div>
-
-# 🎥시연영상
-
-  <a href="https://www.youtube.com/watch?v=F4uLerXovjk" target="_blank">
-    <img src="https://img.youtube.com/vi/F4uLerXovjk/0.jpg" alt="시연영상">
-  </a>
-
-</div>
-<br>
-
-
-# <div> 🧿 청약 정보 제공 챗봇 </div>
-<div> 
-  <p>LGU+ 2기 Final Project Team 1</p>
-  <br>
-  <h3>🎯 주제</h3>
-  <p>상담 이력 기반 가상상담 시스템</p>
-  <br>
-  <h3>🎉 서비스 내용</h3>
-  <p>청약 시장 진입을 준비하는 사회초년생을 대상으로 하는 청약 도우미 챗봇 서비스를 제공하고 있습니다!<br>
-  청약에 관련된 다양한 부가 서버스인 청약캘린더, 경쟁률 분석, 다가올 청약 등의 정보도 제공하고 있습니다!</p>
-  <br>
-  <h3>🗓️ 프로젝트 수행 기간</h3>
-  <p>2024.11.28 ~ 2025.01.25</p>
-  <br>
-</div>
-
 
 
 
